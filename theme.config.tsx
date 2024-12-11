@@ -67,5 +67,8 @@ const config: DocsThemeConfig = {
   project: {
     link: "https://github.com/unbody-io",
   },
+  nextThemes: {
+    defaultTheme: "dark",
+  },
 };
 export default config;
