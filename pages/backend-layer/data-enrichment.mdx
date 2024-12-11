@@ -1,0 +1,74 @@
+# Data Enrichment
+
+Data enrichment is the middleman in your AI pipeline. It takes raw data and transforms it into **knowledge**—adding layers of meaning, context, and metadata. This process is the backbone of the shift from traditional **databases** to true **knowledge bases**.
+
+With enriched data, your applications don’t just store information—they understand and generate insights, forming the foundation for a **generative feedback loop** where enriched outputs can refine future inputs.
+
+---
+
+### Why Data Enrichment Matters
+
+Raw data lacks meaning on its own. Enrichment turns it into actionable knowledge. For example, it can:
+
+- Add context, like tagging customer reviews with sentiment.
+- Extract metadata, such as authors, timestamps, or locations.
+- Summarize long documents into concise, searchable abstracts.
+- Identify entities like names, places, or organizations.
+
+This process prepares your data for semantic search, personalized recommendations, or generative AI applications.
+
+---
+
+### How Data Enrichment Works
+
+Enrichment in Unbody is **modular** and supports both prebuilt and custom configurations. Each enhancer performs a specific task, and you can combine them into workflows tailored to your needs.
+
+### Examples of Prebuilt Enhancers
+
+Unbody includes a set of ready-to-use enhancers for common enrichment tasks. Examples include:
+
+- **AutoSummary**: Automatically generate concise summaries of text.
+- **AutoKeywords**: Extract key terms from documents.
+- **AutoVision**: Process images to:
+    - Generate captions.
+    - Apply OCR to extract text.
+    - Identify and tag objects.
+- **Crawlers**: Scrape and structure data from web pages.
+
+These are just a few examples. A full list of available enhancers can be found under **Project Settings** in the [Developer Workflows: Project Settings](https://chatgpt.com/g/g-9N3RT50W3-unbody-ea/developer-workflows/project-settings.md) section.
+
+---
+
+### Setting Up Enrichment
+
+You can configure data enrichment in two ways:
+
+1. **Dashboard**: Use the Project Settings interface to add and manage enhancers.
+2. **Admin API**: Programmatically set up and manage enrichment workflows for advanced control.
+
+Both options are fully documented. Explore technical details in the [Developer Workflows: Data Enrichment](https://chatgpt.com/g/g-9N3RT50W3-unbody-ea/developer-workflows/data-enrichment.md).
+
+---
+
+### Enrichment Pipelines
+
+An enrichment pipeline combines multiple enhancers to create layered workflows. For example:
+
+1. Extract metadata like titles, timestamps, and authors.
+2. Summarize content using AutoSummary.
+3. Identify and tag entities for easy retrieval.
+
+Pipelines allow you to design workflows tailored to your data and application needs, whether you're processing text, images, or structured content.
+
+---
+
+### Why Unbody’s Enrichment Stands Out
+
+Unbody’s enrichment tools are designed for flexibility and scale:
+
+- **Modular**: Add, remove, or combine enhancers to fit your needs.
+- **Comprehensive**: Includes prebuilt tools for text, images, and web scraping.
+- **Customizable**: Create pipelines that align with your application’s specific requirements.
+- **AI-Ready**: Prepares data for semantic search, recommendations, and generative AI.
+
+Next: [Data Vectorization](https://chatgpt.com/g/g-9N3RT50W3-unbody-ea/c/data-vectorization.md) to see how enriched data becomes machine-readable.
