@@ -1,1 +1,48 @@
-# using-dashboard.mdx
+## Create a Project
+
+To begin using Unbody for a project, you first need to create a project space 😄. Each project serves as a separate container for your data:
+
+- **Separate datasets for different websites**: Create a new project for each dataset.
+- **Shared datasets across applications**: A single project is sufficient.
+
+### Steps to Create a Project:
+
+1. **Navigate to the Dashboard Homepage**:
+    - Click the "Create a New Project" button.
+2. **Configure Your Project**:
+    - A dialog box will open. Name your project and set configurations for AI models and other features.
+    - Choose from a preset or use the advanced panel for more flexibility.
+    - For this guide, select the **Generative OpenAI preset**.
+3. **Create the Project**:
+    - Click on "Create Project".
+    - You will be automatically redirected to the newly created project page.
+
+## **Add Source**
+
+Once on the project page, you can start adding data sources. A **data source** is the origin of your data (e.g., Google Drive, Discord Channel, or GitHub Repository).
+
+### Steps to Add a Source:
+
+1. **Click on "Add New Source"**:
+    - This will open a dialog with four steps.
+2. **Select a Provider**:
+    - Choose the platform where your content is stored (e.g., Google Drive).
+    - Learn more about providers.
+3. **Connect Unbody to Your Source**:
+    - Allow Unbody to access your content from the selected provider.
+    - Learn more about our privacy policies.
+4. **Set an Entry Point**:
+    - Specify where Unbody should find your data on the chosen source.
+    - Entry points vary by provider:
+        - For **Google Drive**, it’s a "folder".
+        - For **Discord**, it’s a "channel".
+5. **Initialize Your Content**:
+    - Navigate to the next step and click **"Initialize"**.
+    - Unbody will index the content from your entry point.
+    - Once the process is complete, the dashboard will display the number of records processed.
+
+### Notes:
+
+- The time taken to index content depends on its size.
+- Interaction with the content is only possible after indexing is complete.
+- Wait until the source status changes to **idle** and the source card shows the processed record count.

@@ -1,16 +1,52 @@
-# Setup Overview
+### **Choosing Between SDK and Dashboard**
 
-Get started with setting up Unbody in your environment.
+- **SDK:** Best for developers who prefer automation and programmatic access.
+- **Dashboard:** Ideal for quick setup and non-technical users who want to explore features interactively.
 
-## Installation Methods
+With either method, you can unlock the full potential of Unbody to retrieve, search, and generate insights from your data
 
-Choose your preferred method:
 
-- [Using Dashboard](/setup/using-dashboard)
-- [Using SDK](/setup/using-sdk)
+```typescript
+const unbody = new Unbody({
+    apiKey: "<API_KEY>",
+    projectId: "<PROJECT_ID>",
+});
+```
 
-## Prerequisites
+```bash 
+# Authorized call to Unbody using CURL
+curl -X POST \\
+-H "Authorization: Bearer <API_KEY>" \\
+-H "X-Project-Id: <PROJECT_ID>" \\
+    -H "Content-Type: application/json" \\
+    -d '{"query": "{ Your GraphQL query here }"}' \\
+    https://graphql.unbody.io
+```
 
-- Node.js 16 or later
-- npm or yarn
-- API key from the Unbody Dashboar
+```typescript
+// Fetch API
+fetch('https://graphql.unbody.io', {
+    method: 'POST',
+    headers: {
+        'Authorization': 'Bearer <API_KEY>',
+        'X-Project-Id': '<PROJECT_ID>',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({query: "{ Your GraphQL query here }"})
+})
+.then(...)
+ 
+// Axios
+const axios = require('axios');
+ 
+axios.post('https://graphql.unbody.io', {
+    query: "{ Your GraphQL query here }"
+}, {
+    headers: {
+        'Authorization': 'Bearer <API_KEY>',
+        'X-Project-Id': '<PROJECT_ID>',
+        'Content-Type': 'application/json'
+    }
+})
+.then(...)
+```
