@@ -22,7 +22,8 @@
     "**/*.ts",
     "**/*.tsx",
     "theme.config.tsx",
-    "pages/_meta.tsx"
+    "pages/_meta.tsx",
+    "pages/_app.tsx"
   ],
   "exclude": ["node_modules"]
 }
