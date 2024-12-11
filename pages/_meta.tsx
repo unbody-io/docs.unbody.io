@@ -37,6 +37,14 @@ const meta = {
   "performance-optimization": "Performance Optimization",
   "scaling-ai-native": "Scaling AI-Native Applications",
   "security-best-practices": "Security Best Practices",
+  "-- ecosystem-community": {
+    title: "Ecosystem & Community",
+    type: "separator",
+  },
+  "encourage-active-involvement": "Encourage Active Involvement",
+  "open-source-contributions": "Open-Source Contributions",
+  "community-resources": "Community Resources",
+  roadmap: "Roadmap",
 };
 
 export default meta;
