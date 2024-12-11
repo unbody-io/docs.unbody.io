@@ -1,4 +1,5 @@
 const meta = {
+  index: "API Overview",
   "graphql-api": "GraphQL API",
   "admin-api": "Admin API",
   "push-api": "Push API",
