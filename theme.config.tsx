@@ -30,7 +30,7 @@ const logo = (
       }
 
       .logo-container svg path {
-        fill: var(--foreground);
+        fill: var(--logo-color);
       }
 
       .logo-container:hover {
