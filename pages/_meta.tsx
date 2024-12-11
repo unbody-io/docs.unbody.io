@@ -30,6 +30,13 @@ const meta = {
   "project-configurations": "Project Configurations",
   "graphql-api-usage": "GraphQL API Usage",
   "custom-plugins": "Custom Plugins",
+  "-- advanced-topics": {
+    title: "Advanced Topics",
+    type: "separator",
+  },
+  "performance-optimization": "Performance Optimization",
+  "scaling-ai-native": "Scaling AI-Native Applications",
+  "security-best-practices": "Security Best Practices",
 };
 
 export default meta;
