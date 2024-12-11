@@ -14,5 +14,6 @@ const config: DocsThemeConfig = {
   nextThemes: {
     defaultTheme: "dark",
   },
+  docsRepositoryBase: "https://github.com/unbody-io/docs.unbody.io",
 };
 export default config;
