@@ -1,16 +1,10 @@
 const meta = {
   index: "Manifesto",
-  "-- introduction": {
-    title: "Introduction",
-    type: "separator",
-  },
-  "conceptual-overview": "Conceptual Overview",
   "-- getting-started": {
     title: "Getting Started",
     type: "separator",
   },
   "get-started": "Get Started",
-  "first-project": "First Project",
   quickstart: "Quickstart",
   "-- core-architecture": {
     title: "Core Architecture",
