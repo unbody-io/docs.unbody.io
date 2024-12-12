@@ -1,10 +1,9 @@
 const meta = {
-  index: "Overview",
+  index: "Manifesto",
   "-- introduction": {
     title: "Introduction",
     type: "separator",
   },
-  manifesto: "Manifesto",
   "conceptual-overview": "Conceptual Overview",
   "-- getting-started": {
     title: "Getting Started",
