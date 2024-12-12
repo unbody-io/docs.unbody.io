@@ -15,5 +15,9 @@ const config: DocsThemeConfig = {
     defaultTheme: "dark",
   },
   docsRepositoryBase: "https://github.com/unbody-io/docs.unbody.io/tree/master",
+  sidebar: {
+    autoCollapse: true,
+    defaultMenuCollapseLevel: 1,
+  },
 };
 export default config;
