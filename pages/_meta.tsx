@@ -5,16 +5,13 @@ const meta = {
     type: "separator",
   },
   "get-started": "Get Started",
-  quickstart: "Quickstart",
+  starters: "Starters",
   "-- core-architecture": {
     title: "Core Architecture",
     type: "separator",
   },
-  "architecture-overview": "Architecture Overview",
-  "backend-layer": "Backend Layer",
-  "api-layer": "API Layer",
-  "frontend-layer": "Frontend Layer",
-  "utility-layer": "Utility Layer",
+  "core-architecture": "Core Architecture",
+  "development-references": "Development Reference",
   "-- development-workflows": {
     title: "Development Workflows",
     type: "separator",
@@ -38,6 +35,7 @@ const meta = {
   "open-source-contributions": "Open-Source Contributions",
   "community-resources": "Community Resources",
   roadmap: "Roadmap",
+  providers: "Providers",
 };
 
 export default meta;
