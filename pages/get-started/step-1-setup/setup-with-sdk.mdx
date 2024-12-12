@@ -1,0 +1,119 @@
+import { PageCard } from "@/components/PageCard";
+import { Callout, Steps, Tabs } from "nextra/components";
+
+# Setup with SDK (Admin API)
+
+This guide will walk you through setting up Unbody programmatically using our SDK and Admin API. The SDK provides more flexibility and control over your project configuration compared to the dashboard.
+
+## Installation
+
+Install Unbody's core packages to get started:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+  <Tabs.Tab>
+    ```bash
+    npm install @unbody/admin @unbody/push @unbody/utils @unbody-react
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```bash
+    yarn add @unbody/admin @unbody/push @unbody/utils @unbody-react
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```bash
+    pnpm add @unbody/admin @unbody/push @unbody/utils @unbody-react
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+<Steps>
+    ### Import Dependencies
+    
+    First, import the necessary modules from Unbody's SDK packages. Unbody provides several APIs for different purposes:
+    
+    ```typescript
+    // Manage resources and orchestration
+    import { UnbodyAdmin } from '@unbody/admin';
+    // Import custom data
+    import { UnbodyPushAPI } from '@unbody/push';
+    // Interact with data (GraphQL)
+    import { Unbody } from '@unbody';
+    // Utilities
+    import { QueryParser } from '@unbody/utils';
+    // UI Components
+    import { RapUI } from '@unbody-react';
+    ```
+
+    ### Configure Project Settings
+
+    Create a new instance of ProjectSettings and configure your project's capabilities:
+
+    ```typescript
+    import { ProjectSettings } from '@unbody/admin';
+    
+    const projectSettings = new ProjectSettings();
+
+    projectSettings
+      // Vectorizers
+      .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding35Small))
+      .set(new ImageVectorizer(ImageVectorizer.Unbody.ImgVec))
+      
+      // Generative modules
+      .set(new DNA(DNA.OpenAI.GPT3_TurboInstruct))
+      .set(new Generative(Generative.Cohere.CommandPlus))
+      
+      // Utilities
+      .set(new Reranker(Reranker.Cohere.EnglishV3))
+      
+      // Enhancers - text
+      .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
+      .set(new AutoEntities(AutoEntities.Unbody.Bert))
+      
+      // Enhancers - visuals
+      .set(new AutoVision(AutoVision.OpenAI.GPT4v))
+      
+      // Parsers & chunkers
+      .set(new PdfParser(PdfParser.Pdf2Image.Default));
+    ```
+
+    ### Create and Save Project
+
+    Initialize your project with the configured settings and save it:
+
+    ```typescript
+    const project = admin.projects.ref({
+      id: "",
+      name: "",
+      settings: projectSettings
+    });
+    
+    project.save();
+    ```
+
+    ### Add Data Source
+
+    Create, save, and update your data source:
+
+    ```typescript
+    const source = project.sources.ref({
+      type: 'push_api',
+      name: "..."
+    });
+    
+    source.save();
+    source.update();
+    ```
+
+    <Callout type="info">
+        The source.update() method helps you refresh and sync your data source. Make sure to monitor the source status
+        to ensure proper initialization and data processing.
+    </Callout>
+
+</Steps>
+
+## Next
+Ready to start building with your programmatically configured Unbody project?
+
+- [Setup 2 Building](/get-started/step-2-building)
+

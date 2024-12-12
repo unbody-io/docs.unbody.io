@@ -10,7 +10,7 @@ const meta = {
     title: "Getting Started",
     type: "separator",
   },
-  setup: "Setup",
+  "get-started": "Get Started",
   "first-project": "First Project",
   quickstart: "Quickstart",
   "-- core-architecture": {
