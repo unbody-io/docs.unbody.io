@@ -1,5 +1,6 @@
-import type { DocsThemeConfig } from "nextra-theme-docs";
+import { type DocsThemeConfig } from "nextra-theme-docs";
 import { Footer } from "./components/Footer";
+import { default as HeadComponent } from "./components/HeadComponent";
 import { Logo } from "./components/Logo";
 
 const config: DocsThemeConfig = {
@@ -19,5 +20,7 @@ const config: DocsThemeConfig = {
     autoCollapse: true,
     defaultMenuCollapseLevel: 1,
   },
+
+  head: HeadComponent,
 };
 export default config;
