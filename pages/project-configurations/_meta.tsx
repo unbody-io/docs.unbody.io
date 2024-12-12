@@ -1,7 +1,9 @@
 const meta = {
- index: "Project Configurations Overview",
- "data-enrichment-pipelines": "Data Enrichment Pipelines",
- "data-processing-workflows": "Data Processing"
+  vectorizers: "Vectorizers",
+  enhancers: "Enhancers",
+  "generative-modules": "Generative Modules",
+  "custom-schemas": "Custom Schemas",
+  "data-processors": "Data Processors",
 };
 
 export default meta;
