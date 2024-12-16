@@ -1,15 +1,67 @@
-# Get started with Unbody
+import { Steps, Callout } from 'nextra/components'
 
-Unbody is a platform that automates the entire backend development process you need to build AI-native applications or functionalities, in one API.
+## Getting Started
 
-Unbody functions as a headless API, which grabs data from any location and in any format, and then processes it with your own choice of AI models, and then return the enhanced data to you via a GraphQL API or one of our SDKs.
+Building AI-native products with Unbody begins with two main steps: **Configuration** and **Usage**. This page will walk you through the essentials so you can start building with Unbody right away.
 
-## Before you begin
-To get started, create an account with Unbody. You can [select the plan](https://unbody.io/pricing) that's right for you.
+Think of Unbody as a **new-age MERN or MEAN stack**—but reimagined for the AI-native era. From data ingestion to APIs, it provides everything you need to build modern, scalable AI-driven products without the complexity of piecing together multiple tools.
+Before diving into the steps, it's essential to understand why Unbody exists, so make sure to read [Why Unbody?](/why) to get a clear picture of the challenges it solves.
 
-## Get started
-The guide is divided into two chapters: the first chapter covers setting up Unbody and your project, while the second focuses on using the Unbody API.
+## How Unbody Works
 
+At its core, Unbody transforms raw, unstructured data into AI-ready knowledge. Here’s how it works, step by step:
 
+<Steps>
+    ### Ingest Your Data
+    Seamlessly pull data from sources like Google Drive, Discord, GitHub, or even custom APIs using the Push API.
+
+    ### Process and Enrich
+    Automatically clean, chunk, vectorize, and enhance your data to make it usable for AI models.
+
+    ### Serve and Query
+    Interact with your processed data through APIs, including a **GraphQL API** for semantic queries, an **Image API** for visual assets, and a **Video/Audio API** for multimedia.
+</Steps>
+
+Unbody is built with **headless architecture**. This means:
+
+- You can centralize your backend while staying agnostic to your frontend framework.
+- Use a single backend to power multiple frontends—whether built with **Next.js**, **Nuxt.js**, or even custom setups with **Node.js** or **Express.js**.
+
+This flexibility allows you to focus on building features, not wrestling with disparate stacks. Learn more about [Unbody’s architecture](/core-architecture-overview).
+
+<Callout type="info" emoji="ℹ️">
+    Unbody is a **commercial open-source framework**, but for now, the **cloud version** is the primary way to use it. Everything—from data ingestion to deployment—is hosted on our platform. The open-source release is on the way!
+</Callout>
+
+<Callout type="info" emoji="💡">
+    You can use Unbody to:
+
+    1. Build complete **AI-native products** from the ground up.
+    2. Add **AI-native features** to existing applications with minimal effort.
+</Callout>
+
+## Your Next Steps
+
+### 1. Configuration
+
+Configuration is the first step to setting up your project. This is where you:
+
+- Define your **data sources** (e.g., Google Drive, Discord, custom Push API).
+- Choose your **AI models** and vectorizers.
+- Configure **enhancers**, schemas, and generative modules.
+
+There are two ways to set up Unbody:
 - [Setup with Dashboard](/get-started/step-1-setup/setup-with-dashboard)
 - [Setup with sdk](/get-started/step-1-setup/setup-with-sdk)
+
+---
+
+### 2. Usage
+
+Once your project is configured, start using Unbody to interact with your data. This includes:
+
+- Querying data with **GraphQL**.
+- Using specialized APIs for images, videos, and audio.
+- Connecting your AI models for semantic search, RAG, or conversational interfaces.
+
+[Learn how to build with Unbody](/get-started/step-2-building)

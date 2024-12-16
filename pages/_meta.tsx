@@ -1,9 +1,10 @@
 const meta = {
   index: "Manifesto",
-  // "-- getting-started": {
-  //   title: "Getting Started",
-  //   type: "separator",
-  // },
+  "why": "Why Unbody",
+  "-- getting-started": {
+    title: "",
+    type: "separator",
+  },
   "get-started": "Getting Started",
   starters: "Starters",
   "-- core-architecture": {
