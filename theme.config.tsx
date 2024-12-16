@@ -8,7 +8,6 @@ const config: DocsThemeConfig = {
   footer: {
     component: Footer,
   },
-
   project: {
     link: "https://github.com/unbody-io",
   },

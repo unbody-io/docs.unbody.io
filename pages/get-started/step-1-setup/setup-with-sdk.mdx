@@ -29,20 +29,14 @@ Install Unbody's core packages to get started:
 
 <Steps>
     ### Import Dependencies
-    
+
     First, import the necessary modules from Unbody's SDK packages. Unbody provides several APIs for different purposes:
-    
+
     ```typescript
     // Manage resources and orchestration
     import { UnbodyAdmin } from '@unbody/admin';
     // Import custom data
     import { UnbodyPushAPI } from '@unbody/push';
-    // Interact with data (GraphQL)
-    import { Unbody } from '@unbody';
-    // Utilities
-    import { QueryParser } from '@unbody/utils';
-    // UI Components
-    import { RapUI } from '@unbody-react';
     ```
 
     ### Configure Project Settings
@@ -51,28 +45,27 @@ Install Unbody's core packages to get started:
 
     ```typescript
     import { ProjectSettings } from '@unbody/admin';
-    
+
     const projectSettings = new ProjectSettings();
 
     projectSettings
       // Vectorizers
       .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding35Small))
       .set(new ImageVectorizer(ImageVectorizer.Unbody.ImgVec))
-      
+
       // Generative modules
-      .set(new DNA(DNA.OpenAI.GPT3_TurboInstruct))
       .set(new Generative(Generative.Cohere.CommandPlus))
-      
+
       // Utilities
       .set(new Reranker(Reranker.Cohere.EnglishV3))
-      
+
       // Enhancers - text
       .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
       .set(new AutoEntities(AutoEntities.Unbody.Bert))
-      
+
       // Enhancers - visuals
       .set(new AutoVision(AutoVision.OpenAI.GPT4v))
-      
+
       // Parsers & chunkers
       .set(new PdfParser(PdfParser.Pdf2Image.Default));
     ```
@@ -87,7 +80,7 @@ Install Unbody's core packages to get started:
       name: "",
       settings: projectSettings
     });
-    
+
     project.save();
     ```
 
@@ -100,7 +93,7 @@ Install Unbody's core packages to get started:
       type: 'push_api',
       name: "..."
     });
-    
+
     source.save();
     source.update();
     ```
