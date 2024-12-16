@@ -1,10 +1,6 @@
 const meta = {
-  index: "Manifesto",
-  // "-- getting-started": {
-  //   title: "Getting Started",
-  //   type: "separator",
-  // },
-  "get-started": "Getting Started",
+  index: "Welcome",
+  "get-started": "Get Started",
   starters: "Starters",
   "-- core-architecture": {
     title: "Core Architecture",
@@ -64,6 +60,8 @@ const meta = {
     title: "Resources",
     type: "separator",
   },
+  manifesto: "Manifesto",
+  why: "Why Unbody",
   providers: "Providers",
 };
 
