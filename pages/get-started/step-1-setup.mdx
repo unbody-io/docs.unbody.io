@@ -1,6 +1,22 @@
 # Step 1: Setup
 
+import { Cards } from 'nextra/components'
+
 Choose your preferred way to setup Unbody:
 
-- [Setup with Dashboard](/get-started/step-1-setup/setup-with-dashboard)
-- [Setup with SDK](/get-started/step-1-setup/setup-with-sdk)
+<Cards>
+    <Cards.Card title={"Setup with Dashboard"}
+                href={"/get-started/step-1-setup/setup-with-dashboard"}
+                arrow={true}>
+        <small className={"ml-4 opacity-75"}>
+            Setup Unbody using the Dashboard (easy way).
+        </small>
+    </Cards.Card>
+    <Cards.Card title={"Setup with SDK"}
+                href={"/get-started/step-1-setup/setup-with-sdk"}
+                arrow={true}>
+        <small className={"ml-4 opacity-75"}>
+            Setup Unbody using the SDK (advance).
+        </small>
+    </Cards.Card>
+</Cards>

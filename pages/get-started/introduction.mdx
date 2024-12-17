@@ -1,8 +1,8 @@
-import { Steps, Callout } from 'nextra/components'
+import { Steps, Callout, Cards } from 'nextra/components'
 
 ## Getting Started
 
-Building AI driven products with Unbody begins with two main steps: **Configuration** and **Usage**. This page will walk you through the essentials so you can start building with Unbody right away.
+Using Unbody involves two main steps: **Configuration** and **Usage**. This page will walk you through the essentials so you can start building with Unbody right away.
 
 Think of Unbody as a **new-age MERN or MEAN stack**—but reimagined for the AI era. From data ingestion to APIs, it provides everything you need to build modern, scalable AI-driven products without the complexity of piecing together multiple tools.
 
@@ -10,17 +10,66 @@ Think of Unbody as a **new-age MERN or MEAN stack**—but reimagined for the AI 
 
 ## How Unbody Works
 
-At its core, Unbody transforms raw, unstructured data into AI-ready knowledge. Here’s how it works, step by step:
+At its core, Unbody transforms raw, unstructured & structured data into AI-ready knowledge and then enable you to develop products & features that powered by this knowledge.
 
+Here’s how it works, step by step:
 <Steps>
     ### Ingest Your Data
-    Seamlessly pull data from sources like Google Drive, Discord, GitHub, or even custom APIs using the Push API.
+    Seamlessly integrate data from sources like [Google Drive](/providers/google-drive), [Discord](/providers/discord), [GitHub](/providers/github), or any custom source using the Push API (e.g., MongoDB). Alternatively, use Unbody as your primary, AI-ready database.
+    <Cards>
+        <Cards.Card title={"Backend Layer"}
+                    href={"/backend-layer#how-it-works"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more about the concepts.
+            </small>
+        </Cards.Card>
+        <Cards.Card title={"Data Ingestion"}
+                    href={"/data-ingestion/overview"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more in technical detail.
+            </small>
+        </Cards.Card>
+    </Cards>
 
     ### Process and Enrich
     Automatically clean, chunk, vectorize, and enhance your data to make it usable for AI models.
+    <Cards>
+        <Cards.Card title={"Backend Layer"}
+                    href={"/backend-layer#how-it-works"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more about the concepts.
+            </small>
+        </Cards.Card>
+        <Cards.Card title={"Project Configuration"}
+                    href={"/data-ingestion/overview"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more in technical detail.
+            </small>
+        </Cards.Card>
+    </Cards>
 
     ### Serve and Query
     Interact with your processed data through APIs, including a **GraphQL API** for semantic queries, an **Image API** for visual assets, and a **Video/Audio API** for multimedia.
+    <Cards>
+        <Cards.Card title={"API Layer"}
+                    href={"/api-layer"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more about the concepts.
+            </small>
+        </Cards.Card>
+        <Cards.Card title={"GraphQL API"}
+                    href={"/graphql-api/authorization"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more in technical detail.
+            </small>
+        </Cards.Card>
+    </Cards>
 </Steps>
 
 Unbody is built with **headless architecture**. This means:
@@ -52,8 +101,23 @@ Configuration is the first step to setting up your project. This is where you:
 - Configure **enhancers**, schemas, and generative modules.
 
 There are two ways to set up Unbody:
-- [Setup with Dashboard](/get-started/step-1-setup/setup-with-dashboard)
-- [Setup with sdk](/get-started/step-1-setup/setup-with-sdk)
+<Cards>
+    <Cards.Card title={"Setup with Dashboard"}
+                href={"/get-started/step-1-setup/setup-with-dashboard"}
+                arrow={true}>
+        <small className={"ml-4 opacity-75"}>
+            Setup Unbody using the Dashboard (easy way)
+        </small>
+    </Cards.Card>
+    <Cards.Card title={"Setup with SDK"}
+                href={"/get-started/step-1-setup/setup-with-sdk"}
+                arrow={true}>
+        <small className={"ml-4 opacity-75"}>
+            Setup Unbody using the SDK (advance)
+        </small>
+    </Cards.Card>
+</Cards>
+
 
 ---
 
@@ -65,4 +129,12 @@ Once your project is configured, start using Unbody to interact with your data. 
 - Using specialized APIs for images, videos, and audio.
 - Connecting your AI models for semantic search, RAG, or conversational interfaces.
 
-[Learn how to build with Unbody](/get-started/step-2-building)
+<Cards>
+    <Cards.Card title={"Start Building"}
+                href={"/get-started/step-2-building"}
+                arrow={true}>
+        <small className={"ml-4 opacity-75"}>
+            Learn how to build with Unbody
+        </small>
+    </Cards.Card>
+</Cards>
