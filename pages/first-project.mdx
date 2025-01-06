@@ -1,0 +1,280 @@
+import { Callout, Cards, Steps, Tabs } from "nextra/components";
+
+# **Getting Started: Create Your First Project**
+
+In this guide, we’ll walk you through building your first project with Unbody, step by step.
+
+<Callout type="info" emoji="⚠️">
+  All the following steps for creating and configuring a project can be done
+  using either the **Dashboard** or the **SDK**. If this is your first time, we
+  recommend using the **Dashboard** for a more visual and user-friendly
+  experience.
+</Callout>
+
+---
+
+## **Prerequisites**
+
+1. **Unbody Account**:
+
+   Sign up at [Unbody.io](https://unbody.io/).
+
+2. **A Data Source**:
+
+   For this guide, we’ll use a **Google Drive folder** with a few files (e.g., Markdown, PDFs, images, or a short video under 1 minute). Unbody also supports many other prebuilt integrations (like Discord or GitHub) and custom data ingestion.
+
+3. **Freemium Plan**:
+
+   Unbody’s free plan is great for testing but has limits on file count and size, so keep your test folder small.
+
+Once ready, let’s get started.
+
+## **Overview**
+
+A **project** in Unbody is your workspace. It includes:
+
+- A dedicated database to store and manage AI-ready data.
+- Configurable AI tools like **vectorizers**, **enhancers**, and **generative modules**.
+- One or more **data sources**, defining where your data comes from.
+
+When you set up a project, you’re defining the tools and processes that transform raw data into actionable knowledge. Once the data is ingested, Unbody processes, vectorizes, and enriches it. Afterward, you can query and interact with the AI-ready data through the **Content API**.
+
+## **Step 1: Create a Project**
+
+<Tabs items={['Dashboard', 'SDK']}>
+  <Tabs.Tab>
+  <Steps>
+    ### Log in to [Unbody](https://unbody.io/).
+    
+    ### Click on **New Project**.
+     ![Create project](/images/docs/get-started/new-project.jpg)
+    
+   </Steps>
+  </Tabs.Tab>
+    
+ <Tabs.Tab>
+  1. Install the SDK:
+    
+    ```bash
+    npm install unbody
+    ```
+    
+  2. Create a project programmatically:
+    
+    ```tsx
+    import { UnbodyAdmin } from '@unbody/admin';
+    
+    const admin = new UnbodyAdmin({
+      apiKey: "<YOUR_ADMIN_API_KEY>",
+    });
+    
+    const project = admin.projects.ref({
+      name: "My First Project",
+    });
+    project.save();
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## **Step 2: Configure your project**
+
+Once your project is created, configure the AI tools it will use. Configurations include:
+
+- **Vectorizers**: Convert data into embeddings for tasks like semantic search.
+- **Enhancers**: Enrich data by summarizing, tagging, or extracting metadata.
+- **Generative Modules**: Enable AI-driven content creation.
+
+For this guide, we use a **vectorizer** for processing text and two built in enhancers; **AutoVision** for enahncing images and AutoSummary for text documents.
+
+<Tabs items={['Dashboard', 'SDK']}>
+  <Tabs.Tab>
+  You’ll find these options in the **Project Configuration** section during project setup.
+
+  ![project settings](/images/docs/get-started/project-settings.jpg)
+  </Tabs.Tab>
+    
+ <Tabs.Tab>
+  ```tsx
+import {
+  ProjectSettings,
+  TextVectorizer,
+  Generative,
+  AutoSummary,
+  AutoVision,
+} from "@unbody/admin";
+
+const projectSettings = new ProjectSettings();
+projectSettings
+  .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
+  .set(new Generative(Generative.Cohere.CommandRPlus))
+  .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
+  .set(new AutoVision(AutoVision.OpenAI.GPT4o));
+
+const project = admin.projects.ref({
+  id: "your-project-id",
+  name: "Your Project Name",
+  settings: projectSettings,
+});
+
+project.save();
+```
+  </Tabs.Tab>
+</Tabs>
+
+
+## **Step 3: Add a Data Source**
+
+Data sources define where your project gets its data. Unbody supports both prebuilt integrations (e.g., Google Drive, Discord) and custom data providers.
+
+<Tabs items={['Dashboard', 'SDK']}>
+  <Tabs.Tab>
+    <Steps>
+        ### Open your project and navigate to **Data Sources**.
+        
+        ### Click **Add Data Source** and select **Google Drive**.
+        ![Create source](/images/docs/get-started/add-source.jpg)
+
+        ![Select provider](/images/docs/get-started/providers.jpg)
+
+        ### Authenticate and select your folder to sync.
+            <Steps>
+                ### Connect
+                 ![Connect a source](/images/docs/get-started/connect.jpg)
+                
+                ### Entrypoint
+                 ![Select an entrypoint](/images/docs/get-started/entry.jpg)
+
+                ### Init
+                 ![Initialize](/images/docs/get-started/init.jpg)
+
+            </Steps>
+
+    </Steps>
+  </Tabs.Tab>
+    
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+At this point, unbody will ingest, process, vectorize, and enrich the data automatically. This process will take while, you can keep track of progress in the data source page under logs section.
+
+At this point you have nothing to do on dashboard and can moe to next step which is about start bulding. The following will be providerd in SDK (typescript) and Graphql. Each project has a graphql playground where you cna play around with the given queries.
+
+## **Step 4: Interact with Your Data**
+
+Once your data is ready, use the **Content API** to perform tasks like semantic search or content generation.
+
+### Fetch google docs
+
+<Tabs items={['Typescript Client', 'Graphql']}>
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+    
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+- Typescript Clinet (title, autosummery, text, toc)
+- Graphql
+
+Now lets get all text documents that are markdown
+
+- Typescript Clinet
+- Graphql
+
+### Semantic search
+
+<Tabs items={['Typescript Client', 'Graphql']}>
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+    
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+### Fetch all images
+
+<Tabs items={['Typescript Client', 'Graphql']}>
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+    
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+### Semantic search on images
+
+<Tabs items={['Typescript Client', 'Graphql']}>
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+    
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+### Simple rag on text files (generative)
+
+<Tabs items={['Typescript Client', 'Graphql']}>
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+    
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+### Simple rag on images (generative)
+
+<Tabs items={['Typescript Client', 'Graphql']}>
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+    
+  <Tabs.Tab>
+    ```tsx
+    // Will be coming soon. But you can look into the custom data ingestion API
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## **Next Steps**
+
+Congratulations! Your first project is now set up. You can:
+
+- Experiment with semantic search or generative tasks.
+- Add more data providers.
+- Build AI-native features and applications with your processed data.
