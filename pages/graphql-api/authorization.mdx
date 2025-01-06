@@ -8,7 +8,17 @@ You can generate your API key from the Unbody Dashboard in `project settings/ de
 
 You can do so using the `Authorization` and `X-Project-Id` headers, respectively. The examples given below demonstrate how to set these headers in different environments.
 
-<Tabs items={['Curl', 'Unbody TypeScript Client', 'JavaScript']}>
+<Tabs items={['SDK (.ts)', 'Curl', 'JavaScript']}>
+    <Tabs.Tab>
+        ```ts
+        import { Unbody } from 'unbody';
+
+        const u = new Unbody({
+            apiKey: "<API_KEY>",
+            projectId: "<PROJECT_ID>",
+        });
+        ```
+    </Tabs.Tab>
   <Tabs.Tab>
 ```bash copy
 # Authorized call to Unbody using CURL
@@ -22,14 +32,7 @@ curl -X POST \\
 <https://graphql.unbody.io>
 ```
   </Tabs.Tab>
-  <Tabs.Tab>
-```tsx copy
-const u = new Unbody({
-  apiKey: "<API_KEY>",
-  projectId: "<PROJECT_ID>",
-});
-```
-</Tabs.Tab>
+
 <Tabs.Tab>
 ```jsx copy
 // Fetch API
