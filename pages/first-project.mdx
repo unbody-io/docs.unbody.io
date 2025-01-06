@@ -297,13 +297,42 @@ Now lets get all text documents that are markdown
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+    const {
+      data: { payload },
+    } = await unbody.get.textDocument.generate
+      .fromMany("Create a summary:", ["text", "title"])
+      .select("title", "text", "autoSummary")
+      .exec();
     ```
   </Tabs.Tab>
     
   <Tabs.Tab>
     ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+    {
+  Get {
+    TextDocument {
+      _additional {
+        generate(
+          groupedResult: {task: "Create a summary:", properties: ["text", "title"]}
+        ) {
+          error
+          groupedResult
+          metadata {
+            finishReason
+            usage {
+              inputTokens
+              outputTokens
+              totalTokens
+            }
+          }
+        }
+      }
+      title
+      text
+      autoSummary
+    }
+  }
+}
     ```
   </Tabs.Tab>
 </Tabs>
@@ -313,7 +342,7 @@ Now lets get all text documents that are markdown
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+     
     ```
   </Tabs.Tab>
     
