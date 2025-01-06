@@ -1,51 +1,113 @@
-import {Callout, Cards} from 'nextra/components'
+import { Callout, Cards, Steps } from 'nextra/components'
 
-# Build the Future with Unbody
+# Intro
 
-Apps today must **think, speak, and solve problems**, but traditional development stacks—built for static data and CRUD workflows—can’t support this shift. Whether you’re adding AI to existing products (AI-enabled) or building apps where AI is the DNA (AI-native), traditional stacks quickly fall apart.
+Users don’t want data. They want answers.
+Apps need to think, speak, solve and adopt.
+Old (current) tools can’t build this.
+That’s why we built Unbody.
 
-Unbody is a unified development stack for the AI era. It replaces fragmented workflows with a single system. From **data ingestion** to **vectorization**, from **semantic APIs** to **deployment**, Unbody gives you everything you need in one place—no duct tape, no fragile workflows.
+### **What is Unbody?**
 
-Think of Unbody as a modern replacement for **MERN** or **MEAN**, but rebuilt for AI.
+**Unbody is the Supabase of the AI era.** Built from the ground up on **vector databases**, it's a **unified development stack** tailored for modern AI-native and AI-enhanced applications. Whether you're creating **AI-native products** (No AI model, no product) or **AI-enhanced features** (Adding AI features to traditional products), Unbody removes the complexity of fragmented pipelines by offering:
 
-Unbody can help you in two key ways:
-- **Start AI-first**: Build AI-native products from scratch, like a smarter Wikipedia, or Preplexity for your own data.
-- **Add AI features**: Integrate AI-driven capabilities into your existing apps, like chatbots, semantic search, or recommendation engines.
+- **Backend Layer**: A unified, plugin-based system for data [ingestion](https://unbody.io), [vectorization](https://unbody.io), [enhancement](https://unbody.io), intelligence APIs, and seamless [storage and streaming](https://unbody.io).
+- **Frontend Layer**: LLM-ready UI components and utilities.
+- **Agentic Layer**: Tools for autonomous decision-making and advanced function calling.
+- **Utility Layer**: Features like query parsing and semantic ranking to accelerate development.
 
-## What Unbody Offers
-- **[Semantic Database](https://weaviate.io/)**: Vectorized storage for semantic search and dynamic relationships.
-- **AI Pipeline**: Seamlessly ingest, clean, vectorize, and enrich data.
-- **AI Integration**: Connect [OpenAI](https://openai.com/), [Cohere](https://cohere.com/), [Mistral](https://mistral.ai/), or your custom models.
-- **Intelligent GraphQL API**: Deliver generative responses, semantic search, and recommendations.
-- **Media Tools**: On-the-fly image processing, video streaming, and a global CDN.
-- **Function Calling (Coming Soon)**: Build systems that think, act, and solve problems autonomously.
+<aside>
 
-## Ready to start
-Now that you know what Unbody is, it’s time to get hands-on.
-<Cards>
-    <Cards.Card title={"Get Started"}
-                href={"/get-started/introduction"}
-                arrow={true}>
-        <small className={"ml-4 opacity-75"}>
-            Start building with Unbody right away.
-        </small>
-    </Cards.Card>
-</Cards>
+Unbody is a **commercial open-source framework**, but for now, the **cloud version** is the primary way to use it. Everything—from data ingestion to deployment—is hosted on our platform. We will release the alpha open-source version in February 2025.
 
-## Need to know more about Unbody?
-<Cards>
-    <Cards.Card title={"Why Unbody?"}
-                href={"/why"}
-                arrow={true}>
-        <small className={"ml-4 opacity-75"}>
-            Understand the shift to AI-native development.
-        </small>
-    </Cards.Card>
-    <Cards.Card title={"Manifesto"}
-                href={"/manifesto"}
-                arrow={true}>
-        <small className={"ml-4 mr-4 opacity-75"}>
-            See what we stand for.
-        </small>
-    </Cards.Card>
-</Cards>
+</aside>
+
+## Why Unbody?
+
+We built Unbody because, to be honest, we were fed up with the lack of AI-driven products in daily life. We found the roots of this in traditional development stacks like **MERN** or **MEAN**, because they are designed for static data and CRUD operations, while the new world of apps demands software to be speakable, with personalization and action-taking capabilities. We need a stack that works based on knowledge and not static data, and is proactive rather than passive. (read more here)
+
+## **How Unbody Works**
+
+At its core, Unbody transforms raw, unstructured & structured data into AI-ready knowledge and then enables you to develop products & features that are powered by this knowledge.
+
+Here's how it works, step by step:
+
+<Steps>
+    ### Ingest Your Data
+    Seamlessly integrate data from sources like [Google Drive](/providers/google-drive), [Discord](/providers/discord), [GitHub](/providers/github), or any custom source using the Push API (e.g., MongoDB). Alternatively, use Unbody as your primary, AI-ready database.
+    <Cards>
+        <Cards.Card title={"Backend Layer"}
+                    href={"/backend-layer#how-it-works"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more about the concepts.
+            </small>
+        </Cards.Card>
+        <Cards.Card title={"Data Ingestion"}
+                    href={"/data-ingestion/overview"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more in technical detail.
+            </small>
+        </Cards.Card>
+    </Cards>
+
+    ### Process and Enrich
+    Automatically clean, chunk, vectorize, and enhance your data to make it usable for AI models.
+    <Cards>
+        <Cards.Card title={"Backend Layer"}
+                    href={"/backend-layer#how-it-works"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more about the concepts.
+            </small>
+        </Cards.Card>
+        <Cards.Card title={"Project Configuration"}
+                    href={"/data-ingestion/overview"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more in technical detail.
+            </small>
+        </Cards.Card>
+    </Cards>
+
+    ### Serve and Query
+    Interact with your processed data through APIs, including a **GraphQL API** for semantic queries, an **Image API** for visual assets, and a **Video/Audio API** for multimedia.
+    <Cards>
+        <Cards.Card title={"API Layer"}
+                    href={"/api-layer"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more about the concepts.
+            </small>
+        </Cards.Card>
+        <Cards.Card title={"GraphQL API"}
+                    href={"/graphql-api/authorization"}
+                    arrow={true}>
+            <small className={"ml-4 opacity-75"}>
+                Learn more in technical detail.
+            </small>
+        </Cards.Card>
+    </Cards>
+</Steps>
+
+Unbody is built with **headless architecture**. This means:
+
+- You can centralize your backend while staying agnostic to your frontend framework.
+- Use a single backend to power multiple frontends—whether built with **Next.js**, **Nuxt.js**, or even custom setups with **Node.js** or **Express.js**.
+
+This flexibility allows you to focus on building features, not wrestling with disparate stacks. Learn more about [Unbody’s architecture](/core-architecture-overview).
+
+<Callout type="info" emoji="ℹ️">
+    Unbody is a **commercial open-source framework**, but for now, the **cloud version** is the primary way to use it. Everything—from data ingestion to deployment—is hosted on our platform. The open-source release is on the way!
+</Callout>
+
+### **What Can You Build with Unbody?**
+
+1. **AI-Native Products**
+
+AI-native products are the type of software where if you remove the AI, nothing is left—the AI is at the core and DNA of the software. You can use Unbody to build Perplexity for internal data or a smarter company-specific Wikipedia. Or build **Shazam for Images or a truly personalized recommendation engine for e-commerce!**
+
+1. **AI-Enhanced Features**
+
+AI-enhanced features are additions to existing products that leverage AI to provide enhanced functionality and better user experiences. The common examples include **Chatbots, Semantic Search and** Personalized Content Recommendations.
