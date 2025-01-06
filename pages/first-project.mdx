@@ -172,13 +172,26 @@ Once your data is ready, use the **Content API** to perform tasks like semantic 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+     const {
+      data: { payload },
+    } = await unbody.get.googleDoc
+      .select("title", "autoSummary", "text", "toc")
+      .exec();
     ```
   </Tabs.Tab>
     
   <Tabs.Tab>
-    ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+    ```graphql
+     {
+        Get {
+            GoogleDoc {
+            title
+            autoSummary
+            text
+            toc
+            }
+        }
+     }
     ```
   </Tabs.Tab>
 </Tabs>
@@ -196,13 +209,28 @@ Now lets get all text documents that are markdown
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+    const {
+      data: { payload },
+    } = await unbody.get.textDocument
+      .where({ mimeType: "text/markdown" })
+      .select("title", "autoSummary", "text")
+      .exec();
     ```
   </Tabs.Tab>
     
   <Tabs.Tab>
-    ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+    ```graphql
+      {
+  Get {
+    TextDocument(
+      where: {operator: Equal, path: "mimeType", valueText: "text/markdown"}
+    ) {
+      title
+      autoSummary
+      text
+    }
+  }
+}
     ```
   </Tabs.Tab>
 </Tabs>
@@ -212,13 +240,22 @@ Now lets get all text documents that are markdown
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+    const {
+      data: { payload },
+    } = await unbody.get.imageBlock.select("url", "originalName").exec();
     ```
   </Tabs.Tab>
     
   <Tabs.Tab>
-    ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+    ```graphql
+     {
+  Get {
+    ImageBlock {
+      url
+      originalName
+    }
+  }
+}
     ```
   </Tabs.Tab>
 </Tabs>
@@ -228,13 +265,29 @@ Now lets get all text documents that are markdown
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+     await unbody.get.imageBlock.similar
+      .image("https://example.com/image.jpg", {
+        certainty: 0.9,
+      })
+      .select("url", "originalName")
+      .exec();
     ```
   </Tabs.Tab>
     
   <Tabs.Tab>
     ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+    {
+  Get {
+    ImageBlock(nearImage: {image: "https://example.com/image.jpg", certainty: 0.9}) {
+      _additional {
+        certainty
+        distance
+      }
+      url
+      originalName
+    }
+  }
+}
     ```
   </Tabs.Tab>
 </Tabs>
