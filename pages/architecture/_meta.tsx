@@ -5,3 +5,5 @@ const meta = {
     "frontend-layer": "Frontend Layer",
     "utility-layer": "Utility Layer",
 }
+
+export default meta;
