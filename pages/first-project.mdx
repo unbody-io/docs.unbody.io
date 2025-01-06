@@ -196,31 +196,25 @@ Once your data is ready, use the **Content API** to perform tasks like semantic 
   </Tabs.Tab>
 </Tabs>
 
-- Typescript Clinet (title, autosummery, text, toc)
-- Graphql
+### Semantic search
 
 Now lets get all text documents that are markdown
 
-- Typescript Clinet
-- Graphql
-
-### Semantic search
-
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-    ```tsx
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument
-      .where({ mimeType: "text/markdown" })
-      .select("title", "autoSummary", "text")
-      .exec();
-    ```
+```typescript
+const {
+  data: { payload },
+} = await unbody.get.textDocument
+  .where({ mimeType: "text/markdown" })
+  .select("title", "autoSummary", "text")
+  .exec();
+```
   </Tabs.Tab>
     
   <Tabs.Tab>
-    ```graphql
-      {
+```graphql
+{
   Get {
     TextDocument(
       where: {operator: Equal, path: "mimeType", valueText: "text/markdown"}
@@ -231,7 +225,7 @@ Now lets get all text documents that are markdown
     }
   }
 }
-    ```
+```
   </Tabs.Tab>
 </Tabs>
 
@@ -239,16 +233,16 @@ Now lets get all text documents that are markdown
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-    ```tsx
-    const {
-      data: { payload },
-    } = await unbody.get.imageBlock.select("url", "originalName").exec();
-    ```
+```typescript
+const {
+  data: { payload },
+} = await unbody.get.imageBlock.select("url", "originalName").exec();
+```
   </Tabs.Tab>
     
   <Tabs.Tab>
-    ```graphql
-     {
+```graphql
+{
   Get {
     ImageBlock {
       url
@@ -256,7 +250,7 @@ Now lets get all text documents that are markdown
     }
   }
 }
-    ```
+```
   </Tabs.Tab>
 </Tabs>
 
@@ -264,21 +258,21 @@ Now lets get all text documents that are markdown
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-    ```tsx
-     await unbody.get.imageBlock.similar
-      .image("https://example.com/image.jpg", {
-        certainty: 0.9,
-      })
-      .select("url", "originalName")
-      .exec();
-    ```
+```typescript
+const {
+  data: { payload },
+} = await unbody.get.imageBlock.search
+  .about("Images about flight tickets")
+  .select("url", "originalName")
+  .exec();
+```
   </Tabs.Tab>
     
   <Tabs.Tab>
-    ```tsx
-    {
+```graphql
+{
   Get {
-    ImageBlock(nearImage: {image: "https://example.com/image.jpg", certainty: 0.9}) {
+    ImageBlock(nearText: {concepts: ["Images about flight tickets"]}) {
       _additional {
         certainty
         distance
@@ -288,7 +282,7 @@ Now lets get all text documents that are markdown
     }
   }
 }
-    ```
+```
   </Tabs.Tab>
 </Tabs>
 
@@ -296,19 +290,19 @@ Now lets get all text documents that are markdown
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-    ```tsx
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument.generate
-      .fromMany("Create a summary:", ["text", "title"])
-      .select("title", "text", "autoSummary")
-      .exec();
-    ```
+```typescript
+const {
+  data: { payload },
+} = await unbody.get.textDocument.generate
+  .fromMany("Create a summary:", ["text", "title"])
+  .select("title", "text", "autoSummary")
+  .exec();
+```
   </Tabs.Tab>
     
   <Tabs.Tab>
-    ```tsx
-    {
+```graphql
+{
   Get {
     TextDocument {
       _additional {
@@ -333,7 +327,7 @@ Now lets get all text documents that are markdown
     }
   }
 }
-    ```
+```
   </Tabs.Tab>
 </Tabs>
 
@@ -341,15 +335,62 @@ Now lets get all text documents that are markdown
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-    ```tsx
-     
-    ```
+```typescript
+const {
+  data: { payload },
+} = await unbody.get.imageBlock.search
+  .about("Find images about documents")
+  .generate.fromMany("Create a summary and analysis of the images found:", [
+    "originalName",
+    "autoCaption",
+    "autoOCR",
+  ])
+  .exec();
+```
   </Tabs.Tab>
     
   <Tabs.Tab>
-    ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
-    ```
+```graphql
+{
+  Get {
+    ImageBlock(nearText: {concepts: ["Find images about documents"]}) {
+      _additional {
+        certainty
+        distance
+        generate(
+          groupedResult: {task: "Create a summary and analysis of the images found:", properties: ["originalName", "autoCaption", "autoOCR"]}
+        ) {
+          error
+          groupedResult
+          metadata {
+            finishReason
+            usage {
+              inputTokens
+              outputTokens
+              totalTokens
+            }
+          }
+        }
+      }
+      alt
+      createdAt
+      ext
+      height
+      mimeType
+      modifiedAt
+      order
+      originalName
+      path
+      pathString
+      remoteId
+      size
+      sourceId
+      url
+      width
+    }
+  }
+}
+```
   </Tabs.Tab>
 </Tabs>
 
