@@ -86,24 +86,25 @@ For this guide, we use a **vectorizer** for processing text and two built in enh
  <Tabs.Tab>
   ```tsx
 import {
-  ProjectSettings,
-  TextVectorizer,
-  Generative,
-  AutoSummary,
-  AutoVision,
+     ProjectSettings,
+     TextVectorizer,
+     Generative,
+     AutoSummary,
+     AutoVision,
 } from "@unbody/admin";
 
 const projectSettings = new ProjectSettings();
+
 projectSettings
-  .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
-  .set(new Generative(Generative.Cohere.CommandRPlus))
-  .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
-  .set(new AutoVision(AutoVision.OpenAI.GPT4o));
+     .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
+     .set(new Generative(Generative.Cohere.CommandRPlus))
+     .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
+     .set(new AutoVision(AutoVision.OpenAI.GPT4o));
 
 const project = admin.projects.ref({
-  id: "your-project-id",
-  name: "Your Project Name",
-  settings: projectSettings,
+     id: "your-project-id",
+     name: "Your Project Name",
+     settings: projectSettings,
 });
 
 project.save();
@@ -162,11 +163,10 @@ Once your data is ready, use the **Content API** to perform tasks like semantic 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```tsx
-     const {
-      data: { payload },
-    } = await unbody.get.googleDoc
-      .select("title", "autoSummary", "text", "toc")
-      .exec();
+     const { data } = await unbody.get
+                                  .googleDoc
+                                  .select("title", "autoSummary", "text", "toc")
+                                  .exec();
     ```
   </Tabs.Tab>
 
