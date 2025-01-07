@@ -49,18 +49,19 @@ When you set up a project, you’re defining the tools and processes that transf
 
    ### Create a project programmatically:
 
-    ```tsx
-    import { UnbodyAdmin } from 'unbody/admin';
+    ```typescript
+    import { UnbodyAdmin } from "@unbody/admin";
 
     const admin = new UnbodyAdmin({
-      apiKey: "<YOUR_ADMIN_API_KEY>",
+      apiKey: "<YOUR_ADMIN_API_KEY>"
     });
 
     const project = admin.projects.ref({
       name: "My First Project",
     });
 
-    project.save().then(...)
+    await project.save()
+                  .then(...);
     ```
     </Steps>
   </Tabs.Tab>
@@ -107,7 +108,7 @@ const project = admin.projects.ref({
      settings: projectSettings,
 });
 
-project.save();
+await project.save();
 ```
   </Tabs.Tab>
 </Tabs>
@@ -175,10 +176,10 @@ Once your data is ready, use the **Content API** to perform tasks like semantic 
      {
         Get {
             GoogleDoc {
-            title
-            autoSummary
-            text
-            toc
+                title
+                autoSummary
+                text
+                toc
             }
         }
      }
@@ -192,30 +193,33 @@ Now lets get all text documents that are markdown
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-```typescript
-const {
-  data: { payload },
-} = await unbody.get.textDocument
-  .where({ mimeType: "text/markdown" })
-  .select("title", "autoSummary", "text")
-  .exec();
-```
+    ```typescript
+    const data = await unbody.get
+                              .textDocument
+                              .where({ mimeType: "text/markdown" })
+                              .select("title", "autoSummary", "text")
+                              .exec();
+    ```
   </Tabs.Tab>
 
   <Tabs.Tab>
-```graphql
-{
-  Get {
-    TextDocument(
-      where: {operator: Equal, path: "mimeType", valueText: "text/markdown"}
-    ) {
-      title
-      autoSummary
-      text
+    ```graphql
+    {
+        Get {
+            TextDocument(
+                where: {
+                    operator: Equal,
+                    path: "mimeType",
+                    valueText: "text/markdown"
+                }
+            ) {
+                title
+                autoSummary
+                text
+            }
+        }
     }
-  }
-}
-```
+    ```
   </Tabs.Tab>
 </Tabs>
 
@@ -223,24 +227,25 @@ const {
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-```typescript
-const {
-  data: { payload },
-} = await unbody.get.imageBlock.select("url", "originalName").exec();
-```
+    ```typescript
+    const data = await unbody.get
+                              .imageBlock
+                              .select("url", "originalName")
+                              .exec();
+    ```
   </Tabs.Tab>
 
   <Tabs.Tab>
-```graphql
-{
-  Get {
-    ImageBlock {
-      url
-      originalName
+    ```graphql
+    {
+        Get {
+            ImageBlock {
+                url
+                originalName
+            }
+        }
     }
-  }
-}
-```
+    ```
   </Tabs.Tab>
 </Tabs>
 
@@ -248,31 +253,31 @@ const {
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-```typescript
-const {
-  data: { payload },
-} = await unbody.get.imageBlock.search
-  .about("Images about flight tickets")
-  .select("url", "originalName")
-  .exec();
-```
+    ```typescript
+    const data = await unbody.get
+                              .imageBlock
+                              .search
+                              .about("Flight tickets")
+                              .select("url", "originalName")
+                              .exec();
+    ```
   </Tabs.Tab>
 
   <Tabs.Tab>
-```graphql
-{
-  Get {
-    ImageBlock(nearText: {concepts: ["Images about flight tickets"]}) {
-      _additional {
-        certainty
-        distance
-      }
-      url
-      originalName
+    ```graphql
+    {
+        Get {
+            ImageBlock(nearText: {concepts: ["Flight tickets"]}) {
+                _additional {
+                    certainty
+                    distance
+                }
+                url
+                originalName
+            }
+        }
     }
-  }
-}
-```
+    ```
   </Tabs.Tab>
 </Tabs>
 
@@ -280,44 +285,47 @@ const {
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-```typescript
-const {
-  data: { payload },
-} = await unbody.get.textDocument.generate
-  .fromMany("Create a summary:", ["text", "title"])
-  .select("title", "text", "autoSummary")
-  .exec();
-```
+    ```typescript
+    const data = await unbody.get
+                              .textDocument
+                              .generate
+                              .fromMany("Create a summary:", ["text", "title"])
+                              .select("title", "text", "autoSummary")
+                              .exec();
+    ```
   </Tabs.Tab>
 
   <Tabs.Tab>
-```graphql
-{
-  Get {
-    TextDocument {
-      _additional {
-        generate(
-          groupedResult: {task: "Create a summary:", properties: ["text", "title"]}
-        ) {
-          error
-          groupedResult
-          metadata {
-            finishReason
-            usage {
-              inputTokens
-              outputTokens
-              totalTokens
+    ```graphql
+    {
+        Get {
+            TextDocument {
+                _additional {
+                    generate(
+                        groupedResult: {
+                            task: "Create a summary:",
+                            properties: ["text", "title"]
+                        }
+                    ) {
+                        error
+                        groupedResult
+                        metadata {
+                            finishReason
+                            usage {
+                                inputTokens
+                                outputTokens
+                                totalTokens
+                            }
+                        }
+                    }
+                }
+                title
+                text
+                autoSummary
             }
-          }
         }
-      }
-      title
-      text
-      autoSummary
     }
-  }
-}
-```
+    ```
   </Tabs.Tab>
 </Tabs>
 
@@ -325,62 +333,66 @@ const {
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
-```typescript
-const {
-  data: { payload },
-} = await unbody.get.imageBlock.search
-  .about("Find images about documents")
-  .generate.fromMany("Create a summary and analysis of the images found:", [
-    "originalName",
-    "autoCaption",
-    "autoOCR",
-  ])
-  .exec();
-```
+    ```typescript
+    const data = await unbody.get
+                              .imageBlock
+                              .search
+                              .about("Documents")
+                              .generate
+                              .fromMany("Create a summary and analysis of the images found:", [
+                                  "originalName",
+                                  "autoCaption",
+                                  "autoOCR"
+                              ])
+                              .exec();
+    ```
   </Tabs.Tab>
 
   <Tabs.Tab>
-```graphql
-{
-  Get {
-    ImageBlock(nearText: {concepts: ["Find images about documents"]}) {
-      _additional {
-        certainty
-        distance
-        generate(
-          groupedResult: {task: "Create a summary and analysis of the images found:", properties: ["originalName", "autoCaption", "autoOCR"]}
-        ) {
-          error
-          groupedResult
-          metadata {
-            finishReason
-            usage {
-              inputTokens
-              outputTokens
-              totalTokens
+    ```graphql
+    {
+        Get {
+            ImageBlock(nearText: {concepts: ["Documents"]}) {
+                _additional {
+                    certainty
+                    distance
+                    generate(
+                        groupedResult: {
+                            task: "Create a summary and analysis of the images found:",
+                            properties: ["originalName", "autoCaption", "autoOCR"]
+                        }
+                    ) {
+                        error
+                        groupedResult
+                        metadata {
+                            finishReason
+                            usage {
+                                inputTokens
+                                outputTokens
+                                totalTokens
+                            }
+                        }
+                    }
+                }
+                alt
+                createdAt
+                ext
+                height
+                mimeType
+                modifiedAt
+                order
+                originalName
+                path
+                pathString
+                remoteId
+                size
+                sourceId
+                url
+                width
             }
-          }
         }
-      }
-      alt
-      createdAt
-      ext
-      height
-      mimeType
-      modifiedAt
-      order
-      originalName
-      path
-      pathString
-      remoteId
-      size
-      sourceId
-      url
-      width
     }
-  }
-}
-```
+    ```
   </Tabs.Tab>
 </Tabs>
 </Steps>
