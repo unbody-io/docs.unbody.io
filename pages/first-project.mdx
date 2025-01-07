@@ -39,6 +39,7 @@ A **project** in Unbody is your workspace. It includes:
 
 When you set up a project, you’re defining the tools and processes that transform raw data into actionable knowledge. Once the data is ingested, Unbody processes, vectorizes, and enriches it. Afterward, you can query and interact with the AI-ready data through the **Content API**.
 
+<Steps>
 ## Step 1: Create a Project
 
 <Tabs items={['Dashboard', 'SDK']}>
@@ -86,11 +87,11 @@ Once your project is created, configure the AI tools it will use. Configurations
 - **Enhancers**: Enrich data by summarizing, tagging, or extracting metadata.
 - **Generative Modules**: Enable AI-driven content creation.
 
-For this guide, we use a **vectorizer** for processing text and two built in enhancers; **AutoVision** for enahncing images and AutoSummary for text documents.
+For this guide, we use a **vectorizer** for processing text and two built in enhancers: **AutoVision** for enhancing images and **AutoSummary** for text documents.
 
 <Tabs items={['Dashboard', 'SDK']}>
   <Tabs.Tab>
-  You’ll find these options in the **Project Configuration** section during project setup.
+  You’ll find these options in the [**Project Configuration**](/project-configurations/vectorizers) section during project setup.
 
   ![project settings](/images/docs/get-started/project-settings.jpg)
   </Tabs.Tab>
@@ -169,7 +170,7 @@ At this point you have nothing to do on dashboard and can moe to next step which
 
 Once your data is ready, use the **Content API** to perform tasks like semantic search or content generation.
 
-### Fetch google docs
+**Fetch google docs**
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -198,7 +199,7 @@ Once your data is ready, use the **Content API** to perform tasks like semantic 
   </Tabs.Tab>
 </Tabs>
 
-### Semantic search
+**Semantic search**
 
 Now lets get all text documents that are markdown
 
@@ -231,7 +232,7 @@ const {
   </Tabs.Tab>
 </Tabs>
 
-### Fetch all images
+**Fetch all images**
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -256,7 +257,7 @@ const {
   </Tabs.Tab>
 </Tabs>
 
-### Semantic search on images
+**Semantic search on images**
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -288,7 +289,7 @@ const {
   </Tabs.Tab>
 </Tabs>
 
-### Simple rag on text files (generative)
+**Simple rag on text files (generative)**
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -333,7 +334,7 @@ const {
   </Tabs.Tab>
 </Tabs>
 
-### Simple rag on images (generative)
+**Simple rag on images (generative)**
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -395,11 +396,12 @@ const {
 ```
   </Tabs.Tab>
 </Tabs>
+</Steps>
 
 ## Next Steps
 
 Congratulations! Your first project is now set up. You can:
 
 - Experiment with semantic search or generative tasks.
-- Add more data providers.
+- Add more [data providers](/providers/overview).
 - Build AI-native features and applications with your processed data.
