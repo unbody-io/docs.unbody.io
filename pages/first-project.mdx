@@ -16,8 +16,8 @@ In this guide, we’ll walk you through building your first project with Unbody,
 ## Prerequisites
 
 1. An Unbody account: Sign up at [Unbody.io](https://unbody.io/).
-2. A Data source: For this guide, we’ll use a **Google Drive folder** with a few files (e.g., Markdown, PDFs, images, or a short video under 1 minute). Unbody also supports many other prebuilt integrations (like Discord or GitHub) and custom data ingestion.
-3. Freemium plan: Unbody’s free plan is great for testing but has limits on file count and size, so keep your test folder small.
+2. A Data source: For this guide, we’ll use a **Google Drive folder** with a few files (e.g., [Markdown](/graphql-api/data-types/textdocument), [PDFs](/graphql-api/data-types/textdocument), [images](/graphql-api/data-types/imageblock), or a short [video](/graphql-api/data-types/videofile) under 1 minute). Unbody also supports many other prebuilt integrations (like [Discord](/providers/discord) or [GitHub](/providers/github) and [custom data ingestion](/data-ingestion/push-api).
+3. Freemium plan: Unbody’s free plan is great for testing but has limits on file count and size, so keep your test folder small. [Learn more about pricing](https://unbody.io/pricing).
 
 Once ready, let’s get started.
 
@@ -29,7 +29,7 @@ A **project** in Unbody is your workspace. It includes:
 - Configurable AI tools like [**vectorizers**](/project-configurations/vectorizers), [**enhancers**](/project-configurations/enhancers), and [**generative modules**](/project-configurations/generative-modules).
 - One or more **data sources**, defining where your data comes from.
 
-When you set up a project, you’re defining the tools and processes that transform raw data into actionable knowledge. Once the data is ingested, Unbody processes, vectorizes, and enriches it. Afterward, you can query and interact with the AI-ready data through the **Content API**.
+When you set up a project, you’re defining the tools and processes that transform raw data into actionable knowledge. Once the data is ingested, Unbody processes, vectorizes, and enriches it. Afterward, you can query and interact with the AI-ready data through the [**Content API**](/graphql-api/authorization).
 
 <Steps>
 ## Step 1: Create a Project
@@ -37,6 +37,7 @@ When you set up a project, you’re defining the tools and processes that transf
 <Tabs items={['Dashboard', 'SDK']}>
   <Tabs.Tab>
       First Log in to [Unbody](https://unbody.io/) and then click on **New Project**.
+
       ![Create project](/images/docs/get-started/new-project.jpg)
   </Tabs.Tab>
  <Tabs.Tab>
@@ -60,8 +61,7 @@ When you set up a project, you’re defining the tools and processes that transf
       name: "My First Project",
     });
 
-    await project.save()
-                  .then(...);
+    await project.save().then(...);
     ```
     </Steps>
   </Tabs.Tab>
@@ -71,11 +71,11 @@ When you set up a project, you’re defining the tools and processes that transf
 
 Once your project is created, configure the AI tools it will use. Configurations include:
 
-- **Vectorizers**: Convert data into embeddings for tasks like semantic search.
-- **Enhancers**: Enrich data by summarizing, tagging, or extracting metadata.
-- **Generative Modules**: Enable AI-driven content creation.
+- [**Vectorizers**](/project-configurations/vectorizers): Convert data into embeddings for tasks like [semantic search](/graphql-api/search/semantic-search).
+- [**Enhancers**](/project-configurations/enhancers): Enrich data by summarizing, tagging, or extracting metadata.
+- [**Generative Modules**](/project-configurations/generative-modules): Enable AI-driven content creation.
 
-For this guide, we use a **vectorizer** for processing text and two built in enhancers: **AutoVision** for enhancing images and **AutoSummary** for text documents.
+For this guide, we use a [**vectorizer**](/admin-api#textvectorizer-configuration) for processing text and two built in enhancers: [**AutoVision**](/admin-api#autovision-configuration) for enhancing images and [**AutoSummary**](/admin-api#autosummary-configuration) for [text documents](/graphql-api/data-types/textdocument).
 
 <Tabs items={['Dashboard', 'SDK']}>
   <Tabs.Tab>
@@ -116,7 +116,7 @@ await project.save();
 
 ## Step 3: Add a Data Source
 
-Data sources define where your project gets its data. Unbody supports both prebuilt integrations (e.g., [Google Drive](/providers/google-drive), [Discord](/providers/discord)) and custom data providers.
+Data sources define where your project gets its data. Unbody supports both [prebuilt integrations](/providers/overview) (e.g., [Google Drive](/providers/google-drive), [Discord](/providers/discord)) and [custom data providers](/data-ingestion/push-api).
 
 <Tabs items={['Dashboard', 'SDK']}>
   <Tabs.Tab>
@@ -153,13 +153,13 @@ Data sources define where your project gets its data. Unbody supports both prebu
 
 At this point, unbody will ingest, process, vectorize, and enrich the data automatically. This process will take while, you can keep track of progress in the data source page under logs section.
 
-At this point you have nothing to do on dashboard and can moe to next step which is about start bulding. The following will be providerd in SDK (typescript) and Graphql. Each project has a graphql playground where you cna play around with the given queries.
+At this point you have nothing to do on dashboard and can move to next step which is about start building. The following will be provided in [SDK (typescript)](/graphql-api/authorization) and [Graphql](/graphql-api/authorization). Each project has a graphql playground where you can play around with the given queries.
 
 ## Step 4: Interact with Your Data
 
-Once your data is ready, use the **Content API** to perform tasks like semantic search or content generation.
+Once your data is ready, use the [**Content API**](/graphql-api/authorization) to perform tasks like semantic search or content generation.
 
-**Fetch google docs**
+**Fetch [google docs](/graphql-api/data-types/googledoc)**
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -187,9 +187,9 @@ Once your data is ready, use the **Content API** to perform tasks like semantic 
   </Tabs.Tab>
 </Tabs>
 
-**Semantic search**
+[**Semantic search**](/graphql-api/search/semantic-search)
 
-Now lets get all text documents that are markdown
+Now lets get all [text documents](/graphql-api/data-types/textdocument) that are markdown
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -223,7 +223,7 @@ Now lets get all text documents that are markdown
   </Tabs.Tab>
 </Tabs>
 
-**Fetch all images**
+**Fetch all [images](/graphql-api/data-types/imageblock)**
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -281,7 +281,7 @@ Now lets get all text documents that are markdown
   </Tabs.Tab>
 </Tabs>
 
-**Simple rag on text files (generative)**
+**Simple rag on text files ([generative](/graphql-api/generative))**
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -329,7 +329,7 @@ Now lets get all text documents that are markdown
   </Tabs.Tab>
 </Tabs>
 
-**Simple rag on images (generative)**
+**Simple rag on images ([generative](/graphql-api/generative))**
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -401,6 +401,6 @@ Now lets get all text documents that are markdown
 
 Congratulations! Your first project is now set up. You can:
 
-- Experiment with semantic search or generative tasks.
+- Experiment with [semantic search](/graphql-api/search/semantic-search) or [generative tasks](/graphql-api/generative).
 - Add more [data providers](/providers/overview).
 - Build AI-native features and applications with your processed data.
