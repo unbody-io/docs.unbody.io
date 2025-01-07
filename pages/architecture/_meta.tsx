@@ -1,5 +1,5 @@
 const meta = {
-    "overview": "Architecture Overview",
+    "overview": "Overview",
     "backend-layer": "Backend Layer",
     "api-layer": "Api Layer",
     "frontend-layer": "Frontend Layer",
