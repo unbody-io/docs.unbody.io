@@ -1,0 +1,13 @@
+import { UnbodyAdmin } from "@unbody/admin";
+
+const admin = new UnbodyAdmin({
+   apiKey: "<YOUR_ADMIN_API_KEY>"
+});
+
+const project = admin.projects
+                   .ref({
+                       name: "My First Project"
+                   });
+
+await project.save()
+           .then(...);
