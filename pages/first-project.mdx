@@ -15,17 +15,9 @@ In this guide, we’ll walk you through building your first project with Unbody,
 
 ## Prerequisites
 
-1. **Unbody Account**:
-
-   Sign up at [Unbody.io](https://unbody.io/).
-
-2. **A Data Source**:
-
-   For this guide, we’ll use a **Google Drive folder** with a few files (e.g., Markdown, PDFs, images, or a short video under 1 minute). Unbody also supports many other prebuilt integrations (like Discord or GitHub) and custom data ingestion.
-
-3. **Freemium Plan**:
-
-   Unbody’s free plan is great for testing but has limits on file count and size, so keep your test folder small.
+1. An Unbody account: Sign up at [Unbody.io](https://unbody.io/).
+2. A Data source: For this guide, we’ll use a **Google Drive folder** with a few files (e.g., Markdown, PDFs, images, or a short video under 1 minute). Unbody also supports many other prebuilt integrations (like Discord or GitHub) and custom data ingestion.
+3. Freemium plan: Unbody’s free plan is great for testing but has limits on file count and size, so keep your test folder small.
 
 Once ready, let’s get started.
 
@@ -44,36 +36,31 @@ When you set up a project, you’re defining the tools and processes that transf
 
 <Tabs items={['Dashboard', 'SDK']}>
   <Tabs.Tab>
-  <Steps>
-    ### Log in to [Unbody](https://unbody.io/).
-    
-    ### Click on **New Project**.
-     ![Create project](/images/docs/get-started/new-project.jpg)
-    
-   </Steps>
+      First Log in to [Unbody](https://unbody.io/) and then click on **New Project**.
+      ![Create project](/images/docs/get-started/new-project.jpg)
   </Tabs.Tab>
-    
  <Tabs.Tab>
   <Steps>
    ### Install the SDK:
-    
+
     ```bash
     npm install unbody
     ```
-    
+
    ### Create a project programmatically:
-    
+
     ```tsx
-    import { UnbodyAdmin } from '@unbody/admin';
-    
+    import { UnbodyAdmin } from 'unbody/admin';
+
     const admin = new UnbodyAdmin({
       apiKey: "<YOUR_ADMIN_API_KEY>",
     });
-    
+
     const project = admin.projects.ref({
       name: "My First Project",
     });
-    project.save();
+
+    project.save().then(...)
     ```
     </Steps>
   </Tabs.Tab>
@@ -95,7 +82,7 @@ For this guide, we use a **vectorizer** for processing text and two built in enh
 
   ![project settings](/images/docs/get-started/project-settings.jpg)
   </Tabs.Tab>
-    
+
  <Tabs.Tab>
   ```tsx
 import {
@@ -133,7 +120,7 @@ Data sources define where your project gets its data. Unbody supports both prebu
   <Tabs.Tab>
     <Steps>
         ### Open your project and navigate to **Data Sources**.
-        
+
         ### Click **Add Data Source** and select **Google Drive**.
         ![Create source](/images/docs/get-started/add-source.jpg)
 
@@ -143,7 +130,7 @@ Data sources define where your project gets its data. Unbody supports both prebu
             <Steps>
                 ### Connect
                  ![Connect a source](/images/docs/get-started/connect.jpg)
-                
+
                 ### Entrypoint
                  ![Select an entrypoint](/images/docs/get-started/entry.jpg)
 
@@ -154,7 +141,7 @@ Data sources define where your project gets its data. Unbody supports both prebu
 
     </Steps>
   </Tabs.Tab>
-    
+
   <Tabs.Tab>
     ```tsx
     // Will be coming soon. But you can look into the custom data ingestion API
@@ -182,7 +169,7 @@ Once your data is ready, use the **Content API** to perform tasks like semantic 
       .exec();
     ```
   </Tabs.Tab>
-    
+
   <Tabs.Tab>
     ```graphql
      {
@@ -214,7 +201,7 @@ const {
   .exec();
 ```
   </Tabs.Tab>
-    
+
   <Tabs.Tab>
 ```graphql
 {
@@ -242,7 +229,7 @@ const {
 } = await unbody.get.imageBlock.select("url", "originalName").exec();
 ```
   </Tabs.Tab>
-    
+
   <Tabs.Tab>
 ```graphql
 {
@@ -270,7 +257,7 @@ const {
   .exec();
 ```
   </Tabs.Tab>
-    
+
   <Tabs.Tab>
 ```graphql
 {
@@ -302,7 +289,7 @@ const {
   .exec();
 ```
   </Tabs.Tab>
-    
+
   <Tabs.Tab>
 ```graphql
 {
@@ -351,7 +338,7 @@ const {
   .exec();
 ```
   </Tabs.Tab>
-    
+
   <Tabs.Tab>
 ```graphql
 {

@@ -1,5 +1,5 @@
 const meta = {
-  index: "Intro",
+  index: "Introduction",
 
   "-- getting-started": {
     title: "Getting Started",
