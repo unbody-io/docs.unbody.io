@@ -1,7 +1,22 @@
 const meta = {
-  index: "Welcome",
-  "get-started": "Get Started",
-  starters: "Starters",
+  index: "Introduction",
+
+  "-- getting-started": {
+    title: "Getting Started",
+    type: "separator",
+  },
+  "first-project": "First Project",
+  // "get-started": "Get Started",
+  // starters: "Starters",
+  "-- core-architecture": {
+    title: "Core Architecture",
+    type: "separator",
+  },
+  "core-architecture-overview": "Overview",
+  "backend-layer": "Backend Layer",
+  "api-layer": "Api Layer",
+  "frontend-layer": "Frontend Layer",
+  "utility-layer": "Utility Layer",
   "-- development-references": {
     title: "Development Reference",
     type: "separator",
