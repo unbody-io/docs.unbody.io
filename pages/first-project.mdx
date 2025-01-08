@@ -36,7 +36,7 @@ When you set up a project, you’re defining the tools and processes that transf
 
 <Tabs items={['Dashboard', 'SDK']}>
   <Tabs.Tab>
-      First Log in to [Unbody](https://unbody.io/) and then click on **New Project**.
+      First Log in to [Unbody](https://unbody.io/) and then click on `New Project`.
 
       ![Create project](/images/docs/get-started/new-project.jpg)
   </Tabs.Tab>
@@ -81,16 +81,16 @@ For this guide, we use a [**vectorizer**](/admin-api#textvectorizer-configuratio
   <Tabs.Tab>
   You’ll find these options in the [**Project Configuration**](/project-configurations/vectorizers) -> `ADVANCED` section during project setup.
 
-  - Configure `Text Vectorizers` to enable semantic search and text processing
+  - Let's choose `text-embedding-3-small` from `OpenAI`.
    ![Setting up text vectorizer](/images/docs/get-started/setup-text-vectorizer.png)
     
-  - Set up `Generative Search` with your preferred model
+  - Set up `Generative Search` -> `Command R+` from `Generative Cohere`.
   ![Setting up generative search](/images/docs/get-started/setup-generative-search.png)
   
-  - Enable `AutoVision` for enhancing Image
+  - Enable `AutoVision` -> `OpenAi GPT-4o` for enhancing Image.
   ![Enable Autovision for enhancing Image](/images/docs/get-started/visual-enhancer.png)
 
-  - Enable `AutoSummary` to automatically generate text summaries
+  - Select `AutoSummary` -> `OpenAI GPT-4o` for automatic text summarization.
   ![Setting up AutoSummary for Text](/images/docs/get-started/setup-autosummary.png)
 
   </Tabs.Tab>
@@ -132,9 +132,9 @@ Data sources define where your project gets its data. Unbody supports both [preb
 <Tabs items={['Dashboard', 'SDK']}>
   <Tabs.Tab>
     <Steps>
-        ### Open your project and navigate to **Data Sources**.
+        ### Open your project and navigate to Data Sources.
 
-        ### Click **Add Data Source** and select **Google Drive**.
+        ### Click `Add Data Source` and select `Google Drive`.
         ![Create source](/images/docs/get-started/add-source.jpg)
 
         ![Select provider](/images/docs/get-started/providers.jpg)
@@ -175,9 +175,9 @@ At this point you have nothing to do on dashboard and can move to next step whic
 {/* *Built-in GraphQL playground for testing queries* */}
 
 ## Step 4: Interact with Your Data
-Once your data is ready, use the [**Content API**](/graphql-api/authorization) to perform tasks like semantic search or content generation. 
+Once your data is ready, use the [**Content API**](/graphql-api/authorization) to perform tasks like  [semantic search](/graphql-api/search/semantic-search) or content generation. 
 
-**Fetch [google docs](/graphql-api/data-types/googledoc)**
+Fetch [google docs](/graphql-api/data-types/googledoc)
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -205,7 +205,7 @@ Once your data is ready, use the [**Content API**](/graphql-api/authorization) t
   </Tabs.Tab>
 </Tabs>
 
-[**Semantic search**](/graphql-api/search/semantic-search)
+[Semantic search](/graphql-api/search/semantic-search)
 
 Now lets get all [text documents](/graphql-api/data-types/textdocument) that are markdown
 
@@ -241,7 +241,7 @@ Now lets get all [text documents](/graphql-api/data-types/textdocument) that are
   </Tabs.Tab>
 </Tabs>
 
-**Fetch all [images](/graphql-api/data-types/imageblock)**
+Fetch all [images](/graphql-api/data-types/imageblock)
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -267,7 +267,7 @@ Now lets get all [text documents](/graphql-api/data-types/textdocument) that are
   </Tabs.Tab>
 </Tabs>
 
-**Semantic search on images**
+Semantic search on images
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -299,7 +299,7 @@ Now lets get all [text documents](/graphql-api/data-types/textdocument) that are
   </Tabs.Tab>
 </Tabs>
 
-**Simple rag on text files ([generative](/graphql-api/generative))**
+Simple rag on text files ([generative](/graphql-api/generative))
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
@@ -347,7 +347,7 @@ Now lets get all [text documents](/graphql-api/data-types/textdocument) that are
   </Tabs.Tab>
 </Tabs>
 
-**Simple rag on images ([generative](/graphql-api/generative))**
+Simple rag on images ([generative](/graphql-api/generative))
 
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
