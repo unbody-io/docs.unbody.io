@@ -1,13 +1,12 @@
 const meta = {
   index: "Introduction",
-
+  "architecture": "Architecture",
   "-- getting-started": {
     title: "Getting Started",
     type: "separator",
   },
   "first-project": "First Project",
   "starters": "Starters",
-  "architecture": "Architecture",
 
   "-- development-references": {
     title: "Development Reference",
@@ -21,7 +20,7 @@ const meta = {
     type: "separator",
   },
 
-  "graphql-api": "Content API",
+  "content-api": "Content API",
   "generative-api": "Generative API",
   "image-api": "Image API",
   "video-api": "Video API",

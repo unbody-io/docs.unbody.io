@@ -1,0 +1,131 @@
+# Unbody's Blueprint
+
+Unbody is designed to enable the next generation of software—products that **think**, **speak**, and **act autonomously**. This vision is realized through three core principles:
+
+- #### Knowledge
+    Unbody builds applications on enriched knowledge rather than static data, transforming raw inputs into dynamic, actionable insights.
+
+- #### Modularity and Openness
+    Every layer is modular and open-source, ensuring flexibility, scalability, and seamless integration for developers to adapt and extend.
+
+- #### Adaptive Agency
+    Unbody empowers software to act autonomously, making decisions, adapting to user needs, and evolving through advanced function calling and contextual awareness.
+
+
+## Backend Layer: Transforming Raw Data into Knowledge
+
+The Backend Layer is the foundation of Unbody, where raw data is processed and transformed into actionable insights. This layer is built on two guiding principles:
+
+1. **Agnostic to Data Location:** Data can come from anywhere—Google Docs, Discord, local files, or databases.
+2. **Agnostic to Data Format:** Data can exist in many forms—text, images, videos, or structured files like PDFs.
+
+These principles shape how Unbody's backend ingests, processes, and enriches data.
+
+### Data Ingestion
+
+Being agnostic to data location means supporting integrations with disparate sources of data that developers interact with daily:
+
+- **Prebuilt Integrations:** Unbody offers connectors for platforms like [Google Drive](/providers/google-drive), [GitHub](/providers/github), and [Discord](/providers/discord). For example, your Google Drive may hold important reports, while Discord stores informal but critical team communications. All of these can be ingested into Unbody.
+- **[Push API](/data-ingestion/push-api):** For more specialized cases, developers can push custom data programmatically by defining schemas that match their unique requirements.
+
+### Data Processing
+
+Handling diverse formats requires tailored solutions for each data type. Data processing ensures that raw data becomes usable and consistent:
+
+- **File Parsers:** Each file type is handled with a dedicated parser. For instance, PDF parsing can extract embedded metadata, text, and images.
+- **Cleaning:** Real-world data is messy. Cleaning removes duplicates, irrelevant content, and inconsistencies, ensuring higher quality downstream.
+- **Chunking:** Large files are divided into smaller, logical segments. By default, Unbody chunks data into its **fundamental content blocks** (text, image, video, audio). For more complex cases, developers can define advanced chunking strategies using custom enhancement pipelines.
+
+### Data Enrichment
+
+Enrichment is the core mechanism of the backend layer, powered by Generative Feedback Loops that iteratively transform raw data into actionable knowledge. Each step in this process involves taking input data, applying specific operations like OCR or retrieval, and producing enriched outputs. These steps operate within modular **[Enhancer Pipelines](/project-configurations/enhancers)**, which handle tasks such as text extraction from images or generating structured metadata.
+
+For advanced use cases, developers can define custom pipelines tailored to their needs. [Learn more about enhancers here.](/project-configurations/enhancers)
+
+### Data Vectorization
+
+Vectorization converts enriched data into embeddings, enabling semantic tasks like [search](/graphql-api/search/semantic-search) and clustering:
+
+- **Prebuilt Models:** Includes transformer-based encoders such as OpenAI embeddings.
+- **Custom Models:** Developers can plug in fine-tuned encoders tailored for specific applications, such as biomedical research or legal text analysis.
+
+### Database and CDN
+
+Unbody uses **[Weaviate](https://weaviate.io)** for vector storage and querying, making it possible to perform semantic queries efficiently. A CDN ensures that enriched data is accessible globally with minimal latency.
+
+---
+
+## ## API Layer: Bridging Applications and Knowledge
+
+The API Layer serves as the bridge between Unbody’s enriched backend and developer applications, providing precise control over how data is queried, transformed, and utilized. This layer is designed to empower developers to interact with complex, enriched data seamlessly.
+
+### Content API
+
+The **Content API** is the primary interface for interacting with enriched and AI-ready data. Built on **Weaviate**, it provides developers with:
+
+- **GraphQL Interface:** Perform operations such as filtering, grouping, ranking, and similarity searches on enriched data.
+- **JavaScript SDK:** Simplifies API integration for web applications by abstracting complex GraphQL queries.
+
+The Content API enables:
+
+- **Traditional Database Functions:** Apply filtering with [where](/graphql-api/filters) clauses, grouping data by metadata, and [sort](/graphql-api/sorting) results for structured queries.
+- **Semantic Queries:** Perform advanced searches using vector similarity or contextual relevance for AI-native workflows.
+- **Generative Capabilities:** Generate text, metadata, or augmented content, enabling tasks like [question answering](#question-answering), summarization, and more.
+
+By combining traditional database operations with semantic and generative features, the Content API serves as a flexible tool for building intelligent applications that fully utilize enriched knowledge.
+
+### Admin API
+
+The Admin API allows developers to manage schemas, enrichment pipelines, and ingestion workflows programmatically. It is ideal for automating operations as part of CI/CD pipelines.
+
+### Push API
+
+Developers can push data into Unbody programmatically using the Push API. This is especially useful for custom data formats or domain-specific ingestion needs.
+
+### Image and Audio/Video APIs
+
+- **Image API:** Transformations such as face cropping, object detection, and metadata tagging are supported.
+- **Audio/Video API:** Mux-powered integrations provide transcription, speaker identification, and streaming capabilities.
+
+---
+
+## Agents Layer: Orchestrating AI Workflows
+
+The **Agents Layer** enables complex workflows by chaining backend tasks, maintaining context, and adapting dynamically to new inputs.
+
+### Capabilities
+
+- **Function Calling:** Agents dynamically execute API calls to perform retrieval, enrichment, or generative tasks.
+- **Multi-Step Pipelines:** Automate workflows, such as querying data, applying enrichment, and delivering a result.
+- **Stateful Context:** Agents maintain embeddings as part of their state, enabling contextual responses.
+
+### Example Applications
+
+- **ETL Pipelines:** Automate extraction, transformation, and loading of data into enriched knowledge repositories.
+- **Adaptive Q&A Systems:** Combine retrieval with generative AI to provide intelligent, context-aware answers.
+- **Semantic Recommendations:** Rank and group documents based on vector proximity to deliver personalized suggestions.
+
+---
+
+## Frontend Layer: AI-Enhanced Interfaces
+
+The Frontend Layer provides tools and components for developers to integrate Unbody’s capabilities into their applications:
+
+- **React Components:** Prebuilt elements like semantic search bars and recommendation interfaces.
+- **Dynamic Players:** Audio and video players that embed enriched metadata for improved interactivity.
+
+---
+
+## Utility Layer: Supporting Developer Workflows
+
+The Utility Layer provides tools to simplify development and enhance system functionality:
+
+- **Natural Language Query Parsing:** Converts unstructured user queries into structured GraphQL operations.
+- **Ranking and Re-Ranking:** Dynamically adjust search results based on relevance models or user preferences.
+
+---
+
+### Conclusion
+
+Unbody's architecture represents a principle-driven approach to building AI-native applications. By grounding every design decision in principles like modularity, knowledge flow, and responsive agency, Unbody creates a system that transforms raw data into actionable intelligence. Each layer is designed to be both self-contained and interconnected, forming a cohesive platform for developers to build the future of AI-powered systems.
+

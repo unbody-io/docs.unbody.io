@@ -17,17 +17,13 @@ That’s why we built Unbody.
 - **Agentic Layer**: Tools for autonomous decision-making and advanced function calling.
 - **Utility Layer**: Features like query parsing and semantic ranking to accelerate development.
 
-<Callout>
-Unbody is a **commercial open-source framework**, but for now, the **cloud version** is the primary way to use it. Everything—from data ingestion to deployment—is hosted on our platform. We will release the alpha open-source version in February 2025.
-</Callout>
-
 ## Why Unbody?
 
 We built Unbody because, to be honest, we were fed up with the lack of AI-driven products in daily life. We found the roots of this in traditional development stacks like **MERN** or **MEAN**, because they are designed for static data and CRUD operations, while the new world of apps demands software to be speakable, with personalization and action-taking capabilities. We need a stack that works based on knowledge and not static data, and is proactive rather than passive. (read more here)
 
 ## How Unbody Works
 
-At its core, Unbody transforms raw, unstructured & structured data into AI-ready knowledge and then enables you to develop products & features that are powered by this knowledge.
+At its core, Unbody transforms raw, unstructured & structured data into AI-ready knowledge and then enables you to develop products & features that are powered by this knowledge. You can read more about the architecture
 
 Here's how it works, step by step:
 
@@ -35,13 +31,6 @@ Here's how it works, step by step:
     ### Ingest Your Data
     Seamlessly integrate data from sources like [Google Drive](/providers/google-drive), [Discord](/providers/discord), [GitHub](/providers/github), or any custom source using the Push API (e.g., MongoDB). Alternatively, use Unbody as your primary, AI-ready database.
     <Cards>
-        <Cards.Card title={"Backend Layer"}
-                    href={"/backend-layer#how-it-works"}
-                    arrow={true}>
-            <small className={"ml-4 opacity-75"}>
-                Learn more about the concepts.
-            </small>
-        </Cards.Card>
         <Cards.Card title={"Data Ingestion"}
                     href={"/data-ingestion/overview"}
                     arrow={true}>
@@ -54,13 +43,6 @@ Here's how it works, step by step:
     ### Process and Enrich
     Automatically clean, chunk, vectorize, and enhance your data to make it usable for AI models.
     <Cards>
-        <Cards.Card title={"Backend Layer"}
-                    href={"/backend-layer#how-it-works"}
-                    arrow={true}>
-            <small className={"ml-4 opacity-75"}>
-                Learn more about the concepts.
-            </small>
-        </Cards.Card>
         <Cards.Card title={"Project Configuration"}
                     href={"/data-ingestion/overview"}
                     arrow={true}>
@@ -73,15 +55,8 @@ Here's how it works, step by step:
     ### Serve and Query
     Interact with your processed data through APIs, including a **GraphQL API** for semantic queries, an **Image API** for visual assets, and a **Video/Audio API** for multimedia.
     <Cards>
-        <Cards.Card title={"API Layer"}
-                    href={"/api-layer"}
-                    arrow={true}>
-            <small className={"ml-4 opacity-75"}>
-                Learn more about the concepts.
-            </small>
-        </Cards.Card>
-        <Cards.Card title={"GraphQL API"}
-                    href={"/graphql-api/authorization"}
+        <Cards.Card title={"Content API"}
+                    href={"/content-api/overview"}
                     arrow={true}>
             <small className={"ml-4 opacity-75"}>
                 Learn more in technical detail.
@@ -91,6 +66,9 @@ Here's how it works, step by step:
 </Steps>
 
 ## What Can You Build with Unbody?
+<Callout>
+    Unbody is a **commercial open-source framework**, but for now, the **cloud version** is the primary way to use it. Everything—from data ingestion to deployment—is hosted on our platform. We will release the alpha open-source version in February 2025.
+</Callout>
 
 1. **AI-Native Products**
 

@@ -1,5 +1,6 @@
 const meta = {
-  authorization: "Authorization",
+  "overview": "Overview",
+  authentication: "Authentication",
   search: "Search",
   generative: "Generative",
   "q-n-a": "QnA",
