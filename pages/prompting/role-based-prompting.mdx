@@ -1,0 +1,51 @@
+import { Tabs } from "nextra/components"
+
+# Role-based Prompting
+
+Use message arrays to create rich, context-aware interactions with multiple roles. This method provides more control over the conversation flow compared to single prompts.
+
+## Basic Role-based Generation
+Define different roles (system, user, assistant) to create more structured and contextual interactions.
+
+```typescript
+const data = await unbody.generate
+    .json(
+        [
+            {
+                role: "user",
+                content: "What is the structure of a business entity?",
+            },
+            { 
+                role: "system", 
+                content: "Explain in detail with examples." 
+            },
+        ],
+        {
+            schema: z.object({
+                companyName: z.string(),
+                employees: z.number(),
+                headquarters: z.string(),
+            }),
+        }
+    );
+```
+
+```typescript
+// Response
+{
+    "content": {
+        "companyName": "Meta Corp",
+        "employees": 8500,
+        "headquarters": "California"
+    },
+    "metadata": {
+        "usage": {
+            "inputTokens": 85,
+            "outputTokens": 18,
+            "totalTokens": 103
+        }
+    }
+}
+```
+
+Learn more about advanced role-based prompting in our [Advanced Prompting Guide](/guides/advanced-prompting).

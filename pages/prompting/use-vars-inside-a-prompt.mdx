@@ -1,0 +1,135 @@
+import { Tabs } from "nextra/components"
+
+# Use vars inside a prompt
+
+Transform and inject dynamic data into your prompts using variables. Variables allow you to process query results before using them in message content.
+
+## Basic Variable Generation
+Use variables to transform query results and reference them in message content.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const data = await unbody.get.videoFile
+        .select("subtitles.SubtitleFile.entries.SubtitleEntry.__typename")
+        .limit(1)
+        .generate.fromOne({
+            options: {
+                vars: [
+                    {
+                        name: "subtitles",
+                        formatter: "jq",
+                        expression: `(.subtitles//[]) | map({ entries })`,
+                    },
+                    {
+                        name: "context",
+                        formatter: "jq",
+                        expression: `{
+                            originalName,
+                            transcription: $subtitles[0].entries
+                        }`,
+                    },
+                ],
+            },
+            messages: [
+                {
+                    content: `Summarize the video's transcription:
+                        \`\`\`json
+                        {context}
+                        \`\`\`
+                    `,
+                },
+            ],
+        })
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        VideoFile(limit: 1) {
+          _additional {
+            generate(
+              singleResult: {
+                messages: [
+                  {
+                    content: "Summarize the video's transcription:\n```json\n{context}\n```"
+                  }
+                ], 
+                options: {
+                  vars: [
+                    {
+                      name: "subtitles", 
+                      formatter: "jq", 
+                      expression: "(.subtitles//[]) | map({ entries })"
+                    }, 
+                    {
+                      name: "context", 
+                      formatter: "jq", 
+                      expression: "{\n originalName,\n transcription: $subtitles[0].entries\n}"
+                    }
+                  ]
+                }
+              }
+            ) {
+              error
+              singleResult
+              metadata {
+                finishReason
+                usage {
+                  inputTokens
+                  outputTokens
+                  totalTokens
+                }
+              }
+            }
+          }
+          subtitles {
+            ... on SubtitleFile {
+              entries {
+                ... on SubtitleEntry {
+                  __typename
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+[
+    {
+        "_additional": {
+            "generate": {
+                "error": null,
+                "metadata": {
+                    "finishReason": "",
+                    "usage": {
+                        "inputTokens": 2213,
+                        "outputTokens": 154,
+                        "totalTokens": 2367
+                    }
+                },
+                "singleResult": "In the video, Quentin Tarantino recounts his first meeting with renowned director Martin Scorsese..."
+            }
+        },
+        "subtitles": [
+            {
+                "entries": [
+                    {
+                        "__typename": "SubtitleEntry"
+                    }
+                ]
+            }
+        ]
+    }
+]
+```
+
+Learn more about advanced variable usage in our [Advanced Variable Guide](/guides/advanced-variables).
