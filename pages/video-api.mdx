@@ -24,7 +24,17 @@ Before you begin, make sure you have the following:
 
 Every video in Unbody is associated with a Mux asset. To stream a video with Mux player, you need the `playbackId` associated with the asset, or you can use the `hlsUrl` directly with your own HLS player of choice.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+<Tabs.Tab>
+
+```tsx
+const { data: { payload }, } = await unbody.get
+                                           .videoFile
+                                           .select("playbackId", "hlsUrl")
+                                           .exec();
+```
+
+</Tabs.Tab>
 <Tabs.Tab>
 
 ```graphql
@@ -36,24 +46,6 @@ query {
     }
   }
 }
-```
-
-</Tabs.Tab>
-<Tabs.Tab>
-
-```tsx
-import { Unbody } from "@unbody-io/ts-client";
-
-const unbody = new Unbody({
-  apiKey: "your-api-key",
-  projectId: "your-project-id",
-});
-
-const {
-  data: { payload: videoFiles },
-} = await unbody.get.videoFile.select("playbackId", "hlsUrl").exec();
-
-const { playbackId, hlsUrl } = videoFiles[0];
 ```
 
 </Tabs.Tab>
@@ -125,7 +117,19 @@ For more detailed guides, please consult the [Mux Documentation](https://docs.mu
 
 Below are the steps to retrieve the thumbnail and animated image URLs using GraphQL and TypeScript:
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+<Tabs.Tab>
+
+```tsx
+const { data: { payload: videoFiles }, } = await unbody.get
+                                                       .videoFile
+                                                       .select("thumbnailUrl.png", "animatedImageUrl.gif")
+                                                       .exec();
+
+const { thumbnailUrl: { png }, animatedImageUrl: { gif }, } = videoFiles[0];
+```
+
+</Tabs.Tab>
 <Tabs.Tab>
 
 ```graphql
@@ -141,29 +145,6 @@ query {
     }
   }
 }
-```
-
-</Tabs.Tab>
-<Tabs.Tab>
-
-```tsx
-import { Unbody } from "@unbody-io/ts-client";
-
-const unbody = new Unbody({
-  apiKey: "your-api-key",
-  projectId: "your-project-id",
-});
-
-const {
-  data: { payload: videoFiles },
-} = await unbody.get.videoFile
-  .select("thumbnailUrl.png", "animatedImageUrl.gif")
-  .exec();
-
-const {
-  thumbnailUrl: { png },
-  animatedImageUrl: { gif },
-} = videoFiles[0];
 ```
 
 </Tabs.Tab>
@@ -187,7 +168,38 @@ Mux uses OpenAI's Whisper model to automatically generate captions for your vide
 
 Unbody stores these captions as `SubtitleFile` and `SubtitleEntry` objects, here's how you can retrieve them:
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+
+<Tabs.Tab>
+
+```ts
+import { Unbody } from "unbody";
+
+const unbody = new Unbody({
+  apiKey: "your-api-key",
+  projectId: "your-project-id",
+});
+
+const { data: { payload: subtitleFiles }, } = await unbody.get
+                                                          .subtitleFile
+                                                          .where({
+                                                            media: {
+                                                              VideoFile: {
+                                                                originalName: "your-video.mp4",
+                                                              },
+                                                            },
+                                                          })
+                                                          .select(
+                                                            "entries.SubtitleEntry.start",
+                                                            "entries.SubtitleEntry.end",
+                                                            "entries.SubtitleEntry.text"
+                                                          )
+                                                          .exec();
+
+const { entries } = subtitleFiles[0];
+```
+
+</Tabs.Tab>
 
 <Tabs.Tab>
 
@@ -215,38 +227,6 @@ query {
 
 </Tabs.Tab>
 
-<Tabs.Tab>
-
-```ts
-import { Unbody } from "@unbody-io/ts-client";
-
-const unbody = new Unbody({
-  apiKey: "your-api-key",
-  projectId: "your-project-id",
-});
-
-const {
-  data: { payload: subtitleFiles },
-} = await unbody.get.subtitleFile
-  .where({
-    media: {
-      VideoFile: {
-        originalName: "your-video.mp4",
-      },
-    },
-  })
-  .select(
-    "entries.SubtitleEntry.start",
-    "entries.SubtitleEntry.end",
-    "entries.SubtitleEntry.text"
-  )
-  .exec();
-
-const { entries } = subtitleFiles[0];
-```
-
-</Tabs.Tab>
-
 </Tabs>
 
 Here are some examples of how you can leverage the auto-generated captions:
@@ -261,7 +241,26 @@ Furthermore, if you have the auto-generated fields feature enabled in your proje
 
 Mux generates multiple MP4 renditions of video files in different resolutions and bitrates for offline viewing, direct downloads, scenarios where streaming HLS streaming is not possible, and other use-cases. Here's how you can access these files: 
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+<Tabs.Tab>
+
+```tsx
+import { Unbody } from "unbody";
+
+const unbody = new Unbody({
+  apiKey: "your-api-key",
+  projectId: "your-project-id",
+});
+
+const { data: { payload: videoFiles }, } = await unbody.get
+                                                       .videoFile
+                                                       .select("files.url", "files.name", "files.width", "files.height")
+                                                       .exec();
+
+const mp4Files = videoFiles[0].files;
+```
+
+</Tabs.Tab>
 <Tabs.Tab>
 
 ```graphql
@@ -277,26 +276,6 @@ query {
     }
   }
 }
-```
-
-</Tabs.Tab>
-<Tabs.Tab>
-
-```tsx
-import { Unbody } from "@unbody-io/ts-client";
-
-const unbody = new Unbody({
-  apiKey: "your-api-key",
-  projectId: "your-project-id",
-});
-
-const {
-  data: { payload: videoFiles },
-} = await unbody.get.videoFile
-  .select("files.url", "files.name", "files.width", "files.height")
-  .exec();
-
-const mp4Files = videoFiles[0].files;
 ```
 
 </Tabs.Tab>

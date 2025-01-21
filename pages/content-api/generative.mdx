@@ -16,13 +16,15 @@ This method generates a result for each object based on a single prompt. You can
 **Syntax:**
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
     ```javascript copy
     const {
         data: { generate },
-    } = await unbody.get.<object_name>.generate
-        .fromOne("Prompt goes here {propertyName}")
-        .exec()
+    } = await unbody.get
+                    .<object_name>
+                    .generate
+                    .fromOne("Prompt goes here {propertyName}")
+                    .exec()
 
     for (const res of generate) {
         const {
@@ -41,7 +43,7 @@ This method generates a result for each object based on a single prompt. You can
     </Tab>
     <Tab title={"GraphQL"}>
         ```graphql
-        {
+        query {
             Get{
                 <ObjectName> {
                     ...fields
@@ -70,13 +72,15 @@ This method generates a result by applying a single prompt to a group of objects
 **Syntax:**
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
         const {
             data: { generate },
-        } = await unbody.get.textDocument.generate
-            .fromMany(`Prompt goes here`, ['propertyName', 'propertyName'])
-            .exec()
+        } = await unbody.get
+                        .textDocument
+                        .generate
+                        .fromMany(`Prompt goes here`, ['propertyName', 'propertyName'])
+                        .exec()
       
         const {
             error,   // If an error occurred, it's captured here
@@ -93,9 +97,9 @@ This method generates a result by applying a single prompt to a group of objects
     </Tab>
     <Tab title={"GraphQL"}>
         ```graphql
-        {
-            Get{
-                <ObjectName>{
+        query {
+            Get {
+                TextDocument{
                     text
                     _additional{
                         generate(
@@ -164,27 +168,29 @@ Generative Search supports image inputs through messages. To use images as input
 This allows you to provide images as part of the context for generating a result. The model will process the image(s) along with any accompanying instructions.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
 ```javascript copy
-await unbody.get.imageBlock
-    .limit(2)
-    .generate.fromMany({
-    messages: [
-        {
-            content: 'Describe these images',
-        },
-        {
-            type: 'image',
-            content: '$..url',
-        },
-    ],
-    })
-    .exec()
+await unbody.get+
+            .imageBlock
+            .limit(2)
+            .generate
+            .fromMany({
+              messages: [
+                  {
+                      content: 'Describe these images',
+                  },
+                  {
+                      type: 'image',
+                      content: '$..url',
+                  },
+              ],
+            })
+            .exec()
 ```
     </Tab>
     <Tab title={"GraphQl"}>
 ```graphql copy
-{
+query {
   Get {
     ImageBlock(limit: 2) {
       _additional {
@@ -257,40 +263,41 @@ Each `var` has the following properties:
 When using cross-references (relations) in `vars` or within message content, you need to fetch at least one property from the referenced object. This ensures the related object data is accessible during query execution.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
 ```javascript copy
-await unbody.get.videoFile
-.select('subtitles.SubtitleFile.entries.SubtitleEntry.__typename')
-.limit(1)
-.generate.fromOne({
-    options: {
-        vars: [
-        {
-            name: 'subtitles',
-            formatter: 'jq',
-            expression: `(.subtitles//[]) | map({ entries })`,
-        },
-        {
-            name: 'context',
-            formatter: 'jq',
-            expression: `{
-            originalName,
-            transcription: $subtitles[0].entries
-            }`,
-        },
-        ],
-    },
-    messages: [
-        {
-            content: `Summarize the video's transcription:
-            \`\`\`json
-            {context}
-            \`\`\`
-        `,
-        }
-    ],
-})
-.exec()
+await unbody.get
+            .videoFile
+            .select('subtitles.SubtitleFile.entries.SubtitleEntry.__typename')
+            .limit(1)
+            .generate.fromOne({
+                options: {
+                    vars: [
+                    {
+                        name: 'subtitles',
+                        formatter: 'jq',
+                        expression: `(.subtitles//[]) | map({ entries })`,
+                    },
+                    {
+                        name: 'context',
+                        formatter: 'jq',
+                        expression: `{
+                        originalName,
+                        transcription: $subtitles[0].entries
+                        }`,
+                    },
+                    ],
+                },
+                messages: [
+                    {
+                        content: `Summarize the video's transcription:
+                        \`\`\`json
+                        {context}
+                        \`\`\`
+                    `,
+                    }
+                ],
+            })
+            .exec()
 ```
     </Tab>
     <Tab title={"GraphQl"}>

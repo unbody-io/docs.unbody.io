@@ -20,7 +20,16 @@ Before you begin, make sure you have the following.
 
 Every image synced with Unbody is accessible through our GraphQL endpoint. Given below is a basic query to fetch an image URL.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+<Tabs.Tab>
+```tsx
+await unbody.get
+            .imageBlock
+            .where({ path: '/your/image/path'},  )
+            .select('url', 'alt', 'width', 'height')
+            .exec()
+```
+</Tabs.Tab>
 <Tabs.Tab>
 ```graphql copy
 query {
@@ -33,11 +42,6 @@ query {
     }
   }
 }
-```
-</Tabs.Tab>
-<Tabs.Tab>
-```tsx
-// TypeScript code is coming soon...
 ```
 </Tabs.Tab>
 </Tabs>

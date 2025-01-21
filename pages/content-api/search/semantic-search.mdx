@@ -9,9 +9,12 @@ This method is best to use when you need to provide a more intuitive and user-fr
 You can perform semantic searches on virtually any text (`string`) field of any object. Here's how:
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
-        unbody.get.<object_name>.search.about("query", {...options})
+        unbody.get
+              .<object_name>
+              .search
+              .about("query", {...options})
         ```
     </Tab>
     <Tab title={"GraphQL"}>
@@ -35,12 +38,12 @@ You can perform semantic searches on virtually any text (`string`) field of any 
 ### Example 1 - Google Drive / Google Docs
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
         unbody.get
-            .googleDoc
-            .search
-            .about("a movie director")
+              .googleDoc
+              .search
+              .about("a movie director")
 
         // payload is an array of GoogleDocs that are about "a movie director"
         ```
@@ -65,12 +68,12 @@ You can perform semantic searches on virtually any text (`string`) field of any 
 ### Example 2 - Discord / Discord messages
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
         unbody.get
-            .discordMessage
-            .search
-            .about("a movie director")
+              .discordMessage
+              .search
+              .about("a movie director")
 
         // payload is an array of DiscordMessages that are about "a movie director"
         ```
@@ -95,12 +98,12 @@ You can perform semantic searches on virtually any text (`string`) field of any 
 ### Example 3 - Any text block
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
         unbody.get
-            .textBlock
-            .search
-            .about("a movie director")
+              .textBlock
+              .search
+              .about("a movie director")
 
         // payload is an array of textBlocks that are about "a movie director"
         // this search includes all types of objects avaiable in the sources of your project
@@ -137,27 +140,27 @@ We have already explained vector space in the previous doc. **`nearVector`** pro
 For example, let us consider you’re searching for articles related to web development, but you want a balanced view, considering both frontend and backend perspectives. The example given below imitates the scenario.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
-        unbody.get
-            .article
-            .nearVector({
-                vector: [...vector representing “web development”...],
-                moveTo: {
-                    concepts: ["frontend", "backend"],
-                    force: 0.5
-                }
-            })
-            .exec()
+        await unbody.get
+                    .textDocument
+                    .nearText({
+                        concepts: [...concepts representing “web development”...],
+                        moveTo: {
+                            concepts: ["frontend", "backend"],
+                            force: 0.5
+                        }
+                    })
+                    .exec()
         ```
     </Tab>
     <Tab title={"GraphQL formatted"}>
         ```graphql
         query{
           Get{
-            Article(
-              nearVector: {
-                vector: [...vector representing “web development”...],
+            TextDocument(
+              nearText: {
+                concepts: [...concepts representing “web development”...],
                 moveTo: {
                   concepts: ["frontend", "backend"],
                   force: 0.5
@@ -165,7 +168,7 @@ For example, let us consider you’re searching for articles related to web deve
               }
             ){
               title
-              content
+              text
             }
           }
         }
@@ -178,27 +181,27 @@ For example, let us consider you’re searching for articles related to web deve
 If you have access to custom words or document vectors, **`nearVector`** allows you to integrate them directly into your search queries.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
         unbody.get
-            .article
-            .nearVector({
-                vector: [...your custom word vector...]
-            })
-            .exec()
+              .textDocument
+              .nearVector({
+                  vector: [...your custom word vector...]
+              })
+              .exec()
         ```
     </Tab>
     <Tab title={"GraphQl formatted"}>
         ```graphql
-        query{
-          Get{
-            Article(
+        query {
+          Get {
+            TextDocument(
               nearVector: {
                 vector: [...your custom word vector...]
               }
             ){
               title
-              content
+              text
             }
           }
         }
@@ -217,35 +220,27 @@ Some of the properties in the data are more relevant than others. You can boost 
 - **Example: Boosting Titles**
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
-        unbody.get
-            .article
-            .nearText({
-                vector: [...vector representing “web development”...],
-                moveTo: {
-                    concepts: ["frontend", "backend"],
-                    force: 0.5
-                },
-                boost: {
-                    title: 2
-                }
-            })
-            .exec()
+        await unbody.get
+                    .textDocument
+                    .search
+                    .find("web development", ["title"])
+                    .exec()
         ```
     </Tab>
     <Tab title={"GraphQl formatted"}>
         ```graphql
-        query{
-          Get{
-            Article(
-              nearText: {
+        query {
+          Get {
+            TextDocument(
+              bm25: {
                 query: "web development",
-                boost: { title: 2 }
+                properties: ["title^2"]
               }
             ){
               title
-              content
+              text
             }
           }
         }
@@ -260,25 +255,25 @@ You can also apply filters to your semantic search queries. It helps to narrow d
 - **Example: Filtering by Tags**
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK"}>
+    <Tab title={"SDK (.ts)"}>
 
         ```javascript copy
         unbody.get
-            .article
-            .where(({Equal}) => ({
-                tags: Equal("tutorial")
-            })
-            .search
-            .about("web development")
-            .exec()
+              .article
+              .where(({Equal}) => ({
+                  tags: Equal("tutorial")
+              }))
+              .search
+              .about("web development")
+              .exec()
         ```
     </Tab>
     <Tab title={"GraphQl formatted"}>
         ```graphql
         query{
           Get{
-            Article(
-              nearText: {
+            TextDocument(
+              bm25: {
                 query: "web development"
               },
               where: {
@@ -288,7 +283,7 @@ You can also apply filters to your semantic search queries. It helps to narrow d
               }
             ){
               title
-              content
+              text
               tags
             }
           }
@@ -296,6 +291,3 @@ You can also apply filters to your semantic search queries. It helps to narrow d
         ```
     </Tab>
 </Tabs>
-
-
-

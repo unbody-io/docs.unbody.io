@@ -27,7 +27,7 @@ Built-in enhancers are categorized by data type, offering seamless functionality
 
 ### Using Built-in Enhancers
 
-To activate built-in enhancers:
+To enable enhancers:
 
 1. Navigate to the **Dashboard** and enable them under the **Enhancers** section.
 2. Alternatively, configure them using the **Admin API**.
@@ -43,22 +43,21 @@ const admin = new UnbodyAdmin({
   },
 })
 
-// Fetch an existing project
-const project = await admin.projects.get({
-  id: '[project-id]',
-})
-
-// Create a project settings object
-const settings = new ProjectSettings()
+const projectSettings = new ProjectSettings();
 
 // Enable AutoSummary and AutoKeywords
-settings.set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
-settings.set(new AutoKeywords(AutoKeywords.OpenAI.GPT4o))
+projectSettings.set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
+projectSettings.set(new AutoKeywords(AutoKeywords.OpenAI.GPT4o))
+
+const project = await admin.projects.ref({
+  name: "My First Project",
+  settings: projectSettings,
+})
 
 // Apply settings to the project
-await project.updateSettings(settings)
+await project.save()
 
-console.log(`Updated enhancers for project: ${project.name}`)
+console.log(`Applied enhancers for project: ${project.name}`)
 ```
 
 ## Custom Enhancers
