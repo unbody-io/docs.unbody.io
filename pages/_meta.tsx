@@ -12,6 +12,12 @@ const meta = {
     type: "separator",
   },
   search: "Search",
+  "generative-and-rag": "Generative & Rag",
+  prompting: "Prompting",
+  "working-with-images": "Working With Images",
+  "working-with-videos": "Working With Videos",
+  "importing-custom-data": "Importing Custom Data",
+  enhancement: "Enhancement",
   "-- development-references": {
     title: "Development Reference",
     type: "separator",

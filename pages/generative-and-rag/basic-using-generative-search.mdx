@@ -1,0 +1,153 @@
+import { Tabs } from "nextra/components"
+
+# Basic using generative search
+
+Use AI to generate meaningful insights and summaries from your documents by applying natural language prompts to individual documents or across multiple documents.
+
+## Generate from single document
+Transform a single document into an AI-generated response by providing a prompt that can reference any of the document's properties using curly braces notation.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const { data: { payload } } = await unbody.get.textDocument
+      .where({ mimeType: "application/pdf" })
+      .generate
+      .fromOne("Summarize this: {text}")
+      .select("title", "originalName")
+      .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextDocument(
+          where: {
+            operator: Equal, 
+            path: "mimeType", 
+            valueText: "application/pdf"
+          }
+        ) {
+          _additional {
+            generate(
+              singleResult: {
+                prompt: "Summarize this: {text}"
+              }
+            ) {
+              error
+              singleResult
+              metadata {
+                finishReason
+                usage {
+                  inputTokens
+                  outputTokens
+                  totalTokens
+                }
+              }
+            }
+          }
+          title
+          originalName
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+[
+  {
+    "_additional": {
+      "generate": {
+        "error": null,
+        "metadata": {
+          "finishReason": "",
+          "usage": {
+            "inputTokens": 5353,
+            "outputTokens": 355,
+            "totalTokens": 5708
+          }
+        },
+        "singleResult": "This research paper, published in the International Journal of Innovative Technology and Exploring Engineering, explores the relationship between machine learning and deep learning, two branches of artificial intelligence that are integral to data science..."
+      }
+    },
+    "originalName": "Machine-Learning-and-Deep-Learning.pdf",
+    "title": "International Journal of Innovative Technology and Exploring Engineering (IJITEE)"
+  }
+]
+```
+
+## Generate from multiple documents
+Create a unified AI-generated response from multiple documents by specifying which properties to include in the generation process, perfect for creating summaries or analyses across a collection of documents.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const { data: { payload } } = await unbody.get.textDocument
+      .generate
+      .fromMany("Create a 100 words summary:", ["text", "title"])
+      .select("title", "originalName")
+      .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextDocument {
+          _additional {
+            generate(
+              groupedResult: {
+                task: "Create a 100 words summary:", 
+                properties: ["text", "title"]
+              }
+            ) {
+              error
+              groupedResult
+              metadata {
+                finishReason
+                usage {
+                  inputTokens
+                  outputTokens
+                  totalTokens
+                }
+              }
+            }
+          }
+          title
+          originalName
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+[
+  {
+    "_additional": {
+      "generate": {
+        "error": null,
+        "groupedResult": "Here is a summary of the provided text:\n\nThe text includes a variety of topics, ranging from discussions on electric vehicles and their impact on urban environments to an exploration of machine learning and deep learning techniques...",
+        "metadata": {
+          "finishReason": "",
+          "usage": {
+            "inputTokens": 14293,
+            "outputTokens": 322,
+            "totalTokens": 14615
+          }
+        }
+      }
+    },
+    "originalName": "Overcoming Challenges in the Adoption of Electric Vehicles_ A Roadmap for Urban Transformation.docx",
+    "title": "Overcoming Challenges in the Adoption of Electric Vehicles: A Roadmap for Urban Transformation"
+  }
+]
+```
+
+Learn more about advanced generation features in our [Advanced Generation Guide](/guides/advanced-generation).

@@ -1,0 +1,115 @@
+
+import { Tabs } from "nextra/components"
+
+# JSON Generation
+
+Generate structured JSON content based on prompts, messages, or schemas. Useful for creating API responses, structured records, or documents.
+
+## Basic JSON Generation
+Generate JSON output using a basic schema definition without Zod.
+
+```typescript
+await unbody.generate.json("Provide user details:", {
+  schema: {
+    type: "object",
+    properties: {
+      name: { type: "string" },
+      age: { type: "number" },
+      address: { type: "string" },
+    },
+  },
+});
+```
+
+```typescript
+// Response
+{
+    "content": {
+        "name": "Jane Doe",
+        "age": 28
+    },
+    "metadata": {
+        "usage": {
+            "inputTokens": 61,
+            "outputTokens": 11,
+            "totalTokens": 72
+        }
+    }
+}
+```
+
+## Generation with Zod Schema
+Use Zod for to structure the response.
+
+```typescript
+import { z } from "zod";
+
+const {
+  data: { payload },
+} = await unbody.generate.json("Provide user details:", {
+  schema: z.object({
+    name: z.string(),
+    age: z.number(),
+  }),
+});
+```
+
+```typescript
+// Response
+{
+    "content": {
+        "name": "Jane Doe",
+        "age": 28
+    },
+    "metadata": {
+        "usage": {
+            "inputTokens": 61,
+            "outputTokens": 11,
+            "totalTokens": 72
+        }
+    }
+}
+```
+
+## Multi-Message Generation
+Use multiple messages to guide the generation process with more context with zod.
+
+```typescript
+import { z } from "zod";
+
+const {
+  data: { payload },
+} = await unbody.generate.json(
+  [
+    {
+      role: "user",
+      content: "What is the structure of a business entity?",
+    },
+    { role: "system", content: "Explain in detail with examples." },
+  ],
+  {
+    schema: z.object({
+      companyName: z.string(),
+      employees: z.number(),
+      headquarters: z.string(),
+    }),
+  }
+);
+```
+
+```typescript
+// Response
+{
+    "content": {
+        "companyName": "Meta Corp",
+        "employees": 8500,
+        "headquarters": "California"
+    },
+    "metadata": {
+        "usage": {
+            "inputTokens": 85,
+            "outputTokens": 18,
+            "totalTokens": 103
+        }
+    }
+}
