@@ -1,4 +1,3 @@
-
 import { Tabs } from "nextra/components"
 
 # JSON Generation
@@ -9,16 +8,17 @@ Generate structured JSON content based on prompts, messages, or schemas. Useful 
 Generate JSON output using a basic schema definition without Zod.
 
 ```typescript
-await unbody.generate.json("Provide user details:", {
-  schema: {
-    type: "object",
-    properties: {
-      name: { type: "string" },
-      age: { type: "number" },
-      address: { type: "string" },
-    },
-  },
-});
+const data = await unbody.generate
+    .json("Provide user details:", {
+        schema: {
+            type: "object",
+            properties: {
+                name: { type: "string" },
+                age: { type: "number" },
+                address: { type: "string" },
+            },
+        },
+    });
 ```
 
 ```typescript
@@ -44,14 +44,13 @@ Use Zod for to structure the response.
 ```typescript
 import { z } from "zod";
 
-const {
-  data: { payload },
-} = await unbody.generate.json("Provide user details:", {
-  schema: z.object({
-    name: z.string(),
-    age: z.number(),
-  }),
-});
+const data = await unbody.generate
+    .json("Provide user details:", {
+        schema: z.object({
+            name: z.string(),
+            age: z.number(),
+        }),
+    });
 ```
 
 ```typescript
@@ -77,24 +76,26 @@ Use multiple messages to guide the generation process with more context with zod
 ```typescript
 import { z } from "zod";
 
-const {
-  data: { payload },
-} = await unbody.generate.json(
-  [
-    {
-      role: "user",
-      content: "What is the structure of a business entity?",
-    },
-    { role: "system", content: "Explain in detail with examples." },
-  ],
-  {
-    schema: z.object({
-      companyName: z.string(),
-      employees: z.number(),
-      headquarters: z.string(),
-    }),
-  }
-);
+const data = await unbody.generate
+    .json(
+        [
+            {
+                role: "user",
+                content: "What is the structure of a business entity?",
+            },
+            { 
+                role: "system", 
+                content: "Explain in detail with examples." 
+            },
+        ],
+        {
+            schema: z.object({
+                companyName: z.string(),
+                employees: z.number(),
+                headquarters: z.string(),
+            }),
+        }
+    );
 ```
 
 ```typescript
@@ -113,3 +114,6 @@ const {
         }
     }
 }
+```
+
+Learn more about advanced JSON generation features in our [Advanced JSON Generation Guide](/guides/advanced-json-generation).
