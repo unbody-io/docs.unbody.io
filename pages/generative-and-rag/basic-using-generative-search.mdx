@@ -10,7 +10,7 @@ Transform a single document into an AI-generated response by providing a prompt 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const { data: { payload } } = await unbody.get.textDocument
+    const data = await unbody.get.textDocument
       .where({ mimeType: "application/pdf" })
       .generate
       .fromOne("Summarize this: {text}")
@@ -86,7 +86,7 @@ Create a unified AI-generated response from multiple documents by specifying whi
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const { data: { payload } } = await unbody.get.textDocument
+    const data = await unbody.get.textDocument
       .generate
       .fromMany("Create a 100 words summary:", ["text", "title"])
       .select("title", "originalName")
