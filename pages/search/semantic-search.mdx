@@ -1,0 +1,176 @@
+import { Tabs } from "nextra/components"
+
+# Semantic Search
+
+Search based on meaning rather than exact keyword matches, allowing users to find relevant content even when exact terms don't match.
+
+## Basic Search
+Performs a simple semantic search to find content based on meaning rather than exact keywords.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const data = await unbody.get.textDocument
+        .search
+        .about("AI applications")
+        .select("title", "autoSummary", "text")
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextDocument(nearText: {
+          concepts: ["AI applications"]
+        }) {
+          _additional {
+            certainty
+            distance
+          }
+          title
+          autoSummary
+          text
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+[
+    {
+        "_additional": {
+            "certainty": 0.89,
+            "distance": 0.21
+        },
+        "title": "AI in Healthcare",
+        "autoSummary": "Artificial Intelligence applications in healthcare, including disease diagnosis, drug discovery, and patient care optimization. The system uses machine learning algorithms to analyze medical imaging and predict patient outcomes.",
+        "text": "Detailed exploration of how AI is transforming healthcare..."
+    },
+    {
+        "_additional": {
+            "certainty": 0.85,
+            "distance": 0.25
+        },
+        "title": "AI in Finance",
+        "autoSummary": "Implementation of AI applications in financial services, focusing on fraud detection, algorithmic trading, and risk assessment models.",
+        "text": "Comprehensive overview of AI applications in finance..."
+    }
+]
+```
+
+## Search with Concept Boost
+Enhances search results by steering them towards specific concepts using `moveTo`. Useful for getting more targeted results about specific topics.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const data = await unbody.get.textBlock
+        .search
+        .about("Explain AI applications.", {
+            moveTo: {
+                concepts: ["automation", "machine learning"],
+                force: 0.5
+            },
+            certainty: 0.85
+        })
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextBlock(
+          nearText: {
+            concepts: ["AI applications"],
+            moveTo: {
+              concepts: ["automation", "machine learning"],
+              force: 0.5
+            },
+            certainty: 0.85
+          }
+        ) {
+          _additional {
+            certainty
+            distance
+          }
+          footnotes
+          html
+          order
+          remoteId
+          sourceId
+          tagName
+          text
+          classNames
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+
+```
+
+## Search with Concept Filtering
+Uses `moveAwayFrom` to exclude certain concepts from search results while maintaining relevance to the main query.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const data = await unbody.get.textBlock
+        .search
+        .about(["Explain quantum physics.", "AI"], {
+            moveAwayFrom: {
+                concepts: ["outdated"],
+                force: 0.3
+            },
+            certainty: 0.9
+        })
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextBlock(
+          nearText: {
+            concepts: ["AI applications"],
+            moveTo: {
+              concepts: ["automation", "machine learning"],
+              force: 0.5
+            },
+            certainty: 0.85
+          }
+        ) {
+          _additional {
+            certainty
+            distance
+          }
+          footnotes
+          html
+          order
+          remoteId
+          sourceId
+          tagName
+          text
+          classNames
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+
+
+```

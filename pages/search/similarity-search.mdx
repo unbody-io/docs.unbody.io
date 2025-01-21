@@ -1,0 +1,226 @@
+import { Tabs } from "nextra/components"
+
+# Similarity Search
+
+Find similar content across text, images, and records based on their characteristics and patterns.
+
+## Text Similarity
+Search for text content with similar meaning or context.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const data = await unbody.get.textBlock
+        .similar
+        .text("artificial intelligence", {
+            certainty: 0.8
+        })
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextDocument(
+          nearText: {
+            concepts: ["resume"],
+            certainty: 0.8
+          }
+        ) {
+          _additional {
+            certainty
+            distance
+          }
+          createdAt
+          html
+          mimeType
+          modifiedAt
+          originalName
+          path
+          pathString
+          remoteId
+          sourceId
+          subtitle
+          description
+          tags
+          text
+          title
+          properties
+          toc
+          authors
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+```
+
+## Advanced Text Similarity
+Search using multiple concepts and directional preferences.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const data = await unbody.get.textBlock
+        .similar
+        .text(["AI", "machine learning"], {
+            certainty: 0.9,
+            moveTo: {
+                concepts: ["future"],
+                force: 0.5
+            }
+        })
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextBlock(
+          nearText: {
+            concepts: ["AI", "machine learning"],
+            certainty: 0.9,
+            moveTo: {
+              concepts: ["future"],
+              force: 0.5
+            }
+          }
+        ) {
+          _additional {
+            certainty
+            distance
+          }
+          footnotes
+          html
+          order
+          remoteId
+          sourceId
+          tagName
+          text
+          classNames
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+```
+
+## Image Similarity
+Find visually similar images using URL or base64 encoding.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const data = await unbody.get.imageBlock
+        .similar
+        .image("https://example.com/image.jpg", {
+            certainty: 0.9
+        })
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        ImageBlock(
+          nearImage: {
+            image: "https://example.com/image.jpg",
+            certainty: 0.9
+          }
+        ) {
+          _additional {
+            certainty
+            distance
+          }
+          alt
+          createdAt
+          ext
+          height
+          mimeType
+          modifiedAt
+          order
+          originalName
+          path
+          pathString
+          remoteId
+          size
+          sourceId
+          url
+          width
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+```
+
+## Record Similarity
+Find similar objects based on a specific record ID.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const data = await unbody.get.textDocument
+        .similar
+        .record("36d71583-7745-5aef-8cc6-85810926bc0c", {
+            certainty: 0.9
+        })
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextDocument(
+          nearObject: {
+            id: "36d71583-7745-5aef-8cc6-85810926bc0c",
+            certainty: 0.9
+          }
+        ) {
+          _additional {
+            certainty
+            distance
+          }
+          createdAt
+          html
+          mimeType
+          modifiedAt
+          originalName
+          path
+          pathString
+          remoteId
+          sourceId
+          subtitle
+          description
+          tags
+          text
+          title
+          properties
+          toc
+          authors
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+```
