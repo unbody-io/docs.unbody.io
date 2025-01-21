@@ -41,7 +41,7 @@ This method generates a result for each object based on a single prompt. You can
     </Tab>
     <Tab title={"GraphQL"}>
         ```graphql
-        {
+        query {
             Get{
                 <ObjectName> {
                     ...fields
@@ -93,9 +93,9 @@ This method generates a result by applying a single prompt to a group of objects
     </Tab>
     <Tab title={"GraphQL"}>
         ```graphql
-        {
-            Get{
-                <ObjectName>{
+        query {
+            Get {
+                TextDocument{
                     text
                     _additional{
                         generate(
@@ -184,7 +184,7 @@ await unbody.get.imageBlock
     </Tab>
     <Tab title={"GraphQl"}>
 ```graphql copy
-{
+query {
   Get {
     ImageBlock(limit: 2) {
       _additional {

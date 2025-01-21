@@ -32,13 +32,35 @@ A **project** in Unbody is your workspace. It includes:
 When you set up a project, you’re defining the tools and processes that transform raw data into actionable knowledge. Once the data is ingested, Unbody processes, vectorizes, and enriches it. Afterward, you can query and interact with the AI-ready data through the [**Content API**](/graphql-api/authorization).
 
 <Steps>
-## Step 1: Create a Project
+## Step 1: Create a Project and configure it
+
+Create your project and configure the AI tools it will use. Configurations include:
+
+- [**Vectorizers**](/project-configurations/vectorizers): Convert data into embeddings for tasks like [semantic search](/graphql-api/search/semantic-search).
+- [**Enhancers**](/project-configurations/enhancers): Enrich data by summarizing, tagging, or extracting metadata.
+- [**Generative Modules**](/project-configurations/generative-modules): Enable AI-driven content creation.
+
+For this guide, we use a [**vectorizer**](/admin-api#textvectorizer-configuration) for processing text and two built in enhancers: [**AutoVision**](/admin-api#autovision-configuration) for enhancing images and [**AutoSummary**](/admin-api#autosummary-configuration) for [text documents](/graphql-api/data-types/textdocument).
 
 <Tabs items={['Dashboard', 'SDK']}>
   <Tabs.Tab>
       First Log in to [Unbody](https://unbody.io/) and then click on `New Project`.
 
       ![Create project](/images/docs/get-started/new-project.jpg)
+      
+      You’ll find these options in the [**Project Configuration**](/project-configurations/vectorizers) -> `ADVANCED` section during project setup.
+
+      - Let's choose `text-embedding-3-small` from `OpenAI`.
+      ![Setting up text vectorizer](/images/docs/get-started/setup-text-vectorizer.png)
+        
+      - Set up `Generative Search` -> `Command R+` from `Generative Cohere`.
+      ![Setting up generative search](/images/docs/get-started/setup-generative-search.png)
+      
+      - Enable `AutoVision` -> `OpenAi GPT-4o` for enhancing Image.
+      ![Enable Autovision for enhancing Image](/images/docs/get-started/visual-enhancer.png)
+
+      - Select `AutoSummary` -> `OpenAI GPT-4o` for automatic text summarization.
+      ![Setting up AutoSummary for Text](/images/docs/get-started/setup-autosummary.png)
   </Tabs.Tab>
  <Tabs.Tab>
   <Steps>
@@ -51,81 +73,41 @@ When you set up a project, you’re defining the tools and processes that transf
    ### Create a project programmatically:
 
     ```typescript
-    import { UnbodyAdmin } from "@unbody/admin";
+    import { 
+          UnbodyAdmin, 
+          ProjectSettings,
+          TextVectorizer,
+          Generative,
+          AutoSummary,
+          AutoVision, 
+    } from "unbody/admin";
 
     const admin = new UnbodyAdmin({
-      apiKey: "<YOUR_ADMIN_API_KEY>"
+      auth: {
+        accessToken: "<YOUR_ACCESS_TOKEN>",
+      }
     });
+
+    const projectSettings = new ProjectSettings();
+
+    projectSettings
+        .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
+        .set(new Generative(Generative.Cohere.CommandRPlus))
+        .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
+        .set(new AutoVision(AutoVision.OpenAI.GPT4o));
 
     const project = admin.projects.ref({
       name: "My First Project",
+      settings: projectSettings,
     });
 
-    await project.save().then(...);
+    await project.save();
     ```
     </Steps>
   </Tabs.Tab>
 </Tabs>
 
-## Step 2: Configure your project
-
-Once your project is created, configure the AI tools it will use. Configurations include:
-
-- [**Vectorizers**](/project-configurations/vectorizers): Convert data into embeddings for tasks like [semantic search](/graphql-api/search/semantic-search).
-- [**Enhancers**](/project-configurations/enhancers): Enrich data by summarizing, tagging, or extracting metadata.
-- [**Generative Modules**](/project-configurations/generative-modules): Enable AI-driven content creation.
-
-For this guide, we use a [**vectorizer**](/admin-api#textvectorizer-configuration) for processing text and two built in enhancers: [**AutoVision**](/admin-api#autovision-configuration) for enhancing images and [**AutoSummary**](/admin-api#autosummary-configuration) for [text documents](/graphql-api/data-types/textdocument).
-
-<Tabs items={['Dashboard', 'SDK']}>
-  <Tabs.Tab>
-  You’ll find these options in the [**Project Configuration**](/project-configurations/vectorizers) -> `ADVANCED` section during project setup.
-
-  - Let's choose `text-embedding-3-small` from `OpenAI`.
-   ![Setting up text vectorizer](/images/docs/get-started/setup-text-vectorizer.png)
-    
-  - Set up `Generative Search` -> `Command R+` from `Generative Cohere`.
-  ![Setting up generative search](/images/docs/get-started/setup-generative-search.png)
-  
-  - Enable `AutoVision` -> `OpenAi GPT-4o` for enhancing Image.
-  ![Enable Autovision for enhancing Image](/images/docs/get-started/visual-enhancer.png)
-
-  - Select `AutoSummary` -> `OpenAI GPT-4o` for automatic text summarization.
-  ![Setting up AutoSummary for Text](/images/docs/get-started/setup-autosummary.png)
-
-  </Tabs.Tab>
-
- <Tabs.Tab>
-  ```tsx
-import {
-     ProjectSettings,
-     TextVectorizer,
-     Generative,
-     AutoSummary,
-     AutoVision,
-} from "@unbody/admin";
-
-const projectSettings = new ProjectSettings();
-
-projectSettings
-     .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
-     .set(new Generative(Generative.Cohere.CommandRPlus))
-     .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
-     .set(new AutoVision(AutoVision.OpenAI.GPT4o));
-
-const project = admin.projects.ref({
-     id: "your-project-id",
-     name: "Your Project Name",
-     settings: projectSettings,
-});
-
-await project.save();
-```
-  </Tabs.Tab>
-</Tabs>
-
-
-## Step 3: Add a Data Source
+## Step 2: Add a Data Source
 
 Data sources define where your project gets its data. Unbody supports both [prebuilt integrations](/providers/overview) (e.g., [Google Drive](/providers/google-drive), [Discord](/providers/discord)) and [custom data providers](/data-ingestion/push-api).
 
@@ -156,8 +138,14 @@ Data sources define where your project gets its data. Unbody supports both [preb
   </Tabs.Tab>
 
   <Tabs.Tab>
+  At this point you can only create a Data Source via the sdk and for authentication, you should get back to the dashboard.
     ```tsx
-    // Will be coming soon. But you can look into the custom data ingestion API
+      const source = project.sources.ref({
+        name: "My First Source",
+        type: SourceTypes['GoogleDrive'],
+      })
+
+      await source.save()
     ```
   </Tabs.Tab>
 </Tabs>
@@ -174,7 +162,7 @@ At this point you have nothing to do on dashboard and can move to next step whic
 ![GraphQL playground interface](/images/docs/get-started/graphql-playground.png)
 {/* *Built-in GraphQL playground for testing queries* */}
 
-## Step 4: Interact with Your Data
+## Step 3: Interact with Your Data
 Once your data is ready, use the [**Content API**](/graphql-api/authorization) to perform tasks like  [semantic search](/graphql-api/search/semantic-search) or content generation. 
 
 Fetch [google docs](/graphql-api/data-types/googledoc)
@@ -182,16 +170,16 @@ Fetch [google docs](/graphql-api/data-types/googledoc)
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```tsx
-     const { data } = await unbody.get
-                                  .googleDoc
-                                  .select("title", "autoSummary", "text", "toc")
-                                  .exec();
+     const { data: {payload} } = await unbody.get
+                                             .googleDoc
+                                             .select("title", "autoSummary", "text", "toc")
+                                             .exec();
     ```
   </Tabs.Tab>
 
   <Tabs.Tab>
     ```graphql
-     {
+     query {
         Get {
             GoogleDoc {
                 title
@@ -212,17 +200,17 @@ Now lets get all [text documents](/graphql-api/data-types/textdocument) that are
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get
-                              .textDocument
-                              .where({ mimeType: "text/markdown" })
-                              .select("title", "autoSummary", "text")
-                              .exec();
+    const { data: {payload} } = await unbody.get
+                                            .textDocument
+                                            .where({ mimeType: "text/markdown" })
+                                            .select("title", "autoSummary", "text")
+                                            .exec();
     ```
   </Tabs.Tab>
 
   <Tabs.Tab>
     ```graphql
-    {
+    query {
         Get {
             TextDocument(
                 where: {
@@ -246,16 +234,16 @@ Fetch all [images](/graphql-api/data-types/imageblock)
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get
-                              .imageBlock
-                              .select("url", "originalName")
-                              .exec();
+    const { data: {payload} } = await unbody.get
+                                            .imageBlock
+                                            .select("url", "originalName")
+                                            .exec();
     ```
   </Tabs.Tab>
 
   <Tabs.Tab>
     ```graphql
-    {
+    query {
         Get {
             ImageBlock {
                 url
@@ -272,18 +260,18 @@ Semantic search on images
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get
-                              .imageBlock
-                              .search
-                              .about("Flight tickets")
-                              .select("url", "originalName")
-                              .exec();
+    const { data: {payload} } = await unbody.get
+                                            .imageBlock
+                                            .search
+                                            .about("Flight tickets")
+                                            .select("url", "originalName")
+                                            .exec();
     ```
   </Tabs.Tab>
 
   <Tabs.Tab>
     ```graphql
-    {
+    query {
         Get {
             ImageBlock(nearText: {concepts: ["Flight tickets"]}) {
                 _additional {
@@ -304,18 +292,18 @@ Simple rag on text files ([generative](/graphql-api/generative))
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get
-                              .textDocument
-                              .generate
-                              .fromMany("Create a summary:", ["text", "title"])
-                              .select("title", "text", "autoSummary")
-                              .exec();
+    const { data: {payload} } = await unbody.get
+                                            .textDocument
+                                            .generate
+                                            .fromMany("Create a summary:", ["text", "title"])
+                                            .select("title", "text", "autoSummary")
+                                            .exec();
     ```
   </Tabs.Tab>
 
   <Tabs.Tab>
     ```graphql
-    {
+    query {
         Get {
             TextDocument {
                 _additional {
@@ -352,23 +340,23 @@ Simple rag on images ([generative](/graphql-api/generative))
 <Tabs items={['Typescript Client', 'Graphql']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get
-                              .imageBlock
-                              .search
-                              .about("Documents")
-                              .generate
-                              .fromMany("Create a summary and analysis of the images found:", [
-                                  "originalName",
-                                  "autoCaption",
-                                  "autoOCR"
-                              ])
-                              .exec();
+    const { data: {payload} } = await unbody.get
+                                            .imageBlock
+                                            .search
+                                            .about("Documents")
+                                            .generate
+                                            .fromMany("Create a summary and analysis of the images found:", [
+                                                "originalName",
+                                                "autoCaption",
+                                                "autoOCR"
+                                            ])
+                                            .exec();
     ```
   </Tabs.Tab>
 
   <Tabs.Tab>
     ```graphql
-    {
+    query {
         Get {
             ImageBlock(nearText: {concepts: ["Documents"]}) {
                 _additional {

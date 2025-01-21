@@ -186,14 +186,13 @@ The sample code given below demonstrates how you can do it.
     </Tab>
     <Tab title={"GraphQl"}>
         ```graphql copy
-        {
+        query {
             Get {
-                <ObjectName>(
+                GoogleDoc (
                     limit: 3
                     hybrid: { query: "coding in Python", fusionType: relativeScoreFusion }
                     ) {
                     title
-                    content
                 }
             }
         }
@@ -223,9 +222,9 @@ Take a look at the example given below.
     </Tab>
     <Tab title={"GraphQl"}>
         ```graphql copy
-        {
+        query {
             Get {
-                Article(
+                GoogleDoc(
                     limit: 3
                     hybrid: {
                         query: "coding in Python",
@@ -233,7 +232,6 @@ Take a look at the example given below.
                         alpha: 0.25
                     }) {
                         title
-                        content
                 }
             }
         }
@@ -253,23 +251,23 @@ You can write a query as given below.
         const {data: {payload}} = await unbody.get
             .googleDoc
             .search
-            .hybrid("specific keyword and broad concept", {properties: ["title^2", "content"]})
+            .hybrid("specific keyword and broad concept", {properties: ["title^2", "text"]})
             .exec();
         ```
     </Tab>
     <Tab title={"GraphQl"}>
         ```graphql copy
-        {
+        query {
             Get {
-                Article(
+                GoogleDoc(
                     limit: 3
                     hybrid: {
                         query: "coding"
-                        properties: ["title^2", "content"]
+                        properties: ["title^2", "text"]
                         alpha: 0.25
                     }) {
                         title
-                        content
+                        text
                     }
                 }
             }
@@ -297,16 +295,16 @@ The example given below shows you how you can form a query with your own vector.
     </Tab>
     <Tab title={"GraphQl"}>
         ```graphql copy
-        {
+        query {
             Get {
-                Article(
+                GoogleDoc(
                 limit: 3
                 hybrid: {
                     query: "coding in js"
                     vector: [...your_vector_here...]
                 }) {
                     title
-                    content
+                    text
                 }
             }
         }
@@ -323,9 +321,9 @@ You can add conditional filters to your hybrid search queries. These filters wil
         ```javascript copy
         const {data: {payload}} = await unbody.get
             .googleDoc
-            .where(({Equal} => ({
+            .where(({Equal}) => ({
                 tags: Equal("tutorial")
-            })
+            }))
             .search
             .hybrid("specific keyword and broad concept")
             .exec();
@@ -333,9 +331,9 @@ You can add conditional filters to your hybrid search queries. These filters wil
     </Tab>
     <Tab title={"GraphQl"}>
         ```graphql copy
-        {
+        query {
             Get {
-                Article(
+                GoogleDoc(
                     limit: 3
                     hybrid: {
                         query: "Classical Mechanics"
@@ -346,7 +344,7 @@ You can add conditional filters to your hybrid search queries. These filters wil
                         valueText: "tutorial"
                     }) {
                             title
-                            content
+                            text
                             tags
                     }
             }

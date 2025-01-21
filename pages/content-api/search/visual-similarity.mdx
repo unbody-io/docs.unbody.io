@@ -9,7 +9,7 @@ Visual similarity search can be performed on any 'imageBlock'. Here's how:
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title="Unbody SDK">
         ```javascript copy
-        unbody.get.imageBlock.search.similar.visual("imageBlockId", {...options})
+        await unbody.get.imageBlock.similar.record("imageBlockId", {...options}).exec()
         ```
     </Tab>
     <Tab title="GraphQL">
@@ -17,8 +17,8 @@ Visual similarity search can be performed on any 'imageBlock'. Here's how:
         query{
           Get{
             ImageBlock(
-                nearImage: {
-                    imageId: "imageBlockId",
+                nearObject: {
+                    id: "imageBlockId",
                     ...options
                 }
             ){
@@ -33,10 +33,29 @@ Visual similarity search can be performed on any 'imageBlock'. Here's how:
 ## Examples
 
 - Example 1 - image blocks
-    ```javascript copy
-    const {data: {payload}} = await unbody.get.imageBlock.similar.image("image url or base64");
-    // payload is an array of ImageBlocks that are visually similar to the specific image with id "specificImageId"
-    ```
+
+<Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
+    <Tab title="Unbody SDK">
+        ```javascript copy
+        await unbody.get.imageBlock.similar.record("valid-uuid").select('url').exec()
+        ```
+    </Tab>
+    <Tab title="GraphQL">
+        ```graphql
+        query{
+          Get{
+            ImageBlock(
+                nearObject: {
+                    id: "valid-uuid",
+                }
+            ){
+                url
+            }
+          }
+        }
+        ```
+    </Tab>
+</Tabs>
 
 
 ### Arguments
