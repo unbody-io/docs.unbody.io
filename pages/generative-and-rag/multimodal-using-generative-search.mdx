@@ -1,0 +1,186 @@
+import { Tabs } from "nextra/components"
+
+# Multimodal using generative search
+
+Use generative search capabilities to analyze multiple images and their associated metadata comprehensively.
+
+## Image Analysis with Metadata
+This example demonstrates how to analyze multiple images along with their metadata, OCR text, and auto-generated captions. It combines visual content analysis with textual information to provide detailed insights.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const data = await unbody.get.imageBlock
+        .where({ mimeType: "image/jpeg" })
+        .limit(2)
+        .select("url", "autoCaption", "alt", "autoOCR", "originalName")
+        .generate.fromMany({
+            messages: [
+                {
+                    content: "Analyze these images comprehensively. Focus on visual content, caption accuracy, and any text found in the images.",
+                },
+                {
+                    type: "image",
+                    content: "{imageData.urls}",
+                },
+                {
+                    content: `Please analyze based on this information:
+                            Image Details:
+                            {imageData.details}
+                            
+                            OCR Text Found:
+                            {imageData.ocrText}
+                            
+                            Generated Captions:
+                            {imageData.captions}
+                            
+                            Consider:
+                            1. Are the auto-generated captions accurate?
+                            2. How does the OCR text relate to the visual content?
+                            3. Compare the alt descriptions with what you see.`,
+                },
+            ],
+            options: {
+                model: "gpt-4-turbo",
+                vars: [
+                    {
+                        name: "imageData",
+                        formatter: "jq",
+                        expression: `{
+                            urls: [.[].url],
+                            details: map({
+                                filename: .originalName,
+                                altDescription: .alt
+                            }),
+                            ocrText: map(.autoOCR),
+                            captions: map(.autoCaption)
+                        }`,
+                    },
+                ],
+                maxTokens: 1500,
+                temperature: 0.7,
+            },
+        })
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        ImageBlock(
+          where: {
+            operator: Equal, 
+            path: "mimeType", 
+            valueText: "image/jpeg"
+          }
+          limit: 2
+        ) {
+          _additional {
+            generate(
+              groupedResult: {
+                messages: [
+                  {
+                    content: "Analyze these images comprehensively. Focus on visual content, caption accuracy, and any text found in the images."
+                  }, 
+                  {
+                    type: "image", 
+                    content: "{imageData.urls}"
+                  }, 
+                  {
+                    content: "Please analyze based on this information:\n          
+                          Image Details:\n          
+                          {imageData.details}\n          
+                          OCR Text Found:\n          
+                          {imageData.ocrText}\n          
+                          Generated Captions:\n          
+                          {imageData.captions}\n          
+                          Consider:\n          
+                          1. Are the auto-generated captions accurate?\n          
+                          2. How does the OCR text relate to the visual content?\n          
+                          3. Compare the alt descriptions with what you see."
+                  }
+                ], 
+                options: {
+                  model: "gpt-4-turbo", 
+                  vars: [
+                    {
+                      name: "imageData", 
+                      formatter: "jq", 
+                      expression: "{\n              
+                        urls: [.[].url],\n              
+                        details: map({\n                
+                          filename: .originalName,\n                
+                          altDescription: .alt\n              
+                        }),\n              
+                        ocrText: map(.autoOCR),\n              
+                        captions: map(.autoCaption)\n            
+                      }"
+                    }
+                  ], 
+                  maxTokens: 1500, 
+                  temperature: 0.7
+                }
+              }
+            ) {
+              error
+              groupedResult
+              metadata {
+                finishReason
+                usage {
+                  inputTokens
+                  outputTokens
+                  totalTokens
+                }
+              }
+            }
+          }
+          url
+          autoCaption
+          alt
+          autoOCR
+          originalName
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+
+[
+    {
+        "_additional": {
+            "generate": {
+                "error": null,
+                "groupedResult": "### Analysis Report\n\n#### Image 1 Analysis\n- **Visual Content**: The first image displays a classic, silver-colored Jaguar E-Type car parked in a covered area with hay bales in the background. The setting appears to be a barn-like structure with a brick floor.\n- **Generated Caption**: \"Classic car parked in a barn with hay bales.\" This caption is accurate as it successfully identifies the key elements in the image – the classic car and the barn setting with hay bales.\n- **OCR Text**: The OCR text for this image is empty (\"\"). This is appropriate since there is no visible text in the image to recognize or transcribe.\n- **Alt Description**: \"6\". The alt description provided is not descriptive of the image content and does not aid in understanding or accessibility.\n\n#### Image 2 Analysis\n- **Visual Content**: The second image shows a classic, green Jaguar E-Type convertible parked on a paved area, surrounded by a lush green grassy field with trees in the background. The car is facing towards the viewer.\n- **Generated Caption**: \"A classic green convertible car parked on a paved area with a grassy background.\" This caption is very accurate and descriptive, highlighting the main features of the image such as the color and type of the car, as well as the setting.\n- **OCR Text**: Similar to the first image, the OCR text for this image is empty (\"\"). This is correct since there is no readable text in the image.\n- **Alt Description**: \"1\". Again, this alt description does not provide any useful information about the image and lacks descriptive value.\n\n### Summary:\n1. **Caption Accuracy**: Both auto-generated captions accurately describe the scenes in the respective images. They successfully capture the type and color of the cars, as well as their settings.\n2. **OCR Text Relation**: In both cases, the OCR text is empty, which is appropriate as there are no textual elements in either of the images.\n3. **Alt Description Comparison**: The alt descriptions (\"6\" and \"1\") are not informative and do not convey any visual content of the images. Alt descriptions could be improved by providing brief, relevant descriptions of the images to enhance accessibility.\n\nOverall, the captions and OCR text are handled appropriately, but the alt descriptions need significant improvement to be useful.",
+                "metadata": {
+                    "finishReason": "stop",
+                    "usage": {
+                        "inputTokens": 1308,
+                        "outputTokens": 468,
+                        "totalTokens": 1776
+                    }
+                }
+            }
+        },
+        "alt": "6",
+        "autoCaption": "Classic car parked in a barn with hay bales",
+        "autoOCR": "",
+        "originalName": "6.jpg",
+        "url": "https://images.cdn.unbody.io/8a3c7426-d45b-4833-aa89-003b1573ff70/image/798d7f1b-1902-5209-99d7-2ff13072b18b.jpg"
+    },
+    {
+        "_additional": null,
+        "alt": "1",
+        "autoCaption": "A classic green convertible car parked on a paved area with a grassy background.",
+        "autoOCR": "",
+        "originalName": "1.jpeg",
+        "url": "https://images.cdn.unbody.io/8a3c7426-d45b-4833-aa89-003b1573ff70/image/aaf76382-2c0e-5065-af32-2e4b577e02f0.jpeg"
+    }
+]
+```
+
+Learn more about advanced multimodal search features in our [Advanced Multimodal Search Guide](/guides/advanced-multimodal-search).

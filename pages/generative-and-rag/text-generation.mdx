@@ -1,0 +1,101 @@
+import { Tabs } from "nextra/components"
+
+# Text Generation
+
+Generate human-like text content using natural language prompts or structured message sequences. Perfect for creating reports, summaries, or engaging in interactive conversations.
+
+## Basic Generation
+Generate text content using a simple prompt string.
+
+```typescript
+const data = await unbody.generate
+    .text("Explain AI's impact on healthcare.");
+```
+
+```typescript
+// Response
+{
+    "content": "AI has had a profound impact on healthcare and continues to shape and improve various aspects of the industry. Here are some key ways in which AI is transforming healthcare:\n\n1. **Clinical Decision Support**: AI algorithms can analyze vast amounts of medical data, patient records, and research to provide valuable insights that support clinical decision-making. This helps healthcare professionals in diagnosing diseases more accurately, selecting appropriate treatments, and personalizing patient care plans.\n\n2. **Medical Imaging and Diagnostics**: AI techniques, especially deep learning, have revolutionized medical imaging analysis. AI systems can detect and diagnose various conditions from medical images, including tumors, fractures, and eye diseases. This improves accuracy, speeds up diagnosis, and reduces the workload on radiologists and other medical specialists.\n\n3. **Drug Discovery and Development**: AI accelerates the process of discovering and developing new drugs by identifying potential drug candidates, optimizing molecular structures, and predicting drug efficacy and safety. This can lead to faster drug development, lower costs, and an increased success rate in bringing new medications to market.\n\n4. **Precision Medicine**: AI enables the development of precision medicine, where treatments and interventions are tailored to individual patients based on their genetic makeup, lifestyle, and environmental factors. By analyzing large datasets, AI can identify patterns and correlations that help determine the most effective treatments for specific patient subgroups.\n\n5. **Virtual Health Assistants**: AI-powered virtual assistants and chatbots can provide patients with immediate assistance, answer common health-related queries, and offer personalized recommendations. These assistants can also help monitor patient symptoms, provide follow-up care, and improve patient engagement and adherence to treatment plans.\n\n6. **Healthcare Operations and Administration**: AI improves the efficiency of healthcare operations by automating administrative tasks, streamlining scheduling and billing processes, and optimizing resource allocation. This reduces costs, improves healthcare facility management, and enables healthcare providers to focus more on patient care.\n\n7. **Predictive Analytics**: AI algorithms can analyze historical data to predict patient outcomes, identify patients at risk of developing specific diseases, and anticipate resource needs. This predictive capability allows healthcare providers to intervene early, improve patient monitoring, and allocate resources effectively.\n\n8. **Clinical Research and Data Analysis**: AI facilitates the analysis of large and complex healthcare datasets, helping researchers identify patterns, correlations, and potential causes of diseases. This accelerates clinical research, improves our understanding of various health conditions, and leads to the development of more effective treatments.\n\n9. **Robotics in Surgery and Rehabilitation**: AI-powered robots assist in surgical procedures, improving precision and reducing invasiveness. They can also aid in patient rehabilitation, providing repetitive tasks and personalized therapy regimens.\n\n10. **Mental Health**: AI-based interventions, such as cognitive behavioral therapy chatbots, are being used to support patients with mental health issues. These tools can provide accessible and affordable therapy, helping to address the shortage of mental health professionals.\n\nWhile AI in healthcare offers tremendous benefits, it also comes with challenges and ethical considerations. These include concerns around data privacy, algorithmic bias, potential job displacement, and the need for proper validation and regulation of AI systems in healthcare. Addressing these challenges is crucial to ensure that AI technology improves healthcare outcomes while maintaining patient safety and trust.",
+    "metadata": {
+        "usage": {
+            "inputTokens": 200,
+            "outputTokens": 650,
+            "totalTokens": 850
+        }
+    }
+}
+```
+
+## Generation with Options
+Control the output by specifying generation parameters like model, temperature, and token limits.
+
+```typescript
+const data = await unbody.generate
+    .text("Write a report on climate change.", {
+        model: "gpt-4",
+        topP: 0.7,
+        maxTokens: 1000,
+        temperature: 0.7,
+        presencePenalty: 0,
+        frequencyPenalty: 0,
+    });
+```
+
+```typescript
+// Response
+{
+    "content": "Title: An In-depth Analysis of Climate Change\n\nIntroduction:\n\nClimate change, often referred to as global warming, is a long-term shift in weather conditions identified by changes in temperature, precipitation, winds, and other indicators. This phenomenon has become a major concern globally due to its significant impacts on the environment and human life. The primary cause of climate change is attributed to human activities, particularly the emission of greenhouse gases into the atmosphere. This report provides an in-depth analysis of climate change, its causes, impacts, and potential solutions.\n\nCauses of Climate Change:\n\nThe primary cause of climate change is the increased concentration of greenhouse gases in the Earth's atmosphere due to human activities. These gases include carbon dioxide (CO2), methane (CH4), and nitrous oxide (N2O), among others. The burning of fossil fuels for electricity, heat, and transportation is the largest single source of global greenhouse gas emissions. Deforestation, industrial processes, and some agricultural practices also contribute to the emission of these gases. \n\nImpacts of Climate Change:\n\nClimate change has a wide range of impacts on the environment and human life. These include:\n\n1. Rising Temperatures: Global temperatures have been rising for over a century, with the most rapid increase occurring in the past 30 years. This has resulted in more frequent and severe heatwaves.\n\n2. Melting Polar Ice and Glaciers: The rise in temperature has led to the melting of polar ice caps and glaciers, leading to a rise in sea levels.\n\n3. Changing Weather Patterns: Climate change has resulted in changes in weather patterns, leading to more frequent and intense storms, floods, and droughts.\n\n4. Impact on Biodiversity: Climate change threatens biodiversity by altering habitats and triggering mass extinctions.\n\n5. Human Health Risks: Rising temperatures and changing weather patterns pose significant risks to human health, including heat stress, malnutrition, and an increased incidence of vector-borne diseases.\n\nPotential Solutions to Climate Change:\n\nAddressing climate change requires urgent and comprehensive action at all levels - individual, community, corporate, and governmental. Some potential solutions include:\n\n1. Reducing Greenhouse Gas Emissions: This can be achieved through the use of renewable energy sources, improving energy efficiency, and promoting sustainable agricultural practices.\n\n2. Carbon Sequestration: This involves capturing and storing carbon dioxide to prevent its release into the atmosphere.\n\n3. Reforestation: Planting trees to absorb carbon dioxide can help mitigate climate change.\n\n4. Climate Change Education and Awareness: Raising awareness about the causes and impacts of climate change can encourage more people to take action.\n\n5. International Cooperation: Climate change is a global problem that requires a global solution. International cooperation is essential to address this issue effectively.\n\nConclusion:\n\nClimate change is one of the most pressing issues facing our planet today. It poses significant threats to the environment and human life. However, with collective action and the right strategies, it is possible to mitigate its impacts and ensure a sustainable future for all. It is imperative for all stakeholders, including governments, businesses, and individuals, to take urgent action to address this critical issue.",
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 14,
+            "outputTokens": 629,
+            "totalTokens": 643
+        }
+    }
+}
+```
+
+## Multi-Message Generation
+Create more contextual and guided responses using a sequence of system and user messages.
+
+```typescript
+const data = await unbody.generate
+    .text(
+        [
+            { 
+                role: "system", 
+                content: "You are an expert on AI." 
+            },
+            { 
+                role: "user", 
+                content: "What are the latest AI trends in 2024?" 
+            },
+        ],
+        {
+            model: "gpt-4",
+            topP: 0.7,
+            maxTokens: 1000,
+            temperature: 0.7,
+            presencePenalty: 0,
+            frequencyPenalty: 0,
+        }
+    );
+```
+
+```typescript
+// Response
+{
+    "content": "As an AI model developed by OpenAI, I can provide information only up to my last training cut-off in September 2021. However, based on the trends up to that point, here are some predictions for AI trends that might be prevalent in 2024:\n\n1. **Explainable AI (XAI)**: As AI becomes more integrated into critical systems, the need for transparency and understanding of how these models make decisions is paramount. The development of XAI could be a significant trend, with models providing clear, understandable reasoning for their outputs.\n\n2. **AI Ethics and Regulation**: As AI technology advances, there is an increasing need for ethical guidelines and regulations. These would help to prevent misuse, bias, and other potential issues associated with AI.\n\n3. **AI in Healthcare**: The use of AI in healthcare for diagnosis, treatment recommendations, patient monitoring, and drug discovery could continue to grow.\n\n4. **AI in Cybersecurity**: AI and Machine Learning algorithms could be used more frequently to detect and respond to cyber threats, given their ability to learn and adapt to new strategies used by cybercriminals.\n\n5. **AI and Quantum Computing**: Quantum computing has the potential to significantly increase the processing power available for AI systems, leading to more advanced and capable AI.\n\n6. **AI in Climate Change**: AI could play a crucial role in climate change mitigation strategies, from optimizing energy use to predicting climate patterns.\n\n7. **AI and Edge Computing**: As IoT devices become more prevalent, running AI algorithms on the device (edge computing) rather than in a centralized location could become more common.\n\n8. **AI and 5G/6G Technology**: The advent of 5G and potentially 6G technology can enable more real-time AI applications, given the reduced latency and increased bandwidth.\n\nRemember, these are only predictions based on the trends up to 2021, and the actual trends in 2024 could be different.",
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 29,
+            "outputTokens": 392,
+            "totalTokens": 421
+        }
+    }
+}
+```
+
+Learn more about advanced text generation features in our [Advanced Text Generation Guide](/guides/advanced-text-generation).

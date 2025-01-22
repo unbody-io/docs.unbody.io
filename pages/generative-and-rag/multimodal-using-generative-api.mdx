@@ -1,0 +1,58 @@
+import { Tabs } from "nextra/components"
+
+# Multimodal using generative API
+
+Use multiple types of inputs including text and images to generate comprehensive analysis and insights.
+
+Perfect for analyzing technical diagrams, flowcharts, or any content that combines visual and textual information.
+
+## Technical Diagram Analysis
+In this example, we combine multiple input types to analyze a system architecture diagram. The system acts as a technical expert, receiving both the image and specific instructions about what aspects to focus on. This is particularly useful for getting detailed insights about complex technical diagrams.
+
+```typescript
+const data = await unbody.generate
+    .text(
+        [
+            {
+                role: "system",
+                content: "You are an expert at analyzing technical diagrams and architecture flowcharts.",
+            },
+            {
+                role: "user",
+                content: "Analyze this system architecture diagram and provide a detailed explanation.",
+            },
+            {
+                type: "image",
+                content: {
+                    url: "https://www.aporia.com/wp-content/uploads/2024/02/image-4.png", // LLM architecture diagram image
+                },
+            },
+            {
+                type: "text",
+                content: "Focus on the data flow patterns and potential bottlenecks in this architecture.",
+            },
+        ],
+        {
+            model: "gpt-4-turbo",
+            temperature: 0.7,
+            maxTokens: 1500,
+        }
+    );
+```
+
+```typescript
+// Response
+{
+    "content": "This system architecture diagram represents a complex interaction between various components to process and optimize queries using a language learning model (LLM). Let’s analyze the data flow and identify potential bottlenecks:\n\n### Data Flow Analysis:\n1. **Vector Database to Embedding Model:**\n   - Queries are mapped to vector representations in the vector database based on contextual relevance. This data is then sent to an embedding model which processes these embeddings.\n   - **Potential Data Flow Issue:** High latency in fetching and embedding data can occur if the vector database is large or not optimized for quick lookups.\n\n2. **Data Filter:**\n   - A data filter is used to ensure that the LLM isn’t processing unauthorized data by filtering context snippets before they are injected into the initial prompt.\n   - **Potential Bottleneck:** The efficiency and speed of the data filter are critical. If the filtering process is slow or the rules are too complex, it could delay the processing of data into the initial prompt.\n\n3. **Initial Prompt to LLM API:**\n   - The initial prompt is optimized by the prompt optimization tool before being sent to the LLM host via the LLM API.\n   - **Potential Data Flow Issue:** The prompt optimization tool must operate efficiently to prevent delays in query processing. A slow optimization process can create a bottleneck.\n\n4. **LLM Cache:**\n   - Outputs are either stored in or pulled from the LLM cache, which suggests an attempt to speed up response times by caching common results.\n   - **Potential Bottleneck:** Cache misses and the efficiency of the cache retrieval mechanism can impact performance. If the cache does not effectively reduce load on the LLM host, it may not provide the intended performance improvement.\n\n5. **Content Classifier or Filter:**\n   - Before sending the output to the end user, it is scanned for harmful or offensive content by a content classifier.\n   - **Potential Bottleneck:** This step is crucial for content safety but can be a significant bottleneck if the classifier is slow or if the filtering criteria are too stringent, causing delays in output delivery.\n\n6. **Telemetry Service and UI:**\n   - The user interface (UI) plays a central role in receiving user queries and displaying outputs. It is interconnected with a telemetry service for monitoring and possibly analytics.\n   - **Potential Data Flow Issue:** The responsiveness of the UI and the overhead introduced by telemetry data handling can affect the user experience.\n\n### Summary:\n- **Major Potential Bottlenecks:**\n  - **Data Filter and Content Classifier**: Both components are critical for data integrity and safety but can severely impact response times if not optimized.\n  - **Prompt Optimization Tool**: Delays in prompt optimization can cascade, affecting overall latency.\n  - **Vector Database Lookup**: Needs to be highly optimized for performance to handle large volumes of queries efficiently.\n\nOverall, this architecture needs robust performance tuning across its components, especially around data filtering, prompt optimization, and content classification, to maintain a smooth and efficient data flow. Ensuring scalability and quick data retrieval from the vector database is also crucial to prevent bottlenecks as the system scales.",
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 1424,
+            "outputTokens": 628,
+            "totalTokens": 2052
+        }
+    }
+}
+```
+
+Learn more about advanced multimodal features in our [Advanced Multimodal Guide](/guides/advanced-multimodal).
