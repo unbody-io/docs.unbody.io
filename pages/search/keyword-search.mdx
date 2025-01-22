@@ -59,8 +59,7 @@ Performs a simple keyword search to find exact matches in all text fields.
 ```
 
 ## Field-Specific Search
-Search for keywords within specific fields of your documents.
-
+Here we are demonstrate a field-specific search functionality. The code uses the `.search.find()` method on the `textDocument` collection to search for "neural networks" specifically within the `title` and `autoSummary` fields, selecting relevant fields to return.
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
@@ -126,3 +125,5 @@ Search for keywords within specific fields of your documents.
     }
 ]
 ```
+
+Learn more in our [Keyword Search Guide](/content-api/search/keyword-search).
