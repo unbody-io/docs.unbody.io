@@ -5,7 +5,7 @@ import { Tabs } from "nextra/components"
 Combines both semantic and keyword search capabilities to provide comprehensive results that match both meaning and specific terms.
 
 ## Basic Search
-Performs a hybrid search across specified fields, combining semantic understanding with keyword matching.
+In this example, we demonstrate a hybrid search combining semantic and keyword matching. The code uses the `.search.hybrid()` method on the `textDocument` collection to search for "AI in healthcare" within `text` and `title` fields.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -63,7 +63,7 @@ Performs a hybrid search across specified fields, combining semantic understandi
 ```
 
 ## Advanced Search
-Advanced hybrid search with custom vector and fusion settings for more precise results.
+In this example, we demonstrate an advanced hybrid search with custom parameters. The code uses the `.search.hybrid()` method on the `googleDoc` collection, specifying fusion settings, vector values, and search properties for more precise results.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -123,3 +123,5 @@ Advanced hybrid search with custom vector and fusion settings for more precise r
     }
 ]
 ```
+
+Learn more in our [Hybrid Search Guide](/content-api/search/hybrid-search).
