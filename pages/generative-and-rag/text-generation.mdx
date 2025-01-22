@@ -63,27 +63,29 @@ In this example, we demonstrates fine-tuned text generation by configuring model
 Showcases structured message-based generation with `.generate.text()`. The code uses a message array to define system and user roles, configuring parameters like model, temperature, and token limits for controlled output.
 
 ```typescript
-const data = await unbody.generate
-    .text(
-        [
-            { 
-                role: "system", 
-                content: "You are an expert on AI." 
-            },
-            { 
-                role: "user", 
-                content: "What are the latest AI trends in 2024?" 
-            },
-        ],
-        {
-            model: "gpt-4",
-            topP: 0.7,
-            maxTokens: 1000,
-            temperature: 0.7,
-            presencePenalty: 0,
-            frequencyPenalty: 0,
-        }
-    );
+    const {
+      data: { payload },
+    } = await unbody.generate
+            .text(
+                [
+                    { 
+                        role: "system", 
+                        content: "You are an expert on AI." 
+                    },
+                    { 
+                        role: "user", 
+                        content: "What are the latest AI trends in 2024?" 
+                    },
+                ],
+                {
+                    model: "gpt-4",
+                    topP: 0.7,
+                    maxTokens: 1000,
+                    temperature: 0.7,
+                    presencePenalty: 0,
+                    frequencyPenalty: 0,
+                }
+            );
 ```
 
 ```typescript
