@@ -6,12 +6,14 @@ import { Tabs } from "nextra/components"
 Use Unbody's Image API powered by Imgix to efficiently fetch, transform and analyze images. Capabilities include dynamic resizing, format conversion, advanced cropping, and intelligent image analysis.
 
 ## Basic Image Query
-Fetch basic image information including OCR text and auto-generated captions.
+The code fetches image information including OCR text extraction and AI-generated captions, limiting results to 5 entries.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.imageBlock
+    const {
+      data: { payload },
+    } = await unbody.get.imageBlock
         .limit(5)
         .select("originalName", "autoOCR", "autoCaption")
         .exec();
@@ -69,13 +71,15 @@ Find similar images by providing a reference image URL.
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.imageBlock.similar
-        .image(
-            "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg" // Image about an electric car
-        )
-        .limit(5)
-        .select("originalName", "url", "autoOCR", "mimeType")
-        .exec();
+    const {
+      data: { payload },
+    } = await unbody.get.imageBlock.similar
+          .image(
+              "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg" // Image about an electric car
+          )
+          .limit(5)
+          .select("originalName", "url", "autoOCR", "mimeType")
+          .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -160,4 +164,4 @@ Find similar images by providing a reference image URL.
 ]
 ```
 
-Learn more about advanced image features in our [Advanced Image Guide](/guides/advanced-image).
+Learn more about advanced image features in our [Image Api Guide](/image-api/overview).

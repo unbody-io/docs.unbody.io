@@ -8,6 +8,8 @@ Use message arrays to create rich, context-aware interactions with multiple role
 The example demonstrates role-based messaging with [Zod](https://zod.dev/) schema validation. Messages define the user query and system instructions, while the Zod schema enforces response structure (company details as strings and numbers). The result is a type-safe JSON object.
 
 ```typescript
+    import { z } from "zod";
+
     const {
       data: { payload },
     } = await unbody.generate
