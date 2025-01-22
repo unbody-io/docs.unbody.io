@@ -5,12 +5,14 @@ import { Tabs } from "nextra/components"
 Search based on meaning rather than exact keyword matches, allowing users to find relevant content even when exact terms don't match.
 
 ## Basic Search
-Performs a simple semantic search to find content based on meaning rather than exact keywords.
+In this example, we demonstrate how to perform a semantic search. The code initiates a search query using the `.search.about()` method on the `textDocument` collection, selecting specific fields (`title`, `autoSummary`, `text`) to return.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.textDocument
+    const {
+      data: { payload },
+    }  = await unbody.get.textDocument
         .search
         .about("AI applications")
         .select("title", "autoSummary", "text")
@@ -40,6 +42,7 @@ Performs a simple semantic search to find content based on meaning rather than e
 
 ```typescript
 // Response
+
 [
     {
         "_additional": {
@@ -63,52 +66,41 @@ Performs a simple semantic search to find content based on meaning rather than e
 ```
 
 ## Search with Concept Boost
-Enhances search results by steering them towards specific concepts using `moveTo`. Useful for getting more targeted results about specific topics.
+In this example, we demonstrate how to perform a semantic search with concept boosting. The code uses the `.search.about()` method on the textBlock collection, enhancing results towards specific concepts with a force factor, while selecting the text field and limiting to 5 results.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.textBlock
-        .search
-        .about("Explain AI applications.", {
-            moveTo: {
-                concepts: ["automation", "machine learning"],
-                force: 0.5
-            },
-            certainty: 0.85
-        })
-        .exec();
+      const {
+         data: { payload },
+      } = await unbody.get.textBlock.search
+              .about("AI applications", {
+                moveTo: {
+                  concepts: ["Deep Learning", "LLM", "chatbot"],
+                  force: 0.5,
+                },
+              })
+              .select("text")
+              .limit(5)
+              .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
     ```graphql
     {
-      Get {
-        TextBlock(
-          nearText: {
-            concepts: ["AI applications"],
-            moveTo: {
-              concepts: ["automation", "machine learning"],
-              force: 0.5
-            },
-            certainty: 0.85
-          }
-        ) {
-          _additional {
-            certainty
-            distance
-          }
-          footnotes
-          html
-          order
-          remoteId
-          sourceId
-          tagName
-          text
-          classNames
-        }
+  Get {
+    TextBlock(
+      nearText: {concepts: ["AI applications"], moveTo: {concepts: ["Deep Learning", "LLM", "chatbot"], force: 0.5}}
+      limit: 5
+    ) {
+      _additional {
+        certainty
+        distance
       }
+      text
     }
+  }
+}
     ```
   </Tabs.Tab>
 </Tabs>
@@ -116,55 +108,104 @@ Enhances search results by steering them towards specific concepts using `moveTo
 ```typescript
 // Response
 
+[
+    {
+        "_additional": {
+            "certainty": 0.7626321315765381,
+            "distance": 0.47473574
+        },
+        "text": "These functionalities enable you to integrate sophisticated AI solutions into your applications."
+    },
+    {
+        "_additional": {
+            "certainty": 0.7564907670021057,
+            "distance": 0.48701847
+        },
+        "text": "Diving into the heart of AI app development, developers face quite a puzzle. Picture this: you're building a chatbot drawing data from Google Drive and Slack. You start mixing tools like LangChain, vector databases, and LlamaIndex with a dash of RAG APIs and vectorizers. Before you know it, you're juggling query languages and document parsers. It's like opening a toolbox and finding tools you never knew existed. You see, this is already getting out of hand, isn't it?"
+    },
+    {
+        "_additional": {
+            "certainty": 0.7547585368156433,
+            "distance": 0.49048293
+        },
+        "text": "But making A.I. apps isn't easy."
+    },
+    {
+        "_additional": {
+            "certainty": 0.7537075281143188,
+            "distance": 0.49258494
+        },
+        "text": "\nFor Text: Options might include popular LLMs like OpenAI's GPT models.\nFor Images: Tools are available to turn images into searchable and analyzable data.\nFor Multimodal Data: Unbody provides solutions that can handle a mix of text, images, and more.\nBeyond Basic Vectorization: But it's not just about converting data into AI-readable formats. Layer 2 also takes care of complex tasks like applying image captioning, auto transcription, and more. These additional tools and functionalities ensure that your application is not just intelligent but also versatile and capable of handling a variety of AI-driven tasks.\n"
+    },
+    {
+        "_additional": {
+            "certainty": 0.7536993026733398,
+            "distance": 0.4926014
+        },
+        "text":"\n |  | \ | Sparse dictionary learning\n | --- | --- | ---\n | As the industries grow, large volumes of data have been recognized. For handling that data, machine learning technology is required. With the machine learning, organizations are able to work more efficiently. Machine learning is used in following areas: | \ | Anomaly detection\n | \ Decision tree\n | \ Association rules\n | F. Applications of Machine learning:\n | There are many applications of machine learning such as:\n | \ Adaptive websites\n | \ Financial services: In financial services, machine learning technology is used to identify the important insight in data and to prevent fraud. The insights help to identify investment opportunities or help investors to know when to trade. Data mining concepts also identify high risk profiles of clients or to pinpoint warning signs of fraud. |  | \ Bioinformatics \ Brain-machine interface\n"
+    }
+]
+
 ```
 
-## Search with Concept Filtering
-Uses `moveAwayFrom` to exclude certain concepts from search results while maintaining relevance to the main query.
-
+## Advanced Search with Concept Steering
+In this example, we demonstrate an advanced semantic search with concept steering. The code uses the `.search.about()` method on the `textDocument` collection with multiple concepts, using `moveTo` to enhance relevance towards modern AI concepts and `moveAwayFrom` to filter out legacy systems. The query includes sorting by `createdAt`, filtering by certainty, and limiting to 5 results.
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.textBlock
-        .search
-        .about(["Explain quantum physics.", "AI"], {
-            moveAwayFrom: {
-                concepts: ["outdated"],
-                force: 0.3
-            },
-            certainty: 0.9
-        })
-        .exec();
+       const {
+      data: { payload },
+    } = await unbody.get.textDocument.search
+      .about(
+        ["Modern AI Chatbots", "Large Language Models", "Conversational AI"],
+        {
+          moveTo: {
+            concepts: [
+              "Natural Language Processing",
+              "ChatGPT",
+              "Machine Learning",
+              "Customer Service Automation",
+            ],
+            force: 0.7,
+          },
+          moveAwayFrom: {
+            concepts: [
+              "Rule-based Chatbots",
+              "Legacy Systems",
+              "Basic FAQ Bots",
+              "Traditional IVR",
+            ],
+            force: 0.8,
+          },
+          certainty: 0.6,
+        }
+      )
+      .select("title", "autoSummary", "tags", "createdAt")
+      .sort("createdAt", "desc")
+      .limit(5)
+      .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
     ```graphql
     {
-      Get {
-        TextBlock(
-          nearText: {
-            concepts: ["AI applications"],
-            moveTo: {
-              concepts: ["automation", "machine learning"],
-              force: 0.5
-            },
-            certainty: 0.85
-          }
-        ) {
-          _additional {
-            certainty
-            distance
-          }
-          footnotes
-          html
-          order
-          remoteId
-          sourceId
-          tagName
-          text
-          classNames
-        }
+  Get {
+    TextDocument(
+      nearText: {concepts: ["Modern AI Chatbots", "Large Language Models", "Conversational AI"], moveTo: {concepts: ["Natural Language Processing", "ChatGPT", "Machine Learning", "Customer Service Automation"], force: 0.7}, moveAwayFrom: {concepts: ["Rule-based Chatbots", "Legacy Systems", "Basic FAQ Bots", "Traditional IVR"], force: 0.8}, certainty: 0.6}
+      sort: {order: desc, path: "createdAt"}
+      limit: 5
+    ) {
+      _additional {
+        certainty
+        distance
       }
+      title
+      autoSummary
+      tags
+      createdAt
     }
+  }
+}
     ```
   </Tabs.Tab>
 </Tabs>
@@ -172,5 +213,38 @@ Uses `moveAwayFrom` to exclude certain concepts from search results while mainta
 ```typescript
 // Response
 
-
+[
+    {
+        "_additional": {
+            "certainty": 0.7615080773830414,
+            "distance": 0.47698385
+        },
+        "autoSummary": "AI is essential in engineering, leveraging ML and DL technologies. ML creates models from data, while DL automates feature extraction for large datasets. This paper explores their architectures, applications, and challenges, aiding effective AI system development and predictive analytics.",
+        "createdAt": "2025-01-21T11:22:51.19Z",
+        "tags": [],
+        "title": "International Journal of Innovative Technology and Exploring Engineering (IJITEE)"
+    },
+    {
+        "_additional": {
+            "certainty": 0.7157922387123108,
+            "distance": 0.5684155
+        },
+        "autoSummary": "Unbody offers an effortless AI app development with a headless API and modular AI pipeline for integrating diverse data types. It tackles personalization, data handling, and complexity, delivering user-centric and AI-enhanced applications. Sign up for free!",
+        "createdAt": "2025-01-21T10:34:57.752Z",
+        "tags": [],
+        "title": "Unbody: all AI buzz in one endpoint, one line of code"
+    },
+    {
+        "_additional": {
+            "certainty": 0.6277952194213867,
+            "distance": 0.74440956
+        },
+        "autoSummary": "The official Unbody client for TypeScript/JavaScript allows data handling through npm installation. It provides methods for retrieving data using queries, asking questions, and various techniques like near text/vector, grouping, sorting, and selection. Transformers parse JSON, while debugging uses graph/json queries.",
+        "createdAt": "2025-01-21T10:34:57.752Z",
+        "tags": [],
+        "title": "Installation"
+    }
+]
 ```
+
+Learn more in our [Semantic Search Guide](/content-api/search/semantic-search).
