@@ -88,22 +88,23 @@ In this example, we demonstrate how to perform a semantic search with concept bo
   <Tabs.Tab>
     ```graphql
     {
-  Get {
-    TextBlock(
-      nearText: {concepts: ["AI applications"], moveTo: {concepts: ["Deep Learning", "LLM", "chatbot"], force: 0.5}}
-      limit: 5
-    ) {
-      _additional {
-        certainty
-        distance
+      Get {
+        TextBlock(
+          nearText: {concepts: ["AI applications"], moveTo: {concepts: ["Deep Learning", "LLM", "chatbot"], force: 0.5}}
+          limit: 5
+        ) {
+          _additional {
+            certainty
+            distance
+          }
+          text
+        }
       }
-      text
     }
-  }
-}
     ```
   </Tabs.Tab>
 </Tabs>
+
 
 ```typescript
 // Response
@@ -189,23 +190,23 @@ In this example, we demonstrate an advanced semantic search with concept steerin
   <Tabs.Tab>
     ```graphql
     {
-  Get {
-    TextDocument(
-      nearText: {concepts: ["Modern AI Chatbots", "Large Language Models", "Conversational AI"], moveTo: {concepts: ["Natural Language Processing", "ChatGPT", "Machine Learning", "Customer Service Automation"], force: 0.7}, moveAwayFrom: {concepts: ["Rule-based Chatbots", "Legacy Systems", "Basic FAQ Bots", "Traditional IVR"], force: 0.8}, certainty: 0.6}
-      sort: {order: desc, path: "createdAt"}
-      limit: 5
-    ) {
-      _additional {
-        certainty
-        distance
+      Get {
+        TextDocument(
+          nearText: {concepts: ["Modern AI Chatbots", "Large Language Models", "Conversational AI"], moveTo: {concepts: ["Natural Language Processing", "ChatGPT", "Machine Learning", "Customer Service Automation"], force: 0.7}, moveAwayFrom: {concepts: ["Rule-based Chatbots", "Legacy Systems", "Basic FAQ Bots", "Traditional IVR"], force: 0.8}, certainty: 0.6}
+          sort: {order: desc, path: "createdAt"}
+          limit: 5
+        ) {
+          _additional {
+            certainty
+            distance
+          }
+          title
+          autoSummary
+          tags
+          createdAt
+        }
       }
-      title
-      autoSummary
-      tags
-      createdAt
     }
-  }
-}
     ```
   </Tabs.Tab>
 </Tabs>
