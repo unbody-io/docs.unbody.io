@@ -5,24 +5,27 @@ import { Tabs } from "nextra/components"
 Generate structured JSON content based on prompts, messages, or schemas. Useful for creating API responses, structured records, or documents.
 
 ## Basic JSON Generation
-Generate JSON output using a basic schema definition without Zod.
+Shows how to generate structured JSON data with a simple schema definition. The `.generate.json()` method allows you to specify the expected output structure using JSON Schema format, ensuring the response matches your requirements.
 
 ```typescript
-const data = await unbody.generate
-    .json("Provide user details:", {
-        schema: {
-            type: "object",
-            properties: {
-                name: { type: "string" },
-                age: { type: "number" },
-                address: { type: "string" },
-            },
-        },
-    });
+    const {
+      data: { payload },
+    }   = await unbody.generate
+            .json("Provide user details:", {
+                schema: {
+                    type: "object",
+                    properties: {
+                        name: { type: "string" },
+                        age: { type: "number" },
+                        address: { type: "string" },
+                    },
+                },
+            });
 ```
 
 ```typescript
 // Response
+
 {
     "content": {
         "name": "Jane Doe",
@@ -39,22 +42,25 @@ const data = await unbody.generate
 ```
 
 ## Generation with Zod Schema
-Use Zod for to structure the response.
+Demonstrates JSON generation with type validation using [Zod](https://zod.dev/), a TypeScript-first validation library that ensures your generated JSON matches the expected structure. Note: Zod must be installed in your project.
 
 ```typescript
 import { z } from "zod";
 
-const data = await unbody.generate
-    .json("Provide user details:", {
-        schema: z.object({
-            name: z.string(),
-            age: z.number(),
-        }),
-    });
+    const {
+      data: { payload },
+    }   = await unbody.generate
+            .json("Provide user details:", {
+                schema: z.object({
+                    name: z.string(),
+                    age: z.number(),
+                }),
+            });
 ```
 
 ```typescript
 // Response
+
 {
     "content": {
         "name": "Jane Doe",
@@ -71,35 +77,38 @@ const data = await unbody.generate
 ```
 
 ## Multi-Message Generation
-Use multiple messages to guide the generation process with more context with zod.
+Shows how to generate JSON using conversational context and Zod schemas.
 
 ```typescript
 import { z } from "zod";
 
-const data = await unbody.generate
-    .json(
-        [
-            {
-                role: "user",
-                content: "What is the structure of a business entity?",
-            },
-            { 
-                role: "system", 
-                content: "Explain in detail with examples." 
-            },
-        ],
-        {
-            schema: z.object({
-                companyName: z.string(),
-                employees: z.number(),
-                headquarters: z.string(),
-            }),
-        }
-    );
+    const {
+      data: { payload },
+    }  = await unbody.generate
+            .json(
+                [
+                    {
+                        role: "user",
+                        content: "What is the structure of a business entity?",
+                    },
+                    { 
+                        role: "system", 
+                        content: "Explain in detail with examples." 
+                    },
+                ],
+                {
+                    schema: z.object({
+                        companyName: z.string(),
+                        employees: z.number(),
+                        headquarters: z.string(),
+                    }),
+                }
+            );
 ```
 
 ```typescript
 // Response
+
 {
     "content": {
         "companyName": "Meta Corp",
@@ -116,4 +125,4 @@ const data = await unbody.generate
 }
 ```
 
-Learn more about advanced JSON generation features in our [Advanced JSON Generation Guide](/guides/advanced-json-generation).
+Learn more about advanced JSON generation features in our [JSON Generation API Guide](/generative-api/json-gen).
