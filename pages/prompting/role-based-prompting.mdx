@@ -5,29 +5,31 @@ import { Tabs } from "nextra/components"
 Use message arrays to create rich, context-aware interactions with multiple roles. This method provides more control over the conversation flow compared to single prompts.
 
 ## Basic Role-based Generation
-Define different roles (system, user, assistant) to create more structured and contextual interactions.
+The example demonstrates role-based messaging with [Zod](https://zod.dev/) schema validation. Messages define the user query and system instructions, while the Zod schema enforces response structure (company details as strings and numbers). The result is a type-safe JSON object.
 
 ```typescript
-const data = await unbody.generate
-    .json(
-        [
+    const {
+      data: { payload },
+    } = await unbody.generate
+        .json(
+            [
+                {
+                    role: "user",
+                    content: "What is the structure of a business entity?",
+                },
+                { 
+                    role: "system", 
+                    content: "Explain in detail with examples." 
+                },
+            ],
             {
-                role: "user",
-                content: "What is the structure of a business entity?",
-            },
-            { 
-                role: "system", 
-                content: "Explain in detail with examples." 
-            },
-        ],
-        {
-            schema: z.object({
-                companyName: z.string(),
-                employees: z.number(),
-                headquarters: z.string(),
-            }),
-        }
-    );
+                schema: z.object({
+                    companyName: z.string(),
+                    employees: z.number(),
+                    headquarters: z.string(),
+                }),
+            }
+        );
 ```
 
 ```typescript
@@ -48,4 +50,4 @@ const data = await unbody.generate
 }
 ```
 
-Learn more about advanced role-based prompting in our [Advanced Prompting Guide](/guides/advanced-prompting).
+Learn more about advanced role-based prompting in our [JSON Generation API Guide](/generative-api/json-gen).
