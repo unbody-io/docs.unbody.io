@@ -2,7 +2,7 @@ import { Tabs } from "nextra/components"
 
 # Multimodal Rag Using Generative Search
 
-Use generative search capabilities to analyze multiple images and their associated metadata comprehensively.
+Create comprehensive insights by processing multiple types of data simultaneously - visual content (images), text (OCR, captions), and metadata. Multimodal RAG combines these different modalities to generate richer, more contextual understanding of your content.
 
 ## Image Analysis with Metadata
 This example demonstrates how to analyze multiple images along with their metadata, OCR text, and auto-generated captions. It combines visual content analysis with textual information to provide detailed insights.
@@ -10,7 +10,9 @@ This example demonstrates how to analyze multiple images along with their metada
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.imageBlock
+    const {
+      data: { payload },
+    } = await unbody.get.imageBlock
         .where({ mimeType: "image/jpeg" })
         .limit(2)
         .select("url", "autoCaption", "alt", "autoOCR", "originalName")
@@ -183,4 +185,4 @@ This example demonstrates how to analyze multiple images along with their metada
 ]
 ```
 
-Learn more about advanced multimodal search features in our [Advanced Multimodal Search Guide](/guides/advanced-multimodal-search).
+Learn more about advanced generation search features in our [Generative Search Guide](/content-api/generative).
