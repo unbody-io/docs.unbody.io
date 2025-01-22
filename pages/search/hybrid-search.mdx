@@ -10,7 +10,9 @@ In this example, we demonstrate a hybrid search combining semantic and keyword m
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.textDocument
+    const {
+      data: { payload },
+    } = await unbody.get.textDocument
         .search
         .hybrid("AI in healthcare", {
             properties: ["text", "title"]
@@ -68,7 +70,9 @@ In this example, we demonstrate an advanced hybrid search with custom parameters
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.googleDoc
+    const {
+      data: { payload },
+    } = await unbody.get.googleDoc
         .search
         .hybrid("Generative Ai", {
             alpha: 0.7,

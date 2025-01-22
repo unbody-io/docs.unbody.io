@@ -10,7 +10,9 @@ Performs a simple keyword search to find exact matches in all text fields.
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.textDocument
+    const {
+      data: { payload },
+    } = await unbody.get.textDocument
         .search
         .find("machine learning")
         .select("originalName", "text", "autoSummary")
@@ -60,10 +62,13 @@ Performs a simple keyword search to find exact matches in all text fields.
 
 ## Field-Specific Search
 Here we are demonstrate a field-specific search functionality. The code uses the `.search.find()` method on the `textDocument` collection to search for "neural networks" specifically within the `title` and `autoSummary` fields, selecting relevant fields to return.
+
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.textDocument
+    const {
+      data: { payload },
+    } = await unbody.get.textDocument
         .search
         .find("neural networks", ["title", "autoSummary"])
         .select("originalName", "properties", "autoSummary")
