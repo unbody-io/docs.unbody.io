@@ -7,100 +7,46 @@ Generate content by providing images as input through messages. The system can a
 ## Basic Image Generation
 Use images as input to generate descriptions or analyze visual content by providing image URLs.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const data = await unbody.get.imageBlock
-        .limit(2)
-        .generate.fromMany({
-            messages: [
+```typescript
+    const {
+      data: { payload },
+    } = await unbody.generate
+          .text(
+              [
                 {
-                    content: "Describe these images",
+                  role: "system",
+                  content: "Describe these images",
                 },
                 {
-                    type: "image",
-                    content: "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg",
+                  type: "image",
+                  content: {
+                    url: "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg",
+                    // Images about a Car
+                  },
                 },
-            ],
-        })
-        .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        ImageBlock(limit: 2) {
-          _additional {
-            generate(
-              groupedResult: {
-                messages: [
-                  {
-                    content: "Describe these images"
-                  }, 
-                  {
-                    type: "image", 
-                    content: "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg"
-                  }
-                ], 
-                options: {}
+              ],
+              {
+                model: "gpt-4-turbo",
+                maxTokens: 500,
+                temperature: 0.7,
               }
-            ) {
-              error
-              groupedResult
-              metadata {
-                finishReason
-                usage {
-                  inputTokens
-                  outputTokens
-                  totalTokens
-                }
-              }
-            }
-          }
-          alt
-          createdAt
-          ext
-          height
-          mimeType
-          modifiedAt
-          order
-          originalName
-          path
-          pathString
-          remoteId
-          size
-          sourceId
-          url
-          width
-        }
-      }
-    }
+          );
     ```
-  </Tabs.Tab>
-</Tabs>
 
 ```typescript
 // Response
-[
-    {
-        "_additional": {
-            "generate": {
-                "error": null,
-                "groupedResult": "The image depicts a futuristic electric car being charged at a charging station. The scene is set during twilight, with a vivid gradient sky transitioning from teal to orange. The car has sleek, modern lines, and the charging station has illuminated displays. A glowing line of electricity shows the connection between the charger and the car, emphasizing the electric charging process. The overall atmosphere is high-tech and futuristic.",
-                "metadata": {
-                    "finishReason": "stop",
-                    "usage": {
-                        "inputTokens": 593,
-                        "outputTokens": 79,
-                        "totalTokens": 672
-                    }
-                }
-            }
-        },
-        "alt": "drive-screenshot",
-        "url": "https://images.cdn.unbody.io/f25ed3ef-5bec-4966-b95c-08be28c9b473/image/4aee60c9-74da-583a-9545-ae13ac05a1b0.png"
+
+{
+    "content": "This image depicts a futuristic electric car being charged at a charging station. The scene is set at night with a vibrant, neon-lit color palette, predominantly featuring blues and oranges. The car is sleek and modern, with illuminated tail lights and a visible energy flow highlighted in blue to indicate charging. The background suggests a serene, remote location with trees silhouetted against the night sky. The image has a dynamic and slightly mysterious atmosphere, enhanced by the ambient lighting and the subtle presence of rain.",
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 527,
+            "outputTokens": 101,
+            "totalTokens": 628
+        }
     }
-]
+}
 ```
-Learn more about advanced image generation features in our  [Advanced Image Guide](/guides/advanced-prompting).
+
+Learn more about advanced role-based prompting in our [JSON Generation API Guide](/generative-api/json-gen).

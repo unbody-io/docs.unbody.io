@@ -10,30 +10,31 @@ In this example, we combine multiple input types to analyze a system architectur
 ```typescript
     const {
       data: { payload },
-    } = await unbody.generate.text(
-        [
-            {
-            role: "system",
-            content: "You are an expert at analyzing technical diagrams.",
-            },
-            {
-            type: "image",
-            content: {
-                url: "https://www.aporia.com/wp-content/uploads/2024/02/image-4.png",
-            },
-            },
-            {
-            role: "user",
-            content:
-                "Analyze this LLM architecture diagram, focusing on data flow and bottlenecks.",
-            },
-        ],
-        {
-            model: "gpt-4-turbo",
-            temperature: 0.7,
-            maxTokens: 1500,
-        }
-        );
+    } = await unbody.generate
+            .text(
+                [
+                    {
+                        role: "system",
+                        content: "You are an expert at analyzing technical diagrams.",
+                    },
+                    {
+                        type: "image",
+                        content: {
+                            url: "https://www.aporia.com/wp-content/uploads/2024/02/image-4.png",
+                        },
+                    },
+                    {
+                        role: "user",
+                        content:
+                            "Analyze this LLM architecture diagram, focusing on data flow and bottlenecks.",
+                    },
+                ],
+                {
+                    model: "gpt-4-turbo",
+                    temperature: 0.7,
+                    maxTokens: 1500,
+                }
+            );
 ```
 
 ```typescript

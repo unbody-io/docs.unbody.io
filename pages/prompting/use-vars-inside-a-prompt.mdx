@@ -5,43 +5,49 @@ import { Tabs } from "nextra/components"
 Transform and inject dynamic data into your prompts using variables. Variables allow you to process query results before using them in message content.
 
 ## Basic Variable Generation
-Use variables to transform query results and reference them in message content.
+Demonstrates using variables to process video subtitles. The code uses two [JQ-formatted](https://jqlang.github.io/jq/) vars:
+- 'subtitles': Extracts video subtitle entries
+- 'context': Creates a structure combining filename and transcription
+
+The processed data is then injected into a message prompt using `context` syntax, generating a summary of the video transcription. Results include generation metadata and usage statistics.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-    const data = await unbody.get.videoFile
-        .select("subtitles.SubtitleFile.entries.SubtitleEntry.__typename")
-        .limit(1)
-        .generate.fromOne({
-            options: {
-                vars: [
-                    {
-                        name: "subtitles",
-                        formatter: "jq",
-                        expression: `(.subtitles//[]) | map({ entries })`,
-                    },
-                    {
-                        name: "context",
-                        formatter: "jq",
-                        expression: `{
-                            originalName,
-                            transcription: $subtitles[0].entries
-                        }`,
-                    },
-                ],
-            },
-            messages: [
-                {
-                    content: `Summarize the video's transcription:
-                        \`\`\`json
-                        {context}
-                        \`\`\`
-                    `,
-                },
-            ],
-        })
-        .exec();
+    const {
+      data: { payload },
+    } = await unbody.get.videoFile
+          .select("subtitles.SubtitleFile.entries.SubtitleEntry.__typename")
+          .limit(1)
+          .generate.fromOne({
+              options: {
+                  vars: [
+                      {
+                          name: "subtitles",
+                          formatter: "jq",
+                          expression: `(.subtitles//[]) | map({ entries })`,
+                      },
+                      {
+                          name: "context",
+                          formatter: "jq",
+                          expression: `{
+                              originalName,
+                              transcription: $subtitles[0].entries
+                          }`,
+                      },
+                  ],
+              },
+              messages: [
+                  {
+                      content: `Summarize the video's transcription:
+                          \`\`\`json
+                          {context}
+                          \`\`\`
+                      `,
+                  },
+              ],
+          })
+          .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -132,4 +138,3 @@ Use variables to transform query results and reference them in message content.
 ]
 ```
 
-Learn more about advanced variable usage in our [Advanced Variable Guide](/guides/advanced-variables).
