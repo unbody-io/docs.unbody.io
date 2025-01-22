@@ -2,14 +2,15 @@ import { Tabs } from "nextra/components"
 
 # Text Generation
 
-Generate human-like text content using natural language prompts or structured message sequences. Perfect for creating reports, summaries, or engaging in interactive conversations.
+Generate natural language content using AI with flexible input methods - from simple prompts to structured message sequences. The system supports various models and parameters to fine-tune output, making it ideal for content creation, analysis, and conversational interactions.
 
 ## Basic Generation
-Generate text content using a simple prompt string.
+A straightforward example of text generation using a simple prompt. The `.generate.text()` method takes a natural language prompt as input and returns AI-generated content with usage metadata showing token consumption. Learn more in our [Text Generation Guide](/generative-api/text-gen).
 
 ```typescript
-const data = await unbody.generate
-    .text("Explain AI's impact on healthcare.");
+    const {
+      data: { payload },
+    } = await unbody.generate.text("Explain AI's impact on healthcare.");
 ```
 
 ```typescript
@@ -27,18 +28,20 @@ const data = await unbody.generate
 ```
 
 ## Generation with Options
-Control the output by specifying generation parameters like model, temperature, and token limits.
+In this example, we demonstrates fine-tuned text generation by configuring model parameters. Using the `.generate.text()` method with options like temperature, token limits, and sampling controls, we can precisely control the output characteristics.
 
 ```typescript
-const data = await unbody.generate
-    .text("Write a report on climate change.", {
-        model: "gpt-4",
-        topP: 0.7,
-        maxTokens: 1000,
-        temperature: 0.7,
-        presencePenalty: 0,
-        frequencyPenalty: 0,
-    });
+    const {
+      data: { payload },
+    } = await unbody.generate
+            .text("Write a report on climate change.", {
+                model: "gpt-4",
+                topP: 0.7,
+                maxTokens: 1000,
+                temperature: 0.7,
+                presencePenalty: 0,
+                frequencyPenalty: 0,
+            });
 ```
 
 ```typescript
@@ -57,7 +60,7 @@ const data = await unbody.generate
 ```
 
 ## Multi-Message Generation
-Create more contextual and guided responses using a sequence of system and user messages.
+Showcases structured message-based generation with `.generate.text()`. The code uses a message array to define system and user roles, configuring parameters like model, temperature, and token limits for controlled output.
 
 ```typescript
 const data = await unbody.generate
@@ -98,4 +101,4 @@ const data = await unbody.generate
 }
 ```
 
-Learn more about advanced text generation features in our [Advanced Text Generation Guide](/guides/advanced-text-generation).
+Learn more about text generation in details in our [Text Generation Guide](/generative-api/text-gen).
