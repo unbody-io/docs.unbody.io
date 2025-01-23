@@ -216,7 +216,19 @@ Fetch and work with video subtitles, including timing and text content. This exa
 ```
 
 ## Analyze Video Content
-Extract and analyze story elements from video subtitles by combining subtitle fetching with content generation.
+# Analyze Video Content
+Analyze subtitle content from videos by extracting story elements and generating structured insights. Perfect for understanding narrative flow and key moments in video transcripts.
+
+The example demonstrates advanced video analysis combining subtitle queries with structured content generation:
+- Fetches video subtitles with size constraints and timing information
+- Uses role-based messages to request story analysis
+- Enforces structured output with Zod schema, capturing:
+ - Story context (location, characters, timeframe)
+ - Key moments and their significance
+ - Humor elements (setup/punchline)
+ - Overall narrative tone
+
+Results are validated against the schema by [Zod](https://zod.dev/), ensuring consistent analysis format.
 
 ```typescript
     const {
