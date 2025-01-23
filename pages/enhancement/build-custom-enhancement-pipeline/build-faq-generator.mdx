@@ -1,0 +1,127 @@
+# Build FAQ Generator: An Enhancer Example
+Extract structured FAQ content from PDF documents using Unbody's Enhancement Pipeline. This example demonstrates how to automatically generate Q&A pairs from document content, making documentation searchable and accessible.
+
+## Creating the Pipeline
+Configure a targeted enhancement pipeline for PDF documents that automatically generates FAQs using AI processing. The pipeline filters for PDF files to ensure focused and efficient processing:
+
+```typescript
+// Initialize pipeline for PDF document processing
+const faqPipeline = new Enhancement.Pipeline(
+  "generate_faqs",      // Unique pipeline identifier
+  "TextDocument",       // Target collection
+  {
+    // Process only PDF files using MIME type check
+    if: (ctx) => ctx.record.mimeType === "application/pdf",
+  }
+);
+```
+
+## Configure FAQ Generation
+Set up the FAQ generation step using GPT-4. This step defines how content is processed and structured, using [Zod](https://zod.dev/) schemas for type-safe outputs:
+
+```typescript
+// Create FAQ generation step with structured output
+const generateFAQs = new Enhancement.Step(
+  "extract_faqs",    // Step identifier
+  new Enhancement.Action.StructuredGenerator({
+    model: "openai-gpt-4o",
+    // Dynamic prompt generation using document context
+    prompt: (ctx) => `
+      Generate a list of FAQs based on this document:
+      Title: ${ctx.record.title || "Untitled"}
+      Content: ${ctx.record.text}
+      
+      Extract key questions and their answers from the content.
+    `,
+    // Define structured output schema for FAQs
+    schema: (ctx, { z }) =>
+      z.object({
+        faqs: z.array(
+          z.object({
+            question: z.string(),
+            answer: z.string(),
+          })
+        ).describe("List of FAQs extracted from the document"),
+      }),
+  }),
+  {
+    // Transform and store results
+    output: {
+      xFAQs: (ctx) => JSON.stringify(ctx.result.json.faqs),
+    },
+  }
+);
+
+// Add generation step to pipeline
+faqPipeline.add(generateFAQs);
+```
+
+## Project Configuration
+Set up project settings with necessary AI capabilities and custom schema for storing FAQs:
+
+```typescript
+// Initialize project settings with required capabilities
+const projectSettings = new ProjectSettings();
+projectSettings
+  .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
+  .set(new Generative(Generative.OpenAI.GPT4o))
+  .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
+  .set(new AutoVision(AutoVision.OpenAI.GPT4o))
+  .set(enhancement)
+  .set(
+    // Add custom schema for FAQ storage
+    new CustomSchema().extend(
+      new CustomSchema.Collection("TextDocument").add(
+        new CustomSchema.Field.Text(
+          "xFAQs",
+          "FAQs generated from the document"
+        )
+      )
+    )
+  );
+
+// Create and save project with configured settings
+const project = admin.projects.ref({
+  name: "PDF FAQ Extraction Project",
+  settings: projectSettings,
+});
+
+await project.save();
+```
+
+## Query Enhanced Documents
+Define types and fetch documents with their generated FAQs:
+
+```typescript
+// Define interface for enhanced document type
+interface ExtendedTextDocument extends ITextDocument {
+  xFAQs: StringField;
+}
+
+// Query documents with generated FAQs
+const {
+  data: { payload },
+} = await unbody.get
+  .collection<ExtendedTextDocument>("TextDocument")
+  .where({
+    mimeType: "application/pdf"
+  })
+  .select("title", "originalName", "xFAQs")
+  .exec();
+```
+
+## Example Response
+```json
+[
+  {
+    "title": "Product Manual",
+    "originalName": "manual.pdf",
+    "xFAQs": "[{\"question\":\"How do I install the software?\",\"answer\":\"Download the installer...\"},{\"question\":\"What are the system requirements?\",\"answer\":\"Minimum 8GB RAM...\"}]"
+  }
+]
+```
+
+## Learn More
+
+- [Unbody Enhancement Documentation](/project-configurations/enhancers)
+- [Custom Schema Documentation](/project-configurations/custom-schemas)
