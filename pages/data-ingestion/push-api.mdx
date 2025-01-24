@@ -1,26 +1,14 @@
-The `@unbody-io/push-api` package provides an easy-to-use interface to manually upload files and push custom data into your projects.
+The `unbody/push` package provides an easy-to-use interface to manually upload files and push custom data into your projects.
 
 - **Uploading Files**: Manually upload and manage files like images and videos.
 - **Pushing Custom Data**: Push structured JSON data with your own schema.
-
-## Installation
-
-To get started with the Unbody Push API, install the typescript client:
-
-```bash
-# using npm
-npm install @unbody-io/push-api
-
-# using yarn
-yarn add @unbody-io/push-api
-```
 
 ## Authentication
 
 The Push API requires authentication using a **Project API Key**, which can be generated on the Unbody dashboard under the project settings. Use this API key to authenticate your requests.
 
 ```ts
-import { UnbodyPushAPI } from '@unbody-io/push-api'
+import { UnbodyPushAPI } from 'unbody/push'
 
 const pushApi = new UnbodyPushAPI({
   projectId: '[project-id]',
@@ -124,7 +112,6 @@ const { data } = await pushApi.records.get({
 
 console.log(data.data.collection) // Record collection name
 console.log(data.data.id) // Record ID
-console.log(data.data.payload) // Record payload
 console.log(data.data.type) // Record type; `file` or `record`
 ```
 

@@ -1,4 +1,5 @@
 const meta = {
+  "overview": "Overview",
   vectorizers: "Vectorizers",
   enhancers: "Enhancers",
   "generative-modules": "Generative Modules",

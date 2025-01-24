@@ -139,10 +139,10 @@ For example, let us consider you’re searching for articles related to web deve
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"Unbody SDK"}>
         ```javascript copy
-        unbody.get
-            .article
-            .nearVector({
-                vector: [...vector representing “web development”...],
+        await unbody.get
+            .textDocument
+            .nearText({
+                concepts: [...concepts representing “web development”...],
                 moveTo: {
                     concepts: ["frontend", "backend"],
                     force: 0.5
@@ -155,9 +155,9 @@ For example, let us consider you’re searching for articles related to web deve
         ```graphql
         query{
           Get{
-            Article(
-              nearVector: {
-                vector: [...vector representing “web development”...],
+            TextDocument(
+              nearText: {
+                concepts: [...concepts representing “web development”...],
                 moveTo: {
                   concepts: ["frontend", "backend"],
                   force: 0.5
@@ -165,7 +165,7 @@ For example, let us consider you’re searching for articles related to web deve
               }
             ){
               title
-              content
+              text
             }
           }
         }
@@ -181,7 +181,7 @@ If you have access to custom words or document vectors, **`nearVector`** allows 
     <Tab title={"Unbody SDK"}>
         ```javascript copy
         unbody.get
-            .article
+            .textDocument
             .nearVector({
                 vector: [...your custom word vector...]
             })
@@ -190,15 +190,15 @@ If you have access to custom words or document vectors, **`nearVector`** allows 
     </Tab>
     <Tab title={"GraphQl formatted"}>
         ```graphql
-        query{
-          Get{
-            Article(
+        query {
+          Get {
+            TextDocument(
               nearVector: {
                 vector: [...your custom word vector...]
               }
             ){
               title
-              content
+              text
             }
           }
         }
@@ -219,33 +219,21 @@ Some of the properties in the data are more relevant than others. You can boost 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"Unbody SDK"}>
         ```javascript copy
-        unbody.get
-            .article
-            .nearText({
-                vector: [...vector representing “web development”...],
-                moveTo: {
-                    concepts: ["frontend", "backend"],
-                    force: 0.5
-                },
-                boost: {
-                    title: 2
-                }
-            })
-            .exec()
+        await unbody.get.textDocument.search.find("web development", ["title"]).exec()
         ```
     </Tab>
     <Tab title={"GraphQl formatted"}>
         ```graphql
-        query{
-          Get{
-            Article(
-              nearText: {
+        query {
+          Get {
+            TextDocument(
+              bm25: {
                 query: "web development",
-                boost: { title: 2 }
+                properties: ["title^2"]
               }
             ){
               title
-              content
+              text
             }
           }
         }
@@ -267,7 +255,7 @@ You can also apply filters to your semantic search queries. It helps to narrow d
             .article
             .where(({Equal}) => ({
                 tags: Equal("tutorial")
-            })
+            }))
             .search
             .about("web development")
             .exec()
@@ -277,8 +265,8 @@ You can also apply filters to your semantic search queries. It helps to narrow d
         ```graphql
         query{
           Get{
-            Article(
-              nearText: {
+            TextDocument(
+              bm25: {
                 query: "web development"
               },
               where: {
@@ -288,7 +276,7 @@ You can also apply filters to your semantic search queries. It helps to narrow d
               }
             ){
               title
-              content
+              text
               tags
             }
           }

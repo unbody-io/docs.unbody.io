@@ -21,7 +21,7 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
     </Tab>
     <Tab title={"GraphQL"}>
         ```graphql
-        {
+        query {
             Get {
                 <ObjectName>(
                     ask: {
@@ -64,9 +64,9 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
     </Tab>
     <Tab title={"GraphQL"}>
         ```graphql
-        {
+        query {
             Get {
-                Document(
+                TextDocument(
                     ask: {
                         question: "Who directed '2001: A Space Odyssey'?",
                         properties: ["summary"]
@@ -115,7 +115,7 @@ Both the JavaScript SDK and GraphQL responses for an `ask{}` query include detai
         {
             "data": {
                 "Get": {
-                    "Document": [
+                    "TextDocument": [
                         {
                             "_additional": {
                                 "answer": {

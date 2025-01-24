@@ -41,13 +41,6 @@ query {
 <Tabs.Tab>
 
 ```tsx
-import { Unbody } from "@unbody-io/ts-client";
-
-const unbody = new Unbody({
-  apiKey: "your-api-key",
-  projectId: "your-project-id",
-});
-
 const {
   data: { payload: audioFiles },
 } = await unbody.get.audioFile.select("assetId", "playbackId", "hlsUrl").exec();
@@ -124,13 +117,6 @@ query {
 <Tabs.Tab>
 
 ```ts
-import { Unbody } from "@unbody-io/ts-client";
-
-const unbody = new Unbody({
-  apiKey: "your-api-key",
-  projectId: "your-project-id",
-});
-
 const {
   data: { payload: subtitleFiles },
 } = await unbody.get.subtitleFile
@@ -190,13 +176,6 @@ query {
 <Tabs.Tab>
 
 ```tsx
-import { Unbody } from "@unbody-io/ts-client";
-
-const unbody = new Unbody({
-  apiKey: "your-api-key",
-  projectId: "your-project-id",
-});
-
 const {
   data: { payload: audioFiles },
 } = await unbody.get.audioFile

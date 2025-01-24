@@ -73,12 +73,17 @@ blogPostCollection.add(new CustomSchema.Field.Date('publishedAt', 'Published Dat
 // Add the collection to the schema
 customSchema.add(blogPostCollection)
 
-// Save the schema to the project
-const project = await admin.projects.get({ id: '[project-id]' })
-const settings = project.settings.set(customSchema)
-await project.updateSettings(settings)
+const projectSettings = new ProjectSettings()
+projectSettings.settings.set(customSchema)
 
-console.log(`Custom Schema added to project: ${project.name}`)
+const project = await admin.projects.ref({
+  name: "My First Project",
+  settings: projectSettings,
+})
+
+await project.save()
+
+console.log(`Custom Schema applied to project: ${project.name}`)
 
 ```
 

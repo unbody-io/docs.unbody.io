@@ -47,10 +47,10 @@ To enable Generative Modules:
 
 You can programmatically configure Generative Modules using the Admin API.
 
-**Example: Setting Up a Generative Module**
+**Example: Setting Up a Project with Generative Module**
 
 ```tsx
-import { UnbodyAdmin, Generative } from 'unbody/admin'
+import { UnbodyAdmin, Generative, ProjectSettings } from 'unbody/admin'
 
 // Initialize the Admin API
 const admin = new UnbodyAdmin({
@@ -60,18 +60,20 @@ const admin = new UnbodyAdmin({
   },
 })
 
-// Fetch the project
-const project = await admin.projects.get({ id: '[project-id]' })
-
-// Configure a generative module
-const generative = new Generative(Generative.OpenAI.GPT4)
-console.log(generative.options.model) // "gpt-4"
-
 // Apply the generative module to the project settings
-const settings = project.settings.set(generative)
-await project.updateSettings(settings)
 
-console.log(`Added Generative Module to project: ${project.name}`)
+const projectSettings = new ProjectSettings()
+// Configure a generative module
+projectSettings.set(new Generative(Generative.OpenAI.GPT4))
+
+const project = await admin.projects.ref({
+  name: "My First Project",
+  settings: projectSettings,
+})
+
+await project.save()
+
+console.log(`Applied Generative Module to project: ${project.name}`)
 
 ```
 
