@@ -1,3 +1,4 @@
+import ResponseCollapse from '@/components/ResponseCollapse'
 import { Tabs } from "nextra/components"
 
 # Semantic Search
@@ -40,30 +41,19 @@ In this example, we demonstrate how to perform a semantic search. The code initi
   </Tabs.Tab>
 </Tabs>
 
+<ResponseCollapse title="Response">
 ```typescript
-// Response
-
-[
-    {
-        "_additional": {
-            "certainty": 0.89,
-            "distance": 0.21
-        },
-        "title": "AI in Healthcare",
-        "autoSummary": "Artificial Intelligence applications in healthcare, including disease diagnosis, drug discovery, and patient care optimization. The system uses machine learning algorithms to analyze medical imaging and predict patient outcomes.",
-        "text": "Detailed exploration of how AI is transforming healthcare..."
-    },
-    {
-        "_additional": {
-            "certainty": 0.85,
-            "distance": 0.25
-        },
-        "title": "AI in Finance",
-        "autoSummary": "Implementation of AI applications in financial services, focusing on fraud detection, algorithmic trading, and risk assessment models.",
-        "text": "Comprehensive overview of AI applications in finance..."
-    }
-]
+const response = {
+  "_additional": {
+    "certainty": 0.89,
+    "distance": 0.21
+  },
+  "title": "AI in Healthcare",
+  "autoSummary": "AI applications in healthcare..."
+}
 ```
+</ResponseCollapse>
+
 
 ## Search with Concept Boost
 In this example, we demonstrate how to perform a semantic search with concept boosting. The code uses the `.search.about()` method on the textBlock collection, enhancing results towards specific concepts with a force factor, while selecting the text field and limiting to 5 results.
