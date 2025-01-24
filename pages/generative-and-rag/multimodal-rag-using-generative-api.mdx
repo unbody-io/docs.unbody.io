@@ -1,0 +1,56 @@
+import { Tabs } from "nextra/components"
+
+# Multimodal Rag Using Generative API
+
+Generate insights by analyzing text and images together. Multimodal capabilities allow combining different types of data - like diagrams with text descriptions or images with metadata - to create comprehensive understanding.
+
+## Technical Diagram Analysis
+In this example, we combine multiple input types to analyze a system architecture diagram. The system acts as a technical expert, receiving both the image and specific instructions about what aspects to focus on. This is particularly useful for getting detailed insights about complex technical diagrams.
+
+```typescript
+    const {
+      data: { payload },
+    } = await unbody.generate
+            .text(
+                [
+                    {
+                        role: "system",
+                        content: "You are an expert at analyzing technical diagrams.",
+                    },
+                    {
+                        type: "image",
+                        content: {
+                            url: "https://www.aporia.com/wp-content/uploads/2024/02/image-4.png",
+                        },
+                    },
+                    {
+                        role: "user",
+                        content:
+                            "Analyze this LLM architecture diagram, focusing on data flow and bottlenecks.",
+                    },
+                ],
+                {
+                    model: "gpt-4-turbo",
+                    temperature: 0.7,
+                    maxTokens: 1500,
+                }
+            );
+```
+
+```typescript
+// Response
+
+{
+    "content": "This diagram outlines the architecture and data flow for a language model (LLM) system. It includes several components that manage the flow of data, optimize queries, and ensure output quality. I'll break down the data flow process and point out potential bottlenecks:\n\n### Data Flow Analysis\n1. **End User Interaction**:\n   - The process starts with the end user sending a query through a user interface (UI). This is part of the telemetry service which likely also tracks user interaction data for analytics and system improvement.\n\n2. **Query Processing**:\n   - The query is then sent to the embedding model where a copy of the query is embedded into a vector format. This embedding model is critical as it transforms the query into a format that can be understood and processed by the vector database.\n\n3. **Vector Database**:\n   - The embedded query is used to retrieve similar findings from a vector database based on contextual relevance. This database must be highly optimized for fast retrieval to avoid delays in response time.\n\n4. **Initial Prompt Formation**:\n   - Filtered context snippets from the vector database are injected into an initial prompt setup. This step involves combining the user's query with relevant data fetched from the database.\n\n5. **Prompt Optimization**:\n   - The initial prompt is then optimized using a prompt optimization tool. This tool refines the prompt to improve the interaction with the LLM.\n\n6. **LLM Processing**:\n   - The optimized prompt is sent to the LLM through an API hosted on an LLM host. The LLM processes the prompt and produces an output.\n\n7. **Content Filtering**:\n   - Before the output is sent to the user, it passes through a content classifier or filter that scans for harmful or offensive content, ensuring the output is appropriate.\n\n8. **Output Delivery**:\n   - The final, filtered output is then sent back to the user via the UI.\n\n### Potential Bottlenecks\n1. **Embedding Model**:\n   - The embedding model must process the query into vectors efficiently. If the model is slow or the embedding process is complex, it could delay the entire query processing cycle.\n\n2. **Vector Database Retrieval**:\n   - The speed at which the vector database retrieves contextually relevant data is crucial. If the database is large or not well-indexed, it could slow down the retrieval process, creating a bottleneck.\n\n3. **Prompt Optimization Tool**:\n   - The efficiency of the prompt optimization tool is vital. If the optimization process is computationally intensive, it might delay the delivery of the prompt to the LLM, affecting overall response time.\n\n4. **Content Classifier**:\n   - The content classifier must quickly scan and filter the output without significantly delaying the delivery to the user. If the classifier is not well-tuned or if it requires heavy computational resources, it can become a bottleneck.\n\n5. **LLM Cache**:\n   - The diagram shows that outputs might be stored or retrieved from an LLM cache. The effectiveness and speed of this cache are crucial, especially for repeated queries or similar prompt scenarios. A slow or inefficient cache system could hinder performance.\n\n### Conclusion\nOverall, the architecture is designed to optimize the query processing and ensure quality outputs in an LLM system. However, attention must be paid to potential bottlenecks, especially in embedding, data retrieval, prompt optimization, and content filtering to maintain a smooth and efficient user experience.",
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 1406,
+            "outputTokens": 694,
+            "totalTokens": 2100
+        }
+    }
+}
+```
+
+Learn more in our [Generative API Guide](/generative-api/overview).

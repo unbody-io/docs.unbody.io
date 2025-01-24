@@ -1,0 +1,130 @@
+# Build FAQ Generator From PDFs
+A guide to creating an automated FAQ generator that processes PDF documents and extracts structured Q&A pairs using Unbody's Enhancement Pipeline.
+
+## Pipeline Setup
+Since we're only targeting PDFs for FAQ generation, we create a pipeline with type filtering. This ensures efficient resource usage by only handling PDF files within the `TextDocument` collection:
+
+```typescript
+// Initialize pipeline for PDF document processing
+const faqPipeline = new Enhancement.Pipeline(
+  "generate_faqs",      // Unique pipeline identifier
+  "TextDocument",       // Target collection
+  {
+    // Process only PDF files using MIME type check
+    if: (ctx) => ctx.record.mimeType === "application/pdf",
+  }
+);
+```
+
+## FAQ Generation Configuration
+Define the enhancement pipeline step for FAQ extraction. Using `StructuredGenerator` action with Zod schema validation, we process document content into structured Q&A pairs:
+```typescript
+// Create FAQ generation step with structured output
+const generateFAQs = new Enhancement.Step(
+  "extract_faqs",    // Step identifier
+  new Enhancement.Action.StructuredGenerator({
+    model: "openai-gpt-4o",
+    // Dynamic prompt generation using document context
+    prompt: (ctx) => `
+      Generate a list of FAQs based on this document:
+      Title: ${ctx.record.title || "Untitled"}
+      Content: ${ctx.record.text}
+      
+      Extract key questions and their answers from the content.
+    `,
+    // Define structured output schema for FAQs
+    schema: (ctx, { z }) =>
+      z.object({
+        faqs: z.array(
+          z.object({
+            question: z.string(),
+            answer: z.string(),
+          })
+        ).describe("List of FAQs extracted from the document"),
+      }),
+  }),
+  {
+    // Transform and store results
+    output: {
+      xFAQs: (ctx) => JSON.stringify(ctx.result.json.faqs),
+    },
+  }
+);
+
+// Add generation step to pipeline
+faqPipeline.add(generateFAQs);
+```
+
+## Project Setup
+Set up project settings with necessary AI capabilities and custom schema for storing FAQs:
+- Configure vectorizers and AI models for processing
+- Add custom schema to extend `TextDocument` collection with FAQ storage field
+
+```typescript
+// Initialize project settings with required capabilities
+const projectSettings = new ProjectSettings();
+projectSettings
+  .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
+  .set(new Generative(Generative.OpenAI.GPT4o))
+  .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
+  .set(new AutoVision(AutoVision.OpenAI.GPT4o))
+  .set(enhancement)
+  .set(
+    // Add custom schema for FAQ storage
+    new CustomSchema().extend(
+      new CustomSchema.Collection("TextDocument").add(
+        new CustomSchema.Field.Text(
+          "xFAQs",
+          "FAQs generated from the document"
+        )
+      )
+    )
+  );
+
+// Create and save project with configured settings
+const project = admin.projects.ref({
+  name: "PDF FAQ Extraction Project",
+  settings: projectSettings,
+});
+
+await project.save();
+```
+
+## Data Retrieval
+Use TypeScript interfaces to ensure type safety when querying enhanced documents. The query targets PDF documents and retrieves their generated FAQs along with metadata:
+
+```typescript
+// Define interface for enhanced document type
+interface ExtendedTextDocument extends ITextDocument {
+  xFAQs: StringField;
+}
+
+// Query documents with generated FAQs
+const {
+  data: { payload },
+} = await unbody.get
+  .collection<ExtendedTextDocument>("TextDocument")
+  .where({
+    mimeType: "application/pdf"
+  })
+  .select("title", "originalName", "xFAQs")
+  .exec();
+```
+
+## Example Response
+Example of the structured FAQ data returned by the enhancement pipeline:
+
+```json
+[
+  {
+    "title": "Product Manual",
+    "originalName": "manual.pdf",
+    "xFAQs": "[{\"question\":\"How do I install the software?\",\"answer\":\"Download the installer...\"},{\"question\":\"What are the system requirements?\",\"answer\":\"Minimum 8GB RAM...\"}]"
+  }
+]
+```
+
+## Learn More
+
+- [Unbody Enhancement Documentation](/project-configurations/enhancers)
+- [Custom Schema Documentation](/project-configurations/custom-schemas)

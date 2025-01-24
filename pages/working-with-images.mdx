@@ -1,0 +1,167 @@
+
+import { Tabs } from "nextra/components"
+
+# Working with images
+
+Use Unbody's Image API powered by [Imgix](https://www.imgix.com/) to efficiently fetch, transform and analyze images. Capabilities include dynamic resizing, format conversion, advanced cropping, and intelligent image analysis.
+
+## Basic Image Query
+The code fetches image information including OCR text extraction and AI-generated captions, limiting results to 5 entries.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const {
+      data: { payload },
+    } = await unbody.get.imageBlock
+        .limit(5)
+        .select("originalName", "autoOCR", "autoCaption")
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        ImageBlock(limit: 5) {
+          originalName
+          autoOCR
+          autoCaption
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response    
+[
+    {
+        "autoCaption": "Futuristic concept car with sleek design and unique lighting",
+        "autoOCR": "BMW VISION Circular",
+        "originalName": "image2.jpeg"
+    },
+    {
+        "autoCaption": null,
+        "autoOCR": null,
+        "originalName": "filters.gif"
+    },
+    {
+        "autoCaption": "Two men standing side by side, one in a suit holding a camera, the other in a striped soccer jersey holding a soccer ball.",
+        "autoOCR": "",
+        "originalName": "image1.png"
+    },
+    {
+        "autoCaption": "A classic car driving on a country road with a person behind the wheel.",
+        "autoOCR": "HVK 809C",
+        "originalName": "Copy of 5.jpg"
+    },
+    {
+        "autoCaption": "A blue SUV driving on a road with a blurred background",
+        "autoOCR": "YC71 AVP",
+        "originalName": "6_0.jpeg"
+    }
+]
+```
+
+## Similar Image Search
+Find similar images by providing a reference image URL. Learn more about [Visual similarity](/content-api/search/visual-similarity)
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const {
+      data: { payload },
+    } = await unbody.get.imageBlock.similar
+          .image(
+              "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg" // Image about an electric car
+          )
+          .limit(5)
+          .select("originalName", "url", "autoOCR", "mimeType")
+          .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        ImageBlock(
+          nearImage: {
+            image: "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg"
+          }
+          limit: 5
+        ) {
+          _additional {
+            certainty
+            distance
+          }
+          originalName
+          url
+          autoOCR
+          mimeType
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response    
+
+[
+    {
+        "_additional": {
+            "certainty": 0.8785399794578552,
+            "distance": 0.24292004
+        },
+        "autoOCR": "BMW VISION Circular",
+        "mimeType": "image/jpeg",
+        "originalName": "image2.jpeg",
+        "url": "https://images.cdn.unbody.io/b2585bb3-2f7e-42cb-a169-7ad75b29cf2d/image/6f07d51f-3211-5397-b7a3-fec2d3fdcec8.jpeg"
+    },
+    {
+        "_additional": {
+            "certainty": 0.8606066107749939,
+            "distance": 0.27878678
+        },
+        "autoOCR": "HONDA\nPower Manager\nHonda e",
+        "mimeType": "image/jpeg",
+        "originalName": "2020-Honda-e-Charging-Point-01.jpeg",
+        "url": "https://images.cdn.unbody.io/b2585bb3-2f7e-42cb-a169-7ad75b29cf2d/image/65a192c9-308e-55a1-9cda-5dcd57e77524.jpeg"
+    },
+    {
+        "_additional": {
+            "certainty": 0.8560068905353546,
+            "distance": 0.28798622
+        },
+        "autoOCR": "RIDE SHARING 37\nRIDE SHARING 37",
+        "mimeType": "image/jpeg",
+        "originalName": "images (2).jpeg",
+        "url": "https://images.cdn.unbody.io/b2585bb3-2f7e-42cb-a169-7ad75b29cf2d/image/883130f5-1b9d-5987-ad22-d59a3892d5d1.jpeg"
+    },
+    {
+        "_additional": {
+            "certainty": 0.8525442183017731,
+            "distance": 0.29491156
+        },
+        "autoOCR": "YC71 AVP",
+        "mimeType": "image/jpeg",
+        "originalName": "6_0.jpeg",
+        "url": "https://images.cdn.unbody.io/b2585bb3-2f7e-42cb-a169-7ad75b29cf2d/image/154d015d-034d-528a-903d-bc1163841479.jpeg"
+    },
+    {
+        "_additional": {
+            "certainty": 0.8517109751701355,
+            "distance": 0.29657805
+        },
+        "autoOCR": "Honda e",
+        "mimeType": "image/jpeg",
+        "originalName": "Honda_e-3.jpeg",
+        "url": "https://images.cdn.unbody.io/b2585bb3-2f7e-42cb-a169-7ad75b29cf2d/image/65c31cc7-ef8f-5c07-a547-6bdd21b1642a.jpeg"
+    }
+]
+```
+
+Learn more about advanced image features in our [Image Api Guide](/image-api/overview).

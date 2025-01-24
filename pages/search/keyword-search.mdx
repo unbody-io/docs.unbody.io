@@ -1,0 +1,134 @@
+import { Tabs } from "nextra/components"
+
+# Keyword Search
+
+Search based on exact keyword matches within your data, ideal for precise matching when users know specific terms they're looking for.
+
+## Basic Search
+Performs a simple keyword search to find exact matches in all text fields.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const {
+      data: { payload },
+    } = await unbody.get.textDocument
+        .search
+        .find("machine learning")
+        .select("originalName", "text", "autoSummary")
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextDocument(bm25: {
+          query: "machine learning"
+        }) {
+          _additional {
+            score
+          }
+          originalName
+          text
+          autoSummary
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+[
+    {
+        "_additional": {
+            "score": "0.8542"
+        },
+        "autoSummary": "This comprehensive guide covers fundamental concepts of machine learning, including supervised and unsupervised learning techniques. The document explores practical applications in data analysis and predictive modeling.",
+        "originalName": "machine-learning-fundamentals.pdf",
+        "text": "Machine learning is a subset of artificial intelligence that enables systems to learn and improve from experience..."
+    },
+    {
+        "_additional": {
+            "score": "0.7621"
+        },
+        "autoSummary": "A practical introduction to machine learning algorithms and their implementation in Python. Includes code examples and best practices for model training and evaluation.",
+        "originalName": "ml-algorithms-guide.pdf",
+        "text": "Understanding machine learning algorithms requires knowledge of both statistics and programming..."
+    }
+]
+```
+
+## Field-Specific Search
+Here we are demonstrate a field-specific search functionality. The code uses the `.search.find()` method on the `textDocument` collection to search for "neural networks" specifically within the `title` and `autoSummary` fields, selecting relevant fields to return.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const {
+      data: { payload },
+    } = await unbody.get.textDocument
+        .search
+        .find("neural networks", ["title", "autoSummary"])
+        .select("originalName", "properties", "autoSummary")
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextDocument(
+          bm25: {
+            query: "neural networks",
+            properties: ["title", "autoSummary"]
+          }
+        ) {
+          _additional {
+            score
+          }
+          originalName
+          properties
+          autoSummary
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+[
+    {
+        "_additional": {
+            "score": "0.9234"
+        },
+        "autoSummary": "A deep dive into neural networks architecture and implementation. This guide covers feedforward networks, convolutional neural networks (CNNs), and recurrent neural networks (RNNs).",
+        "originalName": "neural-networks-guide.pdf",
+        "properties": {
+            "Title": "Understanding Neural Networks",
+            "Author": "AI Research Team",
+            "Creator": "TechDocs",
+            "Pages": 42,
+            "CreationDate": "2024-01-15T10:30:00+00:00"
+        }
+    },
+    {
+        "_additional": {
+            "score": "0.8756"
+        },
+        "autoSummary": "Practical implementation guide for neural networks in deep learning applications. Includes PyTorch examples and optimization techniques.",
+        "originalName": "deep-learning-neural-nets.pdf",
+        "properties": {
+            "Title": "Deep Learning with Neural Networks",
+            "Author": "ML Engineering Team",
+            "Creator": "TechDocs",
+            "Pages": 35,
+            "CreationDate": "2024-01-20T14:45:00+00:00"
+        }
+    }
+]
+```
+
+Learn more in our [Keyword Search Guide](/content-api/search/keyword-search).

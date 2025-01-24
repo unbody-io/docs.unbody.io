@@ -1,0 +1,131 @@
+import { Tabs } from "nextra/components"
+
+# Hybrid Search
+
+Combines both semantic and keyword search capabilities to provide comprehensive results that match both meaning and specific terms.
+
+## Basic Search
+In this example, we demonstrate a hybrid search combining semantic and keyword matching. The code uses the `.search.hybrid()` method on the `textDocument` collection to search for "AI in healthcare" within `text` and `title` fields.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const {
+      data: { payload },
+    } = await unbody.get.textDocument
+        .search
+        .hybrid("AI in healthcare", {
+            properties: ["text", "title"]
+        })
+        .select("title", "text", "autoSummary")
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextDocument(hybrid: {
+          query: "AI in healthcare",
+          properties: ["text", "title"]
+        }) {
+          _additional {
+            score
+          }
+          title
+          text
+          autoSummary
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+[
+    {
+        "_additional": {
+            "score": "0.8532"
+        },
+        "autoSummary": "Comprehensive analysis of AI applications in healthcare systems, focusing on medical diagnosis, patient care automation, and clinical decision support systems. The document explores how machine learning models are transforming healthcare delivery.",
+        "text": "Artificial Intelligence has revolutionized healthcare through improved diagnosis accuracy and treatment optimization...",
+        "title": "Healthcare AI Implementation Guide"
+    },
+    {
+        "_additional": {
+            "score": "0.7845"
+        },
+        "autoSummary": "Overview of emerging AI technologies in the medical sector, with case studies from leading hospitals implementing AI-driven solutions for patient care and administrative efficiency.",
+        "text": "Modern healthcare facilities are increasingly adopting AI-powered systems to enhance patient outcomes...",
+        "title": "AI in Modern Healthcare: Case Studies"
+    }
+]
+```
+
+## Advanced Search
+In this example, we demonstrate an advanced hybrid search with custom parameters. The code uses the `.search.hybrid()` method on the `googleDoc` collection, specifying fusion settings, vector values, and search properties for more precise results.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const {
+      data: { payload },
+    } = await unbody.get.googleDoc
+        .search
+        .hybrid("Generative Ai", {
+            alpha: 0.7,
+            vector: [0.0055148206, 0.013368472, 0.035909854],
+            fusionType: "relativeScoreFusion",
+            properties: ["title", "tags"]
+        })
+        .exec()
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        TextDocument(
+          hybrid: {
+            query: "Generative Ai",
+            alpha: 0.7,
+            vector: [0.0055148206, 0.013368472, 0.035909854],
+            fusionType: relativeScoreFusion,
+            properties: ["title", "tags"]
+          }
+        ) {
+          _additional {
+            score
+          }
+          title
+          autoSummary
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response
+[
+    {
+        "_additional": {
+            "score": "0.9234"
+        },
+        "autoSummary": "Comprehensive guide to blockchain implementation in enterprise systems, covering distributed ledger architecture, smart contracts, and industry applications with practical examples.",
+        "title": "Enterprise Blockchain Solutions"
+    },
+    {
+        "_additional": {
+            "score": "0.8756"
+        },
+        "autoSummary": "Analysis of blockchain technology in financial services, including cryptocurrency integration, DeFi protocols, and traditional banking transformation using distributed ledger systems.",
+        "title": "Blockchain in Finance: Implementation Guide"
+    }
+]
+```
+
+Learn more in our [Hybrid Search Guide](/content-api/search/hybrid-search).

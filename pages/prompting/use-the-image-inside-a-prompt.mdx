@@ -1,0 +1,52 @@
+import { Tabs } from "nextra/components"
+
+# Use the image inside a prompt
+
+Generate content by providing images as input through messages. The system can analyze and describe images using advanced AI models.
+
+## Basic Image Generation
+Use images as input to generate descriptions or analyze visual content by providing image URLs.
+
+```typescript
+    const {
+      data: { payload },
+    } = await unbody.generate
+          .text(
+              [
+                {
+                  role: "system",
+                  content: "Describe these images",
+                },
+                {
+                  type: "image",
+                  content: {
+                    url: "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg",
+                    // Images about a Car
+                  },
+                },
+              ],
+              {
+                model: "gpt-4-turbo",
+                maxTokens: 500,
+                temperature: 0.7,
+              }
+          );
+    ```
+
+```typescript
+// Response
+
+{
+    "content": "This image depicts a futuristic electric car being charged at a charging station. The scene is set at night with a vibrant, neon-lit color palette, predominantly featuring blues and oranges. The car is sleek and modern, with illuminated tail lights and a visible energy flow highlighted in blue to indicate charging. The background suggests a serene, remote location with trees silhouetted against the night sky. The image has a dynamic and slightly mysterious atmosphere, enhanced by the ambient lighting and the subtle presence of rain.",
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 527,
+            "outputTokens": 101,
+            "totalTokens": 628
+        }
+    }
+}
+```
+
+Learn more in our [Message-Based Input with Schema Guide](generative-api/json-gen#message-based-input-with-schema).

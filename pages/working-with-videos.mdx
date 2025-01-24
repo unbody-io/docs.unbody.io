@@ -1,0 +1,334 @@
+import { Tabs } from "nextra/components"
+
+# Working with videos
+
+Use Unbody's Video API powered by [Mux](https://www.mux.com) to work with video content, including streaming, thumbnails, transcriptions, and analysis.
+
+## Fetch Video Assets
+Retrieve video thumbnails and animated preview images with size filtering to optimize loading times.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const {
+      data: { payload: videoFiles },
+    } = await unbody.get.videoFile
+        .where(({ LessThan }) => ({
+            size: LessThan(10000000), // 10 MB in bytes
+        }))
+        .select(
+            "thumbnailUrl.png",
+            "animatedImageUrl.gif",
+            "autoSummary",
+            "animatedImageUrl.webp",
+            "size"
+        )
+        .exec();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        VideoFile(
+          where: {
+            operator: LessThan, 
+            path: "size", 
+            valueInt: 10000000
+          }
+        ) {
+          thumbnailUrl {
+            png
+          }
+          animatedImageUrl {
+            gif
+            webp
+          }
+          autoSummary
+          size
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response    
+
+[
+    {
+        "animatedImageUrl": {
+            "gif": "https://image.mux.com/4HQ7pWtI6YPkh01R01X1bpxSGCP4Kei00wP8nvULvSMPAU/animated.gif",
+            "webp": "https://image.mux.com/4HQ7pWtI6YPkh01R01X1bpxSGCP4Kei00wP8nvULvSMPAU/animated.webp"
+        },
+        "autoSummary": "While acting in Vegas, I visited Scorsese's Casino set. Don Rickles joked that I was there to save the film as a \"real director,\" which cracked up everyone, including Scorsese and De Niro. I was so embarrassed I wanted to hide!",
+        "size": 4469713,
+        "thumbnailUrl": {
+            "png": "https://image.mux.com/4HQ7pWtI6YPkh01R01X1bpxSGCP4Kei00wP8nvULvSMPAU/thumbnail.png"
+        }
+    }
+]
+```
+
+## Access Video Subtitles
+Fetch and work with video subtitles, including timing and text content. This example filters videos by type and size.
+
+<Tabs items={['Unbody SDK', 'GraphQL']}>
+  <Tabs.Tab>
+    ```typescript
+    const {
+      data: { payload: subtitleFiles },
+    } = await unbody.get.subtitleFile
+        .where(({ LessThan }) => ({
+            media: {
+                VideoFile: {
+                    mimeType: "video/mp4",
+                    size: LessThan(10000000), // 10 MB in Bytes
+                },
+            },
+        }))
+        .select(
+            "entries.SubtitleEntry.start",
+            "entries.SubtitleEntry.end",
+            "entries.SubtitleEntry.text"
+        )
+        .exec();
+
+    const { entries } = subtitleFiles[0];
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```graphql
+    {
+      Get {
+        SubtitleFile(
+          where: {
+            operator: And, 
+            operands: [
+              {
+                operator: Equal, 
+                path: ["media", "VideoFile", "mimeType"], 
+                valueText: "video/mp4"
+              }, 
+              {
+                operator: LessThan, 
+                path: ["media", "VideoFile", "size"], 
+                valueInt: 10000000
+              }
+            ]
+          }
+        ) {
+          entries {
+            ... on SubtitleEntry {
+              start
+              end
+              text
+            }
+          }
+        }
+      }
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+```typescript
+// Response    
+
+[
+    {
+        "end": "00:00:04.160",
+        "start": "00:00:00.000",
+        "text": "I was acting in a movie in Vegas and it just turned out that during that time,"
+    },
+    {
+        "end": "00:00:08.320",
+        "start": "00:00:04.160",
+        "text": "Scorsese was doing Casino and I'd never really met Martin Scorsese before."
+    },
+    {
+        "end": "00:00:12.720",
+        "start": "00:00:08.320",
+        "text": "And so I got an invite to go visit the set of Casino."
+    },
+    {
+        "end": "00:00:17.840",
+        "start": "00:00:12.720",
+        "text": "Yeah, this is like right up there with the gates of Oz opening up and I'm going"
+    },
+    {
+        "end": "00:00:18.640",
+        "start": "00:00:17.840",
+        "text": "to meet the wizard."
+    },
+    {
+        "end": "00:00:23.280",
+        "start": "00:00:18.640",
+        "text": "So I'm walking to meet the wizard. I'm walking on the set. It kind of see me."
+    },
+    {
+        "end": "00:00:28.650",
+        "start": "00:00:23.280",
+        "text": "And then Don Wreckles goes, \"Quinton, thank God you're here! This guy doesn't"
+    },
+    {
+        "end": "00:00:29.520",
+        "start": "00:00:28.650",
+        "text": "know what he's doing"
+    },
+    {
+        "end": "00:00:35.840",
+        "start": "00:00:29.520",
+        "text": "at all! Thank God a real director has finally showed up. This cat is out of it!"
+    },
+    {
+        "end": "00:00:37.200",
+        "start": "00:00:35.840",
+        "text": "Please say this is a"
+    },
+    {
+        "end": "00:00:44.190",
+        "start": "00:00:37.200",
+        "text": "disaster! It's a disaster! Please save us from this wreckage! You are a"
+    },
+    {
+        "end": "00:00:46.400",
+        "start": "00:00:44.190",
+        "text": "talented man! We need your"
+    },
+    {
+        "end": "00:00:52.570",
+        "start": "00:00:46.400",
+        "text": "talent!\" Oh my god. Okay now Marty's laughing. The crew is laughing. De Niro's"
+    },
+    {
+        "end": "00:00:53.920",
+        "start": "00:00:52.570",
+        "text": "laughing. I want to"
+    },
+    {
+        "end": "00:01:04.880",
+        "start": "00:00:53.920",
+        "text": "hide under the carpet. Yeah of course. So funny.\n"
+    }
+]
+```
+
+## Analyze Video Content
+# Analyze Video Content
+Analyze subtitle content from videos by extracting story elements and generating structured insights. Perfect for understanding narrative flow and key moments in video transcripts.
+
+The example demonstrates advanced video analysis combining subtitle queries with structured content generation:
+- Fetches video subtitles with size constraints and timing information
+- Uses role-based messages to request story analysis
+- Enforces structured output with Zod schema, capturing:
+ - Story context (location, characters, timeframe)
+ - Key moments and their significance
+ - Humor elements (setup/punchline)
+ - Overall narrative tone
+
+Results are validated against the schema by [Zod](https://zod.dev/), ensuring consistent analysis format.
+
+```typescript
+    const {
+      data: { payload: subtitleFiles },
+    } = await unbody.get.subtitleFile
+        .where(({ LessThan }) => ({
+            media: {
+                VideoFile: {
+                    mimeType: "video/mp4",
+                    size: LessThan(10000000),
+                },
+            },
+        }))
+        .select(
+            "entries.SubtitleEntry.start",
+            "entries.SubtitleEntry.end",
+            "entries.SubtitleEntry.text"
+        )
+        .exec();
+
+    const { entries } = subtitleFiles[0];
+
+    // Now analyze the content using generate.json
+    const analysis = await unbody.generate.json(
+        [
+            {
+                role: "user",
+                content: `Analyze this story from a video transcript: ${JSON.stringify(entries)}`,
+            },
+            {
+                role: "system",
+                content: "Extract key story elements and create a structured analysis.",
+            },
+        ],
+        {
+            schema: z.object({
+                storyContext: z.object({
+                    location: z.string(),
+                    mainCharacters: z.array(z.string()),
+                    timeframe: z.string(),
+                }),
+                keyMoments: z.array(
+                    z.object({
+                        moment: z.string(),
+                        significance: z.string(),
+                    })
+                ),
+                humorElement: z.object({
+                    setup: z.string(),
+                    punchline: z.string(),
+                }),
+                overallTone: z.string(),
+            }),
+        }
+    );
+```
+
+```typescript
+// Response    
+
+{
+    "content": {
+        "storyContext": {
+            "location": "Las Vegas, on the set of the film 'Casino' directed by Martin Scorsese.",
+            "mainCharacters": [
+                "The Narrator",
+                "Martin Scorsese",
+                "Don Rickles",
+                "Robert De Niro"
+            ],
+            "timeframe": "During the filming of the movie 'Casino' in the mid-1990s."
+        },
+        "keyMoments": [
+            {
+                "moment": "The narrator receives an invitation to visit Martin Scorsese's set for the film 'Casino'.",
+                "significance": "This moment represents a significant opportunity and an exciting event for the narrator, akin to meeting a legendary figure in the film industry."
+            },
+            {
+                "moment": "Don Rickles humorously pretends that Scorsese is not competent and pleads with the narrator to save the film's production.",
+                "significance": "This is a playful, humorous interaction that brings levity to the situation and serves as a comedic introduction for the narrator to the film's crew."
+            },
+            {
+                "moment": "The crew, including Martin Scorsese and Robert De Niro, reacts with laughter to Don Rickles' comments.",
+                "significance": "The laughter signifies a friendly environment on set and reflects the camaraderie among the film's crew,; it also shows the narrator's unexpected inclusion in this well-established circle."
+            }
+        ],
+        "humorElement": {
+            "setup": "Don Rickles pretends to panic and criticize Martin Scorsese's directing skills, calling for the narrator's help.",
+            "punchline": "Rickles dramatically exclaims it's a 'disaster' and begs for the narrator's talent, causing the crew to erupt in laughter."
+        },
+        "overallTone": "The story is lighthearted and humorous, characterized by an unexpected and comedic encounter during a prestigious film set visit."
+    },
+    "metadata": {
+        "usage": {
+            "inputTokens": 724,
+            "outputTokens": 340,
+            "totalTokens": 1064
+        }
+    }
+}
+```
+
+Learn more about advanced video features in our [Advanced Video Api Guide](/video-api).
