@@ -1,8 +1,8 @@
-# Build FAQ Generator: An Enhancer Example
-Extract structured FAQ content from PDF documents using Unbody's Enhancement Pipeline. This example demonstrates how to automatically generate Q&A pairs from document content, making documentation searchable and accessible.
+# Build FAQ Generator From PDFs
+A guide to creating an automated FAQ generator that processes PDF documents and extracts structured Q&A pairs using Unbody's Enhancement Pipeline.
 
-## Creating the Pipeline
-Configure a targeted enhancement pipeline for PDF documents that automatically generates FAQs using AI processing. The pipeline filters for PDF files to ensure focused and efficient processing:
+## Pipeline Setup
+Since we're only targeting PDFs for FAQ generation, we create a pipeline with type filtering. This ensures efficient resource usage by only handling PDF files within the `TextDocument` collection:
 
 ```typescript
 // Initialize pipeline for PDF document processing
@@ -16,9 +16,8 @@ const faqPipeline = new Enhancement.Pipeline(
 );
 ```
 
-## Configure FAQ Generation
-Set up the FAQ generation step using GPT-4. This step defines how content is processed and structured, using [Zod](https://zod.dev/) schemas for type-safe outputs:
-
+## FAQ Generation Configuration
+Define the enhancement pipeline step for FAQ extraction. Using `StructuredGenerator` action with Zod schema validation, we process document content into structured Q&A pairs:
 ```typescript
 // Create FAQ generation step with structured output
 const generateFAQs = new Enhancement.Step(
@@ -56,8 +55,10 @@ const generateFAQs = new Enhancement.Step(
 faqPipeline.add(generateFAQs);
 ```
 
-## Project Configuration
+## Project Setup
 Set up project settings with necessary AI capabilities and custom schema for storing FAQs:
+- Configure vectorizers and AI models for processing
+- Add custom schema to extend `TextDocument` collection with FAQ storage field
 
 ```typescript
 // Initialize project settings with required capabilities
@@ -89,8 +90,8 @@ const project = admin.projects.ref({
 await project.save();
 ```
 
-## Query Enhanced Documents
-Define types and fetch documents with their generated FAQs:
+## Data Retrieval
+Use TypeScript interfaces to ensure type safety when querying enhanced documents. The query targets PDF documents and retrieves their generated FAQs along with metadata:
 
 ```typescript
 // Define interface for enhanced document type
@@ -111,6 +112,8 @@ const {
 ```
 
 ## Example Response
+Example of the structured FAQ data returned by the enhancement pipeline:
+
 ```json
 [
   {

@@ -1,8 +1,8 @@
-# Image Metadata Extraction using Enhancement Pipeline
+# Image Analysis Enhancement Pipeline
+Build a metadata extraction system for images that automatically detects colors, subjects, and resolution. This enhancement pipeline combines AI vision capabilities with structured data output.
 
-## Creating an Image Enhancement Pipeline
-
-Unbody's Enhancement mechanism allows precise filtering and processing of image metadata. This pipeline ensures only image files are processed:
+## Pipeline Setup
+Create a targeted pipeline that processes only image files through MIME type filtering, ensuring efficient resource usage within the `ImageBlock` collection:
 
 ```tsx
 const imageEnhancementPipeline = new Enhancement.Pipeline(
@@ -15,9 +15,9 @@ const imageEnhancementPipeline = new Enhancement.Pipeline(
 );
 ```
 
-## Configuring Metadata Extraction Step
+## Metadata Extraction Step
+Define the enhancement pipeline step that extracts structured metadata from images. Using the `StructuredGenerator` action with Zod schema validation, we process image properties, captions, and OCR text into typed metadata fields:
 
-This step creates a sophisticated metadata extraction process using [Zod](https://zod.dev/) for structured output and OpenAI's GPT-4o for intelligent image analysis:
 ```tsx
 const extractImageInfo = new Enhancement.Step(
   "extract_image_info",
@@ -57,9 +57,11 @@ const extractImageInfo = new Enhancement.Step(
 imageEnhancementPipeline.add(extractImageInfo);
 ```
 
-## Project Configuration
-
-Set up project with vectorizers and custom schema for image metadata, configuring AI vectorizers and extending ImageBlock schema to store custom image metadata fields.
+## Project Setup
+Set up project settings with necessary vectorizers and custom schema:
+- Configure text and image vectorization models
+- Add vision processing capabilities 
+- Extend `ImageBlock` schema with metadata fields
 
 ```tsx
 const projectSettings = new ProjectSettings();
@@ -115,12 +117,10 @@ project.settings.set(
 
 // Save the project
 await project.save();  
-
 ```
 
-## Retrieving Enhanced Image Metadata
-
-Query the enhanced image collection with custom metadata fields:
+## Data Retrieval
+Use TypeScript interfaces to ensure type safety when querying enhanced images, retrieving structured metadata about colors, subjects, and resolution:
 
 ```tsx
 import { StringField } from "unbody";
@@ -142,6 +142,7 @@ const {
 ```
 
 ## Example Response
+Example of the structured metadata extracted from processed images:
 
 ```tsx
 [
@@ -168,6 +169,5 @@ const {
 ```
 
 ## Learn More
-
 - [Unbody Enhancement Documentation](/project-configurations/enhancers)
 - [Custom Schema Documentation](/project-configurations/custom-schemas)
