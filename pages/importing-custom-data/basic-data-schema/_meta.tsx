@@ -1,5 +1,5 @@
 const meta = {
-  "custom-schema-and-push-api": "Custom schema and push API",
+  "custom-schema-and-push-api": "Basic custom schema and push API",
 };
 
 export default meta;

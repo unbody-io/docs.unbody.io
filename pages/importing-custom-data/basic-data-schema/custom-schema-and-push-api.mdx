@@ -1,5 +1,5 @@
 
-# A Simple Example with a Simple and Small Schema Including Schema Definition and Using Push API
+# Building Simple Data Schema: A Push API and Schema Definition Example
 
 This guide demonstrates how to create a simple product catalog using Unbody. We'll create a project with a custom schema, set up a Push API source, and show how to add and retrieve data.
 
@@ -107,7 +107,7 @@ await source.initialize();
 
 Finally, let's retrieve the product data using TypeScript interfaces for type safety:
 
-```tsx 
+```typescript
 import {
   BooleanField,
   NumberField,
@@ -129,7 +129,9 @@ const {
   .collection<IProduct>("ProductCollection")
   .select("name", "description", "price", "inStock")
   .exec();
+```  
 
+```typescript
 // Response
 [
     {
@@ -139,6 +141,7 @@ const {
         "price": 29.99
     }
 ]
+```
 
 ## Learn More
 

@@ -8,19 +8,19 @@ Generate structured JSON content based on prompts, messages, or schemas. Useful 
 Shows how to generate structured JSON data with a simple schema definition. The `.generate.json()` method allows you to specify the expected output structure using JSON Schema format, ensuring the response matches your requirements.
 
 ```typescript
-    const {
-      data: { payload },
-    }   = await unbody.generate
-            .json("Provide user details:", {
-                schema: {
-                    type: "object",
-                    properties: {
-                        name: { type: "string" },
-                        age: { type: "number" },
-                        address: { type: "string" },
-                    },
+const {
+    data: { payload },
+}   = await unbody.generate
+        .json("Provide user details:", {
+            schema: {
+                type: "object",
+                properties: {
+                    name: { type: "string" },
+                    age: { type: "number" },
+                    address: { type: "string" },
                 },
-            });
+            },
+        });
 ```
 
 ```typescript
@@ -47,15 +47,15 @@ Demonstrates JSON generation with type validation using [Zod](https://zod.dev/),
 ```typescript
 import { z } from "zod";
 
-    const {
-      data: { payload },
-    }   = await unbody.generate
-            .json("Provide user details:", {
-                schema: z.object({
-                    name: z.string(),
-                    age: z.number(),
-                }),
-            });
+const {
+    data: { payload },
+}   = await unbody.generate
+        .json("Provide user details:", {
+            schema: z.object({
+                name: z.string(),
+                age: z.number(),
+            }),
+        });
 ```
 
 ```typescript
@@ -82,28 +82,28 @@ Shows how to generate JSON using conversational context and Zod schemas.
 ```typescript
 import { z } from "zod";
 
-    const {
-      data: { payload },
-    }  = await unbody.generate
-            .json(
-                [
-                    {
-                        role: "user",
-                        content: "What is the structure of a business entity?",
-                    },
-                    { 
-                        role: "system", 
-                        content: "Explain in detail with examples." 
-                    },
-                ],
-                {
-                    schema: z.object({
-                        companyName: z.string(),
-                        employees: z.number(),
-                        headquarters: z.string(),
-                    }),
-                }
-            );
+const {
+    data: { payload },
+}  = await unbody.generate
+    .json(
+        [
+            {
+                role: "user",
+                content: "What is the structure of a business entity?",
+            },
+            { 
+                role: "system", 
+                content: "Explain in detail with examples." 
+            },
+        ],
+        {
+            schema: z.object({
+                companyName: z.string(),
+                employees: z.number(),
+                headquarters: z.string(),
+            }),
+        }
+    );
 ```
 
 ```typescript
