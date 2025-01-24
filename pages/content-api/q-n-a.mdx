@@ -10,13 +10,14 @@ The `ask{}` operator allows you to input a question directly into the query, and
 
 Here's how to structure your queries using the `ask{}` operator in both GraphQL and the JavaScript SDK to effectively use the Generative Q&A feature:
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK (JavaScript)"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
-        unbody.get.<object_name>.ask("Your question here", {
-            properties: ["property1", "property2"],
-            certainty: 0.75,
-            rerank: true
-        })
+        await unbody.get
+                    .<object_name>
+                    .ask("Your question here", {
+                        properties: ["property1", "property2"],
+                    })
+                    .exec()
         ```
     </Tab>
     <Tab title={"GraphQL"}>
@@ -27,8 +28,6 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
                     ask: {
                         question: "Your question here",
                         properties: ["property1", "property2"],
-                        certainty: 0.75,
-                        rerank: true
                     }
                     limit: 1
                 ){
@@ -51,13 +50,14 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
 
 ### Example 1 - Generative Q&A for Document Retrieval
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK (JavaScript)"}>
+    <Tab title={"SDK (.ts)"}>
         ```javascript copy
-        unbody.get
-        .document
-        .ask("Who directed '2001: A Space Odyssey'?", {
-            properties: ["summary"]
-        })
+        await unbody.get
+                    .textDocument
+                    .ask("Who directed '2001: A Space Odyssey'?", {
+                        properties: ["summary"]
+                    })
+                    .exec()
 
         // This query returns the document's title where the answer is located
         ```
@@ -95,7 +95,7 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
 Both the JavaScript SDK and GraphQL responses for an `ask{}` query include detailed information about the answer:
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"Unbody SDK (JavaScript)"}>
+    <Tab title={"SDK (.ts)"}>
         ```json
         {
             "title": "2001: A Space Odyssey",
@@ -134,6 +134,3 @@ Both the JavaScript SDK and GraphQL responses for an `ask{}` query include detai
         ```
     </Tab>
 </Tabs>
-
-## Summary
-Generative Q&A provides a direct method to query and extract specific answers using natural language questions, making it ideal for obtaining precise information quickly and efficiently. Both the JavaScript SDK and GraphQL offer robust support for implementing this feature.

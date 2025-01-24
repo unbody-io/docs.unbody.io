@@ -10,7 +10,18 @@ In GraphQL, a query is structured in such a way that provides you specifically t
 
 The syntax of the `where` clause is shown in the example given below.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+
+  <Tabs.Tab>
+```tsx
+await unbody.get
+            .ClassName
+            .where(...)
+            .select(...)
+            .exec()
+```
+</Tabs.Tab>
+
   <Tabs.Tab>
 ```graphql copy
 query {
@@ -24,11 +35,6 @@ query {
 }
 ```
   </Tabs.Tab>
-  <Tabs.Tab>
-```tsx
-await unbody.get.ClassName.where(...conditions).select(...fields).exec()
-```
-</Tabs.Tab>
 </Tabs>
 
 In the example given above, `ClassName` is the name of the class that you wish to query. `field1` and `field2` are the attributes you want to retrieve. The `condition` is the specific rule that you wish your data shall meet.
@@ -37,7 +43,17 @@ In the example given above, `ClassName` is the name of the class that you wish t
 
 Now you know that the `where` clause is used to filter the data, let us take a look at the basic structure of the where clause.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+
+  <Tabs.Tab>
+```tsx
+.where(({ OPERATOR }) => { 
+    return { fieldName: OPERATOR(VALUE) } 
+  }
+)
+
+```
+</Tabs.Tab>
   <Tabs.Tab>
 ```graphql copy
 where: {
@@ -47,11 +63,6 @@ where: {
 }
 ```
   </Tabs.Tab>
-  <Tabs.Tab>
-```tsx
-
-```
-</Tabs.Tab>
 </Tabs>
 
 - `path`: The path specifies the path to the field you on which want to filter your data. You can provide a list of field names if you wish to nest the fields.
@@ -86,7 +97,16 @@ If you are wondering how you can combine multiple queries, then you may know tha
 - **Filtering Based on a Single Field**
   Given below is an example query that retrieves documents with the `size` greater than 100.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+<Tabs.Tab>
+```tsx
+await unbody.get
+            .googleDoc
+            .where(({ GreaterThan }) => ({ size: GreaterThan(100) }))
+            .select('title', 'size')
+            .exec()
+```
+</Tabs.Tab>
 <Tabs.Tab>
 ```graphql copy
 query {
@@ -101,17 +121,25 @@ query {
 }
 ```
 </Tabs.Tab>
-<Tabs.Tab>
-```tsx
-await unbody.get.googleDoc.where(({ GreaterThan }) => ({ size: GreaterThan(100) })).select('title', 'size').exec()
-```
-</Tabs.Tab>
+
 </Tabs>
 
 - **Combining Conditions with** `And`
   You can combine two conditions using `And`. The example given below retrieves documents with the `size` greater than 100 and a `createdAt` before January 1st, 2023.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+<Tabs.Tab>
+```tsx
+await unbody.get
+            .googleDoc
+            .where(({ GreaterThan, LessThan, And }) => {
+              return And(({ size: GreaterThan(100), createdAt: LessThan("2023-01-01T00:00:00Z") }))
+            })
+            .select('title')
+            .exec()
+```
+</Tabs.Tab>
+
 <Tabs.Tab>
 ```graphql copy
 query {
@@ -138,17 +166,24 @@ query {
 ```
 
 </Tabs.Tab>
-<Tabs.Tab>
-```tsx
-await unbody.get.googleDoc.where(({ GreaterThan, LessThan, And }) => {return And(({ size: GreaterThan(100), createdAt: LessThan("2023-01-01T00:00:00Z") }))}).select('title').exec()
-```
-</Tabs.Tab>
+
 </Tabs>
 
 - **Combining Conditions with** `Or`
   Similar to `And` you can combine conditions using `Or` as well. The query given below retrieves documents with either the `size` greater than 100 or a title that contains the word “report”.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+<Tabs.Tab>
+```tsx
+await unbody.get
+            .googleDoc
+            .where(({ GreaterThan, Like, Or }) => {
+              return Or(({ size: GreaterThan(100), title: Like("*report*") }))
+            })
+            .select('title')
+            .exec()
+```
+</Tabs.Tab>
 <Tabs.Tab>
 ```graphql copy
 query {
@@ -169,17 +204,25 @@ query {
 }
 ```
 </Tabs.Tab>
-<Tabs.Tab>
-```tsx
-await unbody.get.googleDoc.where(({ GreaterThan, Like, Or }) => {return Or(({ size: GreaterThan(100), title: Like("*report*") }))}).select('title').exec()
-```
-</Tabs.Tab>
+
 </Tabs>
 
 - **Nested Filtering**
   The query given retrieves documents with the `size` greater than 100 and either a title containing “report” or a `pathString` containing “report”.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+
+<Tabs.Tab>
+```tsx
+await unbody.get
+            .googleDoc
+            .where(({ GreaterThan, And, Like, Or }) => { 
+              return And(({ size: GreaterThan(100) }), Or(({ pathString: Like("*report*"), title: Like("*report*") })))
+            })
+            .select('title')
+            .exec()
+```
+</Tabs.Tab>
 <Tabs.Tab>
 ```graphql copy
 query {
@@ -205,13 +248,6 @@ query {
     }
   }
 }
-```
-</Tabs.Tab>
-<Tabs.Tab>
-```tsx
-await unbody.get.googleDoc.where(({ GreaterThan, And, Like, Or }) => 
-  {return And(({ size: GreaterThan(100) }), Or(({ pathString: Like("*report*"), title: Like("*report*") })))
-}).select('title').exec()
 ```
 </Tabs.Tab>
 </Tabs>

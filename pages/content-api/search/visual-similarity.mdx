@@ -1,5 +1,6 @@
 import {Tabs, Tab} from "@nextui-org/react";
 
+# Visual Similarity
 This method can be particularly useful when you want to find images that have a similar aesthetic, color scheme, or subject matter. It works by comparing the visual characteristics of the images and determining how similar they are.
 
 ## Syntax
@@ -7,9 +8,13 @@ This method can be particularly useful when you want to find images that have a 
 Visual similarity search can be performed on any 'imageBlock'. Here's how:
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title="Unbody SDK">
+    <Tab title="SDK (.ts)">
         ```javascript copy
-        await unbody.get.imageBlock.similar.record("imageBlockId", {...options}).exec()
+        await unbody.get
+                    .imageBlock
+                    .similar
+                    .record("imageBlockId", {...options})
+                    .exec()
         ```
     </Tab>
     <Tab title="GraphQL">
@@ -30,14 +35,19 @@ Visual similarity search can be performed on any 'imageBlock'. Here's how:
     </Tab>
 </Tabs>
 
-## Examples
+## Usage
 
-- Example 1 - image blocks
+### Example 1 - image blocks
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title="Unbody SDK">
+    <Tab title="SDK (.ts)">
         ```javascript copy
-        await unbody.get.imageBlock.similar.record("valid-uuid").select('url').exec()
+        await unbody.get
+                    .imageBlock
+                    .similar
+                    .record("valid-uuid")
+                    .select('url')
+                    .exec()
         ```
     </Tab>
     <Tab title="GraphQL">
@@ -60,7 +70,7 @@ Visual similarity search can be performed on any 'imageBlock'. Here's how:
 
 ### Arguments
 
-| arguments | Type | Default | Description |
+| Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | image | string |  | Image url or base64 |
 | certainty | float |  | Normalized Distance between the result item and the search vector. Normalized to be between 0 (identical vectors) and 1 (perfect opposite). |

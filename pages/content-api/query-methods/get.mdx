@@ -13,7 +13,17 @@ To get started,
 
 We have given below an example to fetch the title and summary of all Google Docs.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+ <Tabs.Tab>
+```tsx copy
+const response = await unbody.get
+                             .googleDoc
+                             .select("title", "summary")
+                             .exec();
+console.log(response);
+```
+</Tabs.Tab>
+
   <Tabs.Tab>
 ```graphql copy
 {
@@ -26,12 +36,6 @@ We have given below an example to fetch the title and summary of all Google Docs
 }
 ```
   </Tabs.Tab>
-  <Tabs.Tab>
-```tsx copy
-const response = await u.get.googleDoc.select("title", "summary");
-console.log(response);
-```
-</Tabs.Tab>
 </Tabs>
 
 **Expected response:**
@@ -60,7 +64,19 @@ console.log(response);
 
 You can also deep dive and fetch properties that are cross-referenced to other classes. The example given below shows how to fetch image URLs from text blocks. This will return the title, summary, and URLs of related image blocks.
 
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+  <Tabs.Tab>
+```tsx copy
+const response = unbody.get
+                       .googleDoc
+                       .select(
+                         "title",
+                         "summary",
+                         "blocks.imageBlocks.url"
+                       )
+                       .exec()
+```
+</Tabs.Tab>
   <Tabs.Tab>
 ```graphql copy
 {
@@ -78,15 +94,7 @@ You can also deep dive and fetch properties that are cross-referenced to other c
 }
 ```
   </Tabs.Tab>
-  <Tabs.Tab>
-```tsx copy
-const response = u.get.googleDoc.select(
-  "title",
-  "summary",
-  "blocks.imageBlocks.url"
-);
-```
-</Tabs.Tab>
+
 </Tabs>
 
 **Expected response:**
@@ -117,11 +125,11 @@ const response = u.get.googleDoc.select(
 
 Given below is a list of all arguments that you can use with the **Get** method to tailor your queries.
 
-- **`where`**: Apply filters to refine search results. You can learn more about filters [here](/graphql-api/filters).
+- **`where`**: Apply filters to refine search results. You can learn more about filters [here](/content-api/filters).
 - **`limit`:** It sets the maximum number of objects returned.
 - **`offset`:** If you need to skip a specified number of objects, you can use this argument.
 - **`orderBy`:** This argument returns the objects that are sorted based on a specific property.
-- **`nearText`:** This argument helps you find objects that are semantically similar to the given text. You can learn more about semantic search [here](/graphql-api/search/semantic-search).
+- **`nearText`:** This argument helps you find objects that are semantically similar to the given text. You can learn more about semantic search [here](/content-api/search/semantic-search).
 - **`nearVector`:** This argument helps you find objects with Vector similarity. In simple words, vector similarity is the nearest neighbor search where two objects in high-dimensional space are compared using vectors.
 - **`nearObject`:** This argument returns similar to another object.
 - **`includeMeta`:** If you need to include additional meta-information about query results, you can use this argument in the Get query.

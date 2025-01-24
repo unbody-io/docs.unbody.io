@@ -4,7 +4,7 @@ The `.generate.json()` method creates structured JSON content based on prompts, 
 
 ## Usage
 
-### Prompt with Plain Schema
+### Example 1 - Prompt with Plain Schema
 Define a schema and generate structured JSON:
 ```typescript
 unbody.generate.json("Provide user details:", {
@@ -19,7 +19,7 @@ unbody.generate.json("Provide user details:", {
 });
 ```
 
-### Prompt with Zod Schema
+### Example 2 - Prompt with Zod Schema
 Use Zod for schema validation:
 ```typescript
 import { z } from "zod";
@@ -33,7 +33,7 @@ unbody.generate.json("Provide user details:", {
 });
 ```
 
-### Message-Based Input with Schema
+### Example 3 - Message-Based Input with Schema
 Use messages and a schema to guide the generation:
 ```typescript
 import { z } from "zod";
