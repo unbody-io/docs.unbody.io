@@ -7,7 +7,7 @@ interface CollapseProps {
   className?: string;
 }
 
-const ResponseCollapse: React.FC<CollapseProps> = ({
+const Collapse: React.FC<CollapseProps> = ({
   children,
   title = "Response",
   className = "",
@@ -35,4 +35,4 @@ const ResponseCollapse: React.FC<CollapseProps> = ({
   );
 };
 
-export default ResponseCollapse;
+export default Collapse;

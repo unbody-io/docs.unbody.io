@@ -1,4 +1,4 @@
-import ResponseCollapse from '@/components/ResponseCollapse'
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
 # Semantic Search
@@ -41,7 +41,7 @@ In this example, we demonstrate how to perform a semantic search. The code initi
   </Tabs.Tab>
 </Tabs>
 
-<ResponseCollapse title="Response">
+<Collapse title="Response">
 ```typescript
 const response = {
   "_additional": {
@@ -52,7 +52,7 @@ const response = {
   "autoSummary": "AI applications in healthcare..."
 }
 ```
-</ResponseCollapse>
+</Collapse>
 
 
 ## Search with Concept Boost
@@ -95,9 +95,8 @@ In this example, we demonstrate how to perform a semantic search with concept bo
   </Tabs.Tab>
 </Tabs>
 
-
+<Collapse title="Response">
 ```typescript
-// Response
 
 [
     {
@@ -138,6 +137,7 @@ In this example, we demonstrate how to perform a semantic search with concept bo
 ]
 
 ```
+</Collapse>
 
 ## Advanced Search with Concept Steering
 In this example, we demonstrate an advanced semantic search with concept steering. The code uses the `.search.about()` method on the `textDocument` collection with multiple concepts, using `moveTo` to enhance relevance towards modern AI concepts and `moveAwayFrom` to filter out legacy systems. The query includes sorting by `createdAt`, filtering by certainty, and limiting to 5 results.
@@ -201,8 +201,8 @@ In this example, we demonstrate an advanced semantic search with concept steerin
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 [
     {
@@ -237,5 +237,6 @@ In this example, we demonstrate an advanced semantic search with concept steerin
     }
 ]
 ```
+</Collapse>
 
 Learn more in our [Semantic Search Guide](/content-api/search/semantic-search).

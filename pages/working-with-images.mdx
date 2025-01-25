@@ -1,5 +1,7 @@
 
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+
 
 # Working with images
 
@@ -34,8 +36,9 @@ The code fetches image information including OCR text extraction and AI-generate
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response    
+
 [
     {
         "autoCaption": "Futuristic concept car with sleek design and unique lighting",
@@ -64,6 +67,7 @@ The code fetches image information including OCR text extraction and AI-generate
     }
 ]
 ```
+</Collapse>
 
 ## Similar Image Search
 Find similar images by providing a reference image URL. Learn more about [Visual similarity](/content-api/search/visual-similarity)
@@ -107,8 +111,8 @@ Find similar images by providing a reference image URL. Learn more about [Visual
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response    
 
 [
     {
@@ -163,5 +167,6 @@ Find similar images by providing a reference image URL. Learn more about [Visual
     }
 ]
 ```
+</Collapse>
 
 Learn more about advanced image features in our [Image Api Guide](/image-api/overview).

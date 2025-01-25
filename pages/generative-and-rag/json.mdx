@@ -1,4 +1,6 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+
 
 # JSON Generation
 
@@ -23,8 +25,8 @@ const {
         });
 ```
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 {
     "content": {
@@ -40,6 +42,7 @@ const {
     }
 }
 ```
+</Collapse>
 
 ## Generation with Zod Schema
 Demonstrates JSON generation with type validation using [Zod](https://zod.dev/), a TypeScript-first validation library that ensures your generated JSON matches the expected structure. Note: Zod must be installed in your project.
@@ -58,8 +61,8 @@ const {
         });
 ```
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 {
     "content": {
@@ -75,6 +78,7 @@ const {
     }
 }
 ```
+</Collapse>
 
 ## Multi-Message Generation
 Shows how to generate JSON using conversational context and Zod schemas.
@@ -105,9 +109,8 @@ const {
         }
     );
 ```
-
+<Collapse title="Response">
 ```typescript
-// Response
 
 {
     "content": {
@@ -124,5 +127,6 @@ const {
     }
 }
 ```
+</Collapse>
 
 Learn more about advanced JSON generation features in our [JSON Generation API Guide](/generative-api/json-gen).

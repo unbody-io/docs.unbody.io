@@ -1,4 +1,6 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+
 
 # Simple Rag With Generative Search
 
@@ -58,8 +60,9 @@ Transform a single document into an AI-generated response by providing a prompt 
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
+
 [
   {
     "_additional": {
@@ -81,6 +84,7 @@ Transform a single document into an AI-generated response by providing a prompt 
   }
 ]
 ```
+</Collapse>
 
 ## Generate from single document with options
 Generate content from a single document with additional configuration options. Customize the output by adjusting temperature (0-1), token limits, model selection, and presence/frequency penalties.
@@ -152,8 +156,9 @@ Generate content from a single document with additional configuration options. C
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
+
 [
     {
         "_additional": {
@@ -174,6 +179,7 @@ Generate content from a single document with additional configuration options. C
     }
 ]
 ```
+</Collapse>
 
 ## Generate from multiple documents
 Create a unified AI-generated response from multiple documents by specifying which properties to include in the generation process.
@@ -223,8 +229,9 @@ Create a unified AI-generated response from multiple documents by specifying whi
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
+
 [
   {
     "_additional": {
@@ -246,6 +253,7 @@ Create a unified AI-generated response from multiple documents by specifying whi
   }
 ]
 ```
+</Collapse>
 
 ## Generate from multiple documents with options
 Generate content from multiple documents with additional configuration options for more control over the generation process.
@@ -320,8 +328,9 @@ Generate content from multiple documents with additional configuration options f
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
+
 [
     {
         "_additional": {
@@ -343,5 +352,6 @@ Generate content from multiple documents with additional configuration options f
     }
 ]
 ```
+</Collapse>
 
 Learn more about advanced generation features in our [Generative Search Guide](/content-api/generative).

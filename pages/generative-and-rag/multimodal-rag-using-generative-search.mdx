@@ -1,4 +1,6 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+
 
 # Multimodal Rag Using Generative Search
 
@@ -149,8 +151,8 @@ This example demonstrates how to analyze multiple images along with their metada
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 [
     {
@@ -184,5 +186,6 @@ This example demonstrates how to analyze multiple images along with their metada
     }
 ]
 ```
+</Collapse>
 
 Learn more about advanced generation search features in our [Generative Search Guide](/content-api/generative).

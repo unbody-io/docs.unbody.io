@@ -1,4 +1,6 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+
 
 # Similarity Search
 
@@ -56,8 +58,8 @@ A simple example showing semantic text search. The `.similar.text()` method is u
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 [
     {
@@ -76,6 +78,7 @@ A simple example showing semantic text search. The `.similar.text()` method is u
     }
 ]
 ```
+</Collapse>
 
 ## Advanced Text Similarity
 Here we showcase advanced text similarity search with concept steering. Using the `.similar.text()` method on the `textDocument` collection, we search with multiple concepts while limiting results to 2 entries and maintaining a minimum certainty of 0.65.
@@ -122,8 +125,8 @@ Here we showcase advanced text similarity search with concept steering. Using th
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 [
     {
@@ -156,6 +159,7 @@ Here we showcase advanced text similarity search with concept steering. Using th
     }
 ]
 ```
+</Collapse>
 
 ## Image Similarity
 The code demonstrates visual search capabilities through the `.similar.image()` method. Operating on the `imageBlock` collection, it finds the top 5 visually similar images matching a reference URL, with a certainty threshold of 0.65 for accuracy. Learn more in our [Visual Similarity Guide](/content-api/search/visual-similarity).
@@ -202,8 +206,8 @@ The code demonstrates visual search capabilities through the `.similar.image()` 
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 [
     {
@@ -248,6 +252,7 @@ The code demonstrates visual search capabilities through the `.similar.image()` 
     }
 ]
 ```
+</Collapse>
 
 ## Record Similarity
 Demonstrating record-based similarity search, this example uses a specific record ID to find related content. The `.similar.record()` method filters results with a 0.75 certainty threshold and limits to 5 matches, ensuring relevance. Learn more in our [Record Similarity Guide](/content-api/search/record-similarity).
@@ -292,8 +297,8 @@ Demonstrating record-based similarity search, this example uses a specific recor
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 [
     {
@@ -338,3 +343,4 @@ Demonstrating record-based similarity search, this example uses a specific recor
     }
 ]
 ```
+</Collapse>

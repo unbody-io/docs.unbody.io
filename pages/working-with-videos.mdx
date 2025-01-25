@@ -1,4 +1,6 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+
 
 # Working with videos
 
@@ -53,8 +55,8 @@ Retrieve video thumbnails and animated preview images with size filtering to opt
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response    
 
 [
     {
@@ -70,6 +72,7 @@ Retrieve video thumbnails and animated preview images with size filtering to opt
     }
 ]
 ```
+</Collapse>
 
 ## Access Video Subtitles
 Fetch and work with video subtitles, including timing and text content. This example filters videos by type and size.
@@ -132,9 +135,8 @@ Fetch and work with video subtitles, including timing and text content. This exa
     ```
   </Tabs.Tab>
 </Tabs>
-
+<Collapse title="Response">
 ```typescript
-// Response    
 
 [
     {
@@ -214,6 +216,7 @@ Fetch and work with video subtitles, including timing and text content. This exa
     }
 ]
 ```
+</Collapse>
 
 ## Analyze Video Content
 # Analyze Video Content
@@ -286,8 +289,9 @@ Results are validated against the schema by [Zod](https://zod.dev/), ensuring co
     );
 ```
 
+<Collapse title="Response">
 ```typescript
-// Response    
+  
 
 {
     "content": {
@@ -330,5 +334,6 @@ Results are validated against the schema by [Zod](https://zod.dev/), ensuring co
     }
 }
 ```
+</Collapse>
 
 Learn more about advanced video features in our [Advanced Video Api Guide](/video-api).

@@ -1,3 +1,4 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
 # Use the image inside a prompt
@@ -33,8 +34,8 @@ Use images as input to generate descriptions or analyze visual content by provid
           );
     ```
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 {
     "content": "This image depicts a futuristic electric car being charged at a charging station. The scene is set at night with a vibrant, neon-lit color palette, predominantly featuring blues and oranges. The car is sleek and modern, with illuminated tail lights and a visible energy flow highlighted in blue to indicate charging. The background suggests a serene, remote location with trees silhouetted against the night sky. The image has a dynamic and slightly mysterious atmosphere, enhanced by the ambient lighting and the subtle presence of rain.",
@@ -48,5 +49,6 @@ Use images as input to generate descriptions or analyze visual content by provid
     }
 }
 ```
+</Collapse>
 
 Learn more in our [Message-Based Input with Schema Guide](generative-api/json-gen#message-based-input-with-schema).

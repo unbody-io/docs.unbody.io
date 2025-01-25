@@ -1,4 +1,6 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+
 
 # Keyword Search
 
@@ -39,6 +41,7 @@ Performs a simple keyword search to find exact matches in all text fields.
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
 [
     {
@@ -59,6 +62,7 @@ Performs a simple keyword search to find exact matches in all text fields.
     }
 ]
 ```
+</Collapse>
 
 ## Field-Specific Search
 Here we are demonstrate a field-specific search functionality. The code uses the `.search.find()` method on the `textDocument` collection to search for "neural networks" specifically within the `title` and `autoSummary` fields, selecting relevant fields to return.
@@ -98,6 +102,7 @@ Here we are demonstrate a field-specific search functionality. The code uses the
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
 [
     {
@@ -130,5 +135,6 @@ Here we are demonstrate a field-specific search functionality. The code uses the
     }
 ]
 ```
+</Collapse>
 
 Learn more in our [Keyword Search Guide](/content-api/search/keyword-search).

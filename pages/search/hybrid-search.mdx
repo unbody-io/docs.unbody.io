@@ -1,4 +1,6 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+
 
 # Hybrid Search
 
@@ -42,8 +44,9 @@ In this example, we demonstrate a hybrid search combining semantic and keyword m
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
+
 [
     {
         "_additional": {
@@ -63,6 +66,7 @@ In this example, we demonstrate a hybrid search combining semantic and keyword m
     }
 ]
 ```
+</Collapse>
 
 ## Advanced Search
 In this example, we demonstrate an advanced hybrid search with custom parameters. The code uses the `.search.hybrid()` method on the `googleDoc` collection, specifying fusion settings, vector values, and search properties for more precise results.
@@ -108,8 +112,9 @@ In this example, we demonstrate an advanced hybrid search with custom parameters
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
+
 [
     {
         "_additional": {
@@ -127,5 +132,6 @@ In this example, we demonstrate an advanced hybrid search with custom parameters
     }
 ]
 ```
+</Collapse>
 
 Learn more in our [Hybrid Search Guide](/content-api/search/hybrid-search).
