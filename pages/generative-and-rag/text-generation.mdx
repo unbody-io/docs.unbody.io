@@ -1,23 +1,23 @@
 import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
-
 # Text Generation
 
 Generate natural language content using AI with flexible input methods - from simple prompts to structured message sequences. The system supports various models and parameters to fine-tune output, making it ideal for content creation, analysis, and conversational interactions.
 
 ## Basic Generation
+
 A straightforward example of text generation using a simple prompt. The `.generate.text()` method takes a natural language prompt as input and returns AI-generated content with usage metadata showing token consumption. Learn more in our [Text Generation Guide](/generative-api/text-gen).
 
 ```typescript
-    const {
-      data: { payload },
-    } = await unbody.generate.text("Explain AI's impact on healthcare.");
+const {
+  data: { payload },
+} = await unbody.generate
+        .text("Explain AI's impact on healthcare.");
 ```
 
 <Collapse title="Response">
 ```typescript
-
 {
     "content": "AI has had a profound impact on healthcare and continues to shape and improve various aspects of the industry. Here are some key ways in which AI is transforming healthcare:\n\n1. **Clinical Decision Support**: AI algorithms can analyze vast amounts of medical data, patient records, and research to provide valuable insights that support clinical decision-making. This helps healthcare professionals in diagnosing diseases more accurately, selecting appropriate treatments, and personalizing patient care plans.\n\n2. **Medical Imaging and Diagnostics**: AI techniques, especially deep learning, have revolutionized medical imaging analysis. AI systems can detect and diagnose various conditions from medical images, including tumors, fractures, and eye diseases. This improves accuracy, speeds up diagnosis, and reduces the workload on radiologists and other medical specialists.\n\n3. **Drug Discovery and Development**: AI accelerates the process of discovering and developing new drugs by identifying potential drug candidates, optimizing molecular structures, and predicting drug efficacy and safety. This can lead to faster drug development, lower costs, and an increased success rate in bringing new medications to market.\n\n4. **Precision Medicine**: AI enables the development of precision medicine, where treatments and interventions are tailored to individual patients based on their genetic makeup, lifestyle, and environmental factors. By analyzing large datasets, AI can identify patterns and correlations that help determine the most effective treatments for specific patient subgroups.\n\n5. **Virtual Health Assistants**: AI-powered virtual assistants and chatbots can provide patients with immediate assistance, answer common health-related queries, and offer personalized recommendations. These assistants can also help monitor patient symptoms, provide follow-up care, and improve patient engagement and adherence to treatment plans.\n\n6. **Healthcare Operations and Administration**: AI improves the efficiency of healthcare operations by automating administrative tasks, streamlining scheduling and billing processes, and optimizing resource allocation. This reduces costs, improves healthcare facility management, and enables healthcare providers to focus more on patient care.\n\n7. **Predictive Analytics**: AI algorithms can analyze historical data to predict patient outcomes, identify patients at risk of developing specific diseases, and anticipate resource needs. This predictive capability allows healthcare providers to intervene early, improve patient monitoring, and allocate resources effectively.\n\n8. **Clinical Research and Data Analysis**: AI facilitates the analysis of large and complex healthcare datasets, helping researchers identify patterns, correlations, and potential causes of diseases. This accelerates clinical research, improves our understanding of various health conditions, and leads to the development of more effective treatments.\n\n9. **Robotics in Surgery and Rehabilitation**: AI-powered robots assist in surgical procedures, improving precision and reducing invasiveness. They can also aid in patient rehabilitation, providing repetitive tasks and personalized therapy regimens.\n\n10. **Mental Health**: AI-based interventions, such as cognitive behavioral therapy chatbots, are being used to support patients with mental health issues. These tools can provide accessible and affordable therapy, helping to address the shortage of mental health professionals.\n\nWhile AI in healthcare offers tremendous benefits, it also comes with challenges and ethical considerations. These include concerns around data privacy, algorithmic bias, potential job displacement, and the need for proper validation and regulation of AI systems in healthcare. Addressing these challenges is crucial to ensure that AI technology improves healthcare outcomes while maintaining patient safety and trust.",
     "metadata": {
@@ -32,21 +32,23 @@ A straightforward example of text generation using a simple prompt. The `.genera
 </Collapse>
 
 ## Generation with Options
-In this example, we demonstrates fine-tuned text generation by configuring model parameters. Using the `.generate.text()` method with options like temperature, token limits, and sampling controls, we can precisely control the output characteristics.
+
+In this example, we demonstrate fine-tuned text generation by configuring model parameters. Using the `.generate.text()` method with options like temperature, token limits, and sampling controls, we can precisely control the output characteristics.
 
 ```typescript
-    const {
-      data: { payload },
-    } = await unbody.generate
-            .text("Write a report on climate change.", {
-                model: "gpt-4",
-                topP: 0.7,
-                maxTokens: 1000,
-                temperature: 0.7,
-                presencePenalty: 0,
-                frequencyPenalty: 0,
-            });
+const {
+  data: { payload },
+} = await unbody.generate
+        .text("Write a report on climate change.", {
+            model: "gpt-4",
+            topP: 0.7,
+            maxTokens: 1000,
+            temperature: 0.7,
+            presencePenalty: 0,
+            frequencyPenalty: 0,
+        });
 ```
+
 <Collapse title="Response">
 ```typescript
 
@@ -65,32 +67,33 @@ In this example, we demonstrates fine-tuned text generation by configuring model
 </Collapse>
 
 ## Multi-Message Generation
+
 Showcases structured message-based generation with `.generate.text()`. The code uses a message array to define system and user roles, configuring parameters like model, temperature, and token limits for controlled output.
 
 ```typescript
-    const {
-      data: { payload },
-    } = await unbody.generate
-            .text(
-                [
-                    { 
-                        role: "system", 
-                        content: "You are an expert on AI." 
-                    },
-                    { 
-                        role: "user", 
-                        content: "What are the latest AI trends in 2024?" 
-                    },
-                ],
-                {
-                    model: "gpt-4",
-                    topP: 0.7,
-                    maxTokens: 1000,
-                    temperature: 0.7,
-                    presencePenalty: 0,
-                    frequencyPenalty: 0,
-                }
-            );
+const {
+  data: { payload },
+} = await unbody.generate
+        .text(
+            [
+                { 
+                    role: "system", 
+                    content: "You are an expert on AI." 
+                },
+                { 
+                    role: "user", 
+                    content: "What are the latest AI trends in 2024?" 
+                },
+            ],
+            {
+                model: "gpt-4",
+                topP: 0.7,
+                maxTokens: 1000,
+                temperature: 0.7,
+                presencePenalty: 0,
+                frequencyPenalty: 0,
+            }
+        );
 ```
 
 <Collapse title="Response">
@@ -110,4 +113,4 @@ Showcases structured message-based generation with `.generate.text()`. The code 
 ```
 </Collapse>
 
-Learn more about text generation in details in our [Text Generation Guide](/generative-api/text-gen).
+Learn more about text generation in detail in our [Text Generation Guide](/generative-api/text-gen).
