@@ -7,7 +7,7 @@ import { Tabs } from "nextra/components"
 Generate structured JSON content based on prompts, messages, or schemas. Useful for creating API responses, structured records, or documents.
 
 ## Basic JSON Generation
-Shows how to generate structured JSON data with a simple schema definition. The `.generate.json()` method allows you to specify the expected output structure using JSON Schema format, ensuring the response matches your requirements.
+Let's say you need to collect user information as structured data like name, age and address. This example shows how to generate JSON that matches your requirements.
 
 ```typescript
 const {
@@ -45,7 +45,7 @@ const {
 </Collapse>
 
 ## Generation with Zod Schema
-Demonstrates JSON generation with type validation using [Zod](https://zod.dev/), a TypeScript-first validation library that ensures your generated JSON matches the expected structure. Note: Zod must be installed in your project.
+Are you familiar with the Zod validation library? You can also use Zod to define the output structure while providing full-type safety.
 
 ```typescript
 import { z } from "zod";
@@ -81,7 +81,7 @@ const {
 </Collapse>
 
 ## Multi-Message Generation
-Shows how to generate JSON using conversational context and Zod schemas.
+Want to create structured data through natural conversation? This approach combines chat-like interactions with strict output formatting to generate precise JSON responses.
 
 ```typescript
 import { z } from "zod";

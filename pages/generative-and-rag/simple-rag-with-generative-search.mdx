@@ -7,7 +7,7 @@ import { Tabs } from "nextra/components"
 Use AI to generate meaningful insights and summaries from your documents using Retrieval-Augmented Generation (RAG). Apply natural language prompts to individual documents or across multiple sources to extract relevant information and create context-aware responses.
 
 ## Generate from single document
-Transform a single document into an AI-generated response by providing a prompt that can reference any of the document's properties using curly braces notation.
+Let's say you have a PDF document and want to create a quick summary of its contents. This example shows how to generate an AI response that references any part of the document.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -87,7 +87,7 @@ Transform a single document into an AI-generated response by providing a prompt 
 </Collapse>
 
 ## Generate from single document with options
-Generate content from a single document with additional configuration options. Customize the output by adjusting temperature (0-1), token limits, model selection, and presence/frequency penalties.
+Need more control over how the AI processes your documents? You can fine-tune parameters like creativity level and response length to get exactly the kind of output you need.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -182,7 +182,7 @@ Generate content from a single document with additional configuration options. C
 </Collapse>
 
 ## Generate from multiple documents
-Create a unified AI-generated response from multiple documents by specifying which properties to include in the generation process.
+Have information spread across several documents? You can combine specific fields from multiple sources to create a unified summary or analysis.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -256,7 +256,7 @@ Create a unified AI-generated response from multiple documents by specifying whi
 </Collapse>
 
 ## Generate from multiple documents with options
-Generate content from multiple documents with additional configuration options for more control over the generation process.
+Looking to process multiple documents while maintaining precise control over the output? This approach lets you combine document properties while fine-tuning the AI's response characteristics.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>

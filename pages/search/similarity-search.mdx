@@ -7,7 +7,7 @@ import { Tabs } from "nextra/components"
 Find similar content across text, images, and records based on their characteristics and patterns.
 
 ## Text Similarity
-A simple example showing semantic text search. The `.similar.text()` method is used on the `textBlock` collection to fetch content similar to "artificial intelligence", with a certainty threshold of 0.8 ensuring high relevance.
+Let's say you have several documents about AI technology and want to find related content discussing machine learning advancements. This example shows how to search across your documents to find conceptually related content.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -81,7 +81,7 @@ A simple example showing semantic text search. The `.similar.text()` method is u
 </Collapse>
 
 ## Advanced Text Similarity
-Here we showcase advanced text similarity search with concept steering. Using the `.similar.text()` method on the `textDocument` collection, we search with multiple concepts while limiting results to 2 entries and maintaining a minimum certainty of 0.65.
+Need to discover content that aligns with specific concepts while maintaining high relevance? Advanced text similarity lets you steer your search toward particular themes or topics while filtering out unrelated results.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -162,7 +162,7 @@ Here we showcase advanced text similarity search with concept steering. Using th
 </Collapse>
 
 ## Image Similarity
-The code demonstrates visual search capabilities through the `.similar.image()` method. Operating on the `imageBlock` collection, it finds the top 5 visually similar images matching a reference URL, with a certainty threshold of 0.65 for accuracy. Learn more in our [Visual Similarity Guide](/content-api/search/visual-similarity).
+Looking for images that share visual characteristics like colors, objects, or composition? Image similarity search helps you find visually related content regardless of filenames or metadata.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -255,7 +255,7 @@ The code demonstrates visual search capabilities through the `.similar.image()` 
 </Collapse>
 
 ## Record Similarity
-Demonstrating record-based similarity search, this example uses a specific record ID to find related content. The `.similar.record()` method filters results with a 0.75 certainty threshold and limits to 5 matches, ensuring relevance. Learn more in our [Record Similarity Guide](/content-api/search/record-similarity).
+Found a valuable document and want to discover similar content? Record similarity uses an existing document as a reference point to uncover related records that might be missed through traditional search methods.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>

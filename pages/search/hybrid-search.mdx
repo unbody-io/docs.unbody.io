@@ -1,13 +1,12 @@
 import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
-
 # Hybrid Search
 
 Combines both semantic and keyword search capabilities to provide comprehensive results that match both meaning and specific terms.
 
 ## Basic Search
-In this example, we demonstrate a hybrid search combining semantic and keyword matching. The code uses the `.search.hybrid()` method on the `textDocument` collection to search for "AI in healthcare" within `text` and `title` fields.
+Let's say you have a large collection of documents and need to find content that is both conceptually relevant and contains specific key terms. Hybrid search combines semantic understanding with keyword matching to deliver more comprehensive results than either method alone.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -46,7 +45,6 @@ In this example, we demonstrate a hybrid search combining semantic and keyword m
 
 <Collapse title="Response">
 ```typescript
-
 [
     {
         "_additional": {
@@ -69,7 +67,7 @@ In this example, we demonstrate a hybrid search combining semantic and keyword m
 </Collapse>
 
 ## Advanced Search
-In this example, we demonstrate an advanced hybrid search with custom parameters. The code uses the `.search.hybrid()` method on the `googleDoc` collection, specifying fusion settings, vector values, and search properties for more precise results.
+Sometimes you need more precise control over search results, especially when dealing with technical or specialized content. For instance, when searching for "Generative AI" documents, you might want to prioritize results that match specific semantic vectors (representing particular concepts or themes) while also ensuring they contain relevant keywords in their titles and tags. This approach is particularly useful for creating targeted content recommendations or building specialized knowledge bases.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -78,7 +76,7 @@ In this example, we demonstrate an advanced hybrid search with custom parameters
       data: { payload },
     } = await unbody.get.googleDoc
         .search
-        .hybrid("Generative Ai", {
+        .hybrid("Generative AI", {
             alpha: 0.7,
             vector: [0.0055148206, 0.013368472, 0.035909854],
             fusionType: "relativeScoreFusion",
@@ -93,7 +91,7 @@ In this example, we demonstrate an advanced hybrid search with custom parameters
       Get {
         TextDocument(
           hybrid: {
-            query: "Generative Ai",
+            query: "Generative AI",
             alpha: 0.7,
             vector: [0.0055148206, 0.013368472, 0.035909854],
             fusionType: relativeScoreFusion,
@@ -114,7 +112,6 @@ In this example, we demonstrate an advanced hybrid search with custom parameters
 
 <Collapse title="Response">
 ```typescript
-
 [
     {
         "_additional": {

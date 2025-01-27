@@ -7,7 +7,7 @@ import { Tabs } from "nextra/components"
 Search based on exact keyword matches within your data, ideal for precise matching when users know specific terms they're looking for.
 
 ## Basic Search
-Performs a simple keyword search to find exact matches in all text fields.
+When you need to find documents containing specific terms exactly as written, keyword search is your best option. For instance, searching for "machine learning" will return only documents that contain that exact phrase.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -65,7 +65,7 @@ Performs a simple keyword search to find exact matches in all text fields.
 </Collapse>
 
 ## Field-Specific Search
-Here we are demonstrate a field-specific search functionality. The code uses the `.search.find()` method on the `textDocument` collection to search for "neural networks" specifically within the `title` and `autoSummary` fields, selecting relevant fields to return.
+Sometimes you want to search for keywords only in certain parts of your documents - like titles or summaries - while ignoring the main content.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>

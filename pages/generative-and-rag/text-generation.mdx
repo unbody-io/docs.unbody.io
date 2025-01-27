@@ -7,7 +7,7 @@ import { Tabs } from "nextra/components"
 Generate natural language content using AI with flexible input methods - from simple prompts to structured message sequences. The system supports various models and parameters to fine-tune output, making it ideal for content creation, analysis, and conversational interactions.
 
 ## Basic Generation
-A straightforward example of text generation using a simple prompt. The `.generate.text()` method takes a natural language prompt as input and returns AI-generated content with usage metadata showing token consumption. Learn more in our [Text Generation Guide](/generative-api/text-gen).
+Let's say you want an AI system to analyze and explain a complex topic like AI's impact on healthcare. This example shows how to generate content from a simple prompt.
 
 ```typescript
     const {
@@ -32,7 +32,7 @@ A straightforward example of text generation using a simple prompt. The `.genera
 </Collapse>
 
 ## Generation with Options
-In this example, we demonstrates fine-tuned text generation by configuring model parameters. Using the `.generate.text()` method with options like temperature, token limits, and sampling controls, we can precisely control the output characteristics.
+Sometimes you need more control over how AI generates content - like adjusting creativity levels or limiting response length. This example shows how to fine-tune the generation process using parameters like temperature and token limits to get precisely the output style you need.
 
 ```typescript
     const {
@@ -65,7 +65,7 @@ In this example, we demonstrates fine-tuned text generation by configuring model
 </Collapse>
 
 ## Multi-Message Generation
-Showcases structured message-based generation with `.generate.text()`. The code uses a message array to define system and user roles, configuring parameters like model, temperature, and token limits for controlled output.
+Sometimes you need AI responses from a specific viewpoint or with certain background knowledge. Message-based generation lets you define AI roles and build contextual conversations through a sequence of messages.
 
 ```typescript
     const {

@@ -6,7 +6,7 @@ import { Tabs } from "nextra/components"
 Search based on meaning rather than exact keyword matches, allowing users to find relevant content even when exact terms don't match.
 
 ## Basic Search
-In this example, we demonstrate how to perform a semantic search. The code initiates a search query using the `.search.about()` method on the `textDocument` collection, selecting specific fields (`title`, `autoSummary`, `text`) to return.
+Let's say you want to find documents discussing "AI applications" - but the relevant content might use terms like "machine learning systems" or "neural networks" instead. Semantic search understands these conceptual relationships and returns relevant results regardless of exact term matches.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -56,7 +56,7 @@ const response = {
 
 
 ## Search with Concept Boost
-In this example, we demonstrate how to perform a semantic search with concept boosting. The code uses the `.search.about()` method on the textBlock collection, enhancing results towards specific concepts with a force factor, while selecting the text field and limiting to 5 results.
+Let's say you need to perform a semantic search for "AI applications" but want to prioritize results that are more closely related to specific concepts like "Deep Learning," "LLM," and "chatbot." To achieve this, we can use concept boosting, which adjusts the search results to align more strongly with these concepts by applying a weighted influence (force factor). This ensures that the most relevant results, based on the given priorities, are returned.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
@@ -140,7 +140,8 @@ In this example, we demonstrate how to perform a semantic search with concept bo
 </Collapse>
 
 ## Advanced Search with Concept Steering
-In this example, we demonstrate an advanced semantic search with concept steering. The code uses the `.search.about()` method on the `textDocument` collection with multiple concepts, using `moveTo` to enhance relevance towards modern AI concepts and `moveAwayFrom` to filter out legacy systems. The query includes sorting by `createdAt`, filtering by certainty, and limiting to 5 results.
+When building an AI knowledge base, you might want to find modern AI-related content while specifically excluding outdated approaches. For example, when searching for chatbot documentation, you want to focus on modern NLP and Large Language Models while avoiding legacy rule-based systems. Concept steering lets you push the search toward desired concepts and away from unwanted ones simultaneously.
+
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
