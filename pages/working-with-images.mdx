@@ -8,17 +8,18 @@ import { Tabs } from "nextra/components"
 Use Unbody's Image API powered by [Imgix](https://www.imgix.com/) to efficiently fetch, transform and analyze images. Capabilities include dynamic resizing, format conversion, advanced cropping, and intelligent image analysis.
 
 ## Basic Image Query
-When working with image collections, you often need to retrieve basic information about images efficiently. This example demonstrates how to fetch image details like original file names, extracted OCR text, and AI-generated captions, allowing you to quickly inspect and understand the contents of your image database by limiting the results to 5 entries.
+When working with image collections, you need a quick way to retrieve essential information about your images. [Learn more about Image Fetching](/image-api/api-reference#example-1---fetching-your-image-url).
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
     const {
       data: { payload },
-    } = await unbody.get.imageBlock
-        .limit(5)
-        .select("originalName", "autoOCR", "autoCaption")
-        .exec();
+    } = await unbody.get
+                    .imageBlock
+                    .limit(5)
+                    .select("originalName", "autoOCR", "autoCaption")
+                    .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -70,20 +71,21 @@ When working with image collections, you often need to retrieve basic informatio
 </Collapse>
 
 ## Similar Image Search
-When you want to find visually similar images based on a reference image, such as exploring a collection of electric vehicles, this method allows you to retrieve images that share visual characteristics. 
+When you want to find visually similar images based on a reference image, such as exploring a collection of electric vehicles, this method allows you to retrieve images that share visual characteristics. [Learn more about Visual similarity](/content-api/search/visual-similarity)
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
     const {
       data: { payload },
-    } = await unbody.get.imageBlock.similar
-          .image(
-              "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg" // Image about an electric car
-          )
-          .limit(5)
-          .select("originalName", "url", "autoOCR", "mimeType")
-          .exec();
+    } = await unbody.get
+                    .imageBlock
+                    .similar.image(
+                      "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg" // Image about an electric car
+                    )
+                    .limit(5)
+                    .select("originalName", "url", "autoOCR", "mimeType")
+                    .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -172,7 +174,7 @@ When you want to find visually similar images based on a reference image, such a
 Here are revised explanations:
 
 ## Creating a Face Gallery
-Imagine building a digital yearbook or a mood board of portraits. You want to quickly gather and showcase a collection of human faces from your image library. This example demonstrates how to extract and display faces dynamically, turning a scattered image collection into a compelling visual narrative.
+Imagine building a digital yearbook or a mood board of portraits. You want to quickly gather and showcase a collection of human faces from your image library. This example demonstrates how to extract and display faces dynamically, turning a scattered image collection into a compelling visual narrative. [Learn more about Image Transformation](/image-api/api-reference#api-reference)
 
 ```typescript
 // Fetch images with semantic search
