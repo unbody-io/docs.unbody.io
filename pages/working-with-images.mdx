@@ -178,10 +178,11 @@ Imagine building a digital yearbook or a mood board of portraits. You want to qu
 
 ```typescript
 // Fetch images with semantic search
-const { data: { payload: images } } = await unbody.get.imageBlock
-  .search.about("Human Face")
-  .select("url")
-  .exec();
+const { data: { payload: images } } = await unbody.get
+                                                  .imageBlock
+                                                  .search.about("Human Face")
+                                                  .select("url")
+                                                  .exec();
   
 // Render face gallery
 <div className="grid grid-cols-3 gap-4">
