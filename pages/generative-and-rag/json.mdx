@@ -1,28 +1,27 @@
 import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
-
 # JSON Generation
 
 Generate structured JSON content based on prompts, messages, or schemas. Useful for creating API responses, structured records, or documents.
 
 ## Basic JSON Generation
-Let's say you need to collect user information as structured data like name, age and address. This example shows how to generate JSON that matches your requirements.
+When you need to generate structured data with specific fields, use schema-based generation. This ensures the output follows your required format with proper data types. [Learn more about basic JSON generation](/generative-api/json-gen#example-1---prompt-with-plain-schema).
 
 ```typescript
 const {
-    data: { payload },
-}   = await unbody.generate
-        .json("Provide user details:", {
-            schema: {
-                type: "object",
-                properties: {
-                    name: { type: "string" },
-                    age: { type: "number" },
-                    address: { type: "string" },
-                },
-            },
-        });
+  data: { payload }
+} = await unbody.generate
+                .json("Provide user details:", {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      name: { type: "string" },
+                      age: { type: "number" },
+                      address: { type: "string" }
+                    }
+                  }
+                });
 ```
 
 <Collapse title="Response">
@@ -44,21 +43,22 @@ const {
 ```
 </Collapse>
 
+
 ## Generation with Zod Schema
-Are you familiar with the Zod validation library? You can also use Zod to define the output structure while providing full-type safety.
+When you need type-safe JSON generation, use [Zod](https://zod.dev/) schemas to define your output structure. This approach provides full TypeScript integration and runtime validation.
 
 ```typescript
 import { z } from "zod";
 
 const {
-    data: { payload },
-}   = await unbody.generate
-        .json("Provide user details:", {
-            schema: z.object({
-                name: z.string(),
-                age: z.number(),
-            }),
-        });
+  data: { payload }
+} = await unbody.generate
+                .json("Provide user details:", {
+                  schema: z.object({
+                    name: z.string(),
+                    age: z.number()
+                  })
+                });
 ```
 
 <Collapse title="Response">
@@ -81,7 +81,7 @@ const {
 </Collapse>
 
 ## Multi-Message Generation
-Want to create structured data through natural conversation? This approach combines chat-like interactions with strict output formatting to generate precise JSON responses.
+When you need to generate structured data through conversation, use [Message-Based Input with Schema](/generative-api/json-gen#example-3---message-based-input-with-schema). This helps when you need to provide context or specific instructions before generating the final structured output.
 
 ```typescript
 import { z } from "zod";

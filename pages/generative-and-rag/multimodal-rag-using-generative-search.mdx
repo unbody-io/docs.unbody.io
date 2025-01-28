@@ -7,148 +7,149 @@ import { Tabs } from "nextra/components"
 Create comprehensive insights by processing multiple types of data simultaneously - visual content (images), text (OCR, captions), and metadata. Multimodal RAG combines these different modalities to generate richer, more contextual understanding of your content.
 
 ## Image Analysis with Metadata
-This example demonstrates how to analyze multiple images along with their metadata, OCR text, and auto-generated captions. It combines visual content analysis with textual information to provide detailed insights.
+Need to analyze multiple images while considering their metadata, OCR text, and captions? Use [`.generate.fromMany()`](/content-api/generative#example-2---from-many) with [Messages](/content-api/generative#using-messages-instead-of-prompts) and [Vars](/content-api/generative#using-vars) to combine visual analysis with metadata examination for comprehensive image insights.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.imageBlock
-        .where({ mimeType: "image/jpeg" })
-        .limit(2)
-        .select("url", "autoCaption", "alt", "autoOCR", "originalName")
-        .generate.fromMany({
-            messages: [
-                {
-                    content: "Analyze these images comprehensively. Focus on visual content, caption accuracy, and any text found in the images.",
-                },
-                {
-                    type: "image",
-                    content: "{imageData.urls}",
-                },
-                {
-                    content: `Please analyze based on this information:
-                            Image Details:
-                            {imageData.details}
-                            
-                            OCR Text Found:
-                            {imageData.ocrText}
-                            
-                            Generated Captions:
-                            {imageData.captions}
-                            
-                            Consider:
-                            1. Are the auto-generated captions accurate?
-                            2. How does the OCR text relate to the visual content?
-                            3. Compare the alt descriptions with what you see.`,
-                },
-            ],
-            options: {
-                model: "gpt-4-turbo",
-                vars: [
-                    {
-                        name: "imageData",
-                        formatter: "jq",
-                        expression: `{
-                            urls: [.[].url],
-                            details: map({
-                                filename: .originalName,
-                                altDescription: .alt
-                            }),
-                            ocrText: map(.autoOCR),
-                            captions: map(.autoCaption)
-                        }`,
-                    },
-                ],
-                maxTokens: 1500,
-                temperature: 0.7,
-            },
-        })
-        .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        ImageBlock(
-          where: {
-            operator: Equal, 
-            path: "mimeType", 
-            valueText: "image/jpeg"
-          }
-          limit: 2
-        ) {
-          _additional {
-            generate(
-              groupedResult: {
-                messages: [
-                  {
-                    content: "Analyze these images comprehensively. Focus on visual content, caption accuracy, and any text found in the images."
-                  }, 
-                  {
-                    type: "image", 
-                    content: "{imageData.urls}"
-                  }, 
-                  {
-                    content: "Please analyze based on this information:\n          
-                          Image Details:\n          
-                          {imageData.details}\n          
-                          OCR Text Found:\n          
-                          {imageData.ocrText}\n          
-                          Generated Captions:\n          
-                          {imageData.captions}\n          
-                          Consider:\n          
-                          1. Are the auto-generated captions accurate?\n          
-                          2. How does the OCR text relate to the visual content?\n          
-                          3. Compare the alt descriptions with what you see."
-                  }
-                ], 
-                options: {
-                  model: "gpt-4-turbo", 
-                  vars: [
-                    {
-                      name: "imageData", 
-                      formatter: "jq", 
-                      expression: "{\n              
-                        urls: [.[].url],\n              
-                        details: map({\n                
-                          filename: .originalName,\n                
-                          altDescription: .alt\n              
-                        }),\n              
-                        ocrText: map(.autoOCR),\n              
-                        captions: map(.autoCaption)\n            
-                      }"
-                    }
-                  ], 
-                  maxTokens: 1500, 
-                  temperature: 0.7
-                }
-              }
-            ) {
-              error
-              groupedResult
-              metadata {
-                finishReason
-                usage {
-                  inputTokens
-                  outputTokens
-                  totalTokens
-                }
-              }
-            }
-          }
-          url
-          autoCaption
-          alt
-          autoOCR
-          originalName
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .imageBlock
+                   .where({ mimeType: "image/jpeg" })
+                   .limit(2)
+                   .select("url", "autoCaption", "alt", "autoOCR", "originalName")
+                   .generate.fromMany({
+                     messages: [
+                       {
+                         content: "Analyze these images comprehensively. Focus on visual content, caption accuracy, and any text found in the images."
+                       },
+                       {
+                         type: "image",
+                         content: "{imageData.urls}"
+                       },
+                       {
+                         content: `Please analyze based on this information:
+                           Image Details:
+                           {imageData.details}
+                           
+                           OCR Text Found:
+                           {imageData.ocrText}
+                           
+                           Generated Captions:
+                           {imageData.captions}
+                           
+                           Consider:
+                           1. Are the auto-generated captions accurate?
+                           2. How does the OCR text relate to the visual content?
+                           3. Compare the alt descriptions with what you see.`
+                       }
+                     ],
+                     options: {
+                       model: "gpt-4-turbo",
+                       vars: [
+                         {
+                           name: "imageData",
+                           formatter: "jq",
+                           expression: `{
+                             urls: [.[].url],
+                             details: map({
+                               filename: .originalName,
+                               altDescription: .alt
+                             }),
+                             ocrText: map(.autoOCR),
+                             captions: map(.autoCaption)
+                           }`
+                         }
+                       ],
+                       maxTokens: 1500,
+                       temperature: 0.7
+                     }
+                   })
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       ImageBlock(
+         where: {
+           operator: Equal, 
+           path: "mimeType", 
+           valueText: "image/jpeg"
+         }
+         limit: 2
+       ) {
+         _additional {
+           generate(
+             groupedResult: {
+               messages: [
+                 {
+                   content: "Analyze these images comprehensively. Focus on visual content, caption accuracy, and any text found in the images."
+                 }, 
+                 {
+                   type: "image", 
+                   content: "{imageData.urls}"
+                 }, 
+                 {
+                   content: "Please analyze based on this information:\n          
+                         Image Details:\n          
+                         {imageData.details}\n          
+                         OCR Text Found:\n          
+                         {imageData.ocrText}\n          
+                         Generated Captions:\n          
+                         {imageData.captions}\n          
+                         Consider:\n          
+                         1. Are the auto-generated captions accurate?\n          
+                         2. How does the OCR text relate to the visual content?\n          
+                         3. Compare the alt descriptions with what you see."
+                 }
+               ], 
+               options: {
+                 model: "gpt-4-turbo", 
+                 vars: [
+                   {
+                     name: "imageData", 
+                     formatter: "jq", 
+                     expression: "{\n              
+                       urls: [.[].url],\n              
+                       details: map({\n                
+                         filename: .originalName,\n                
+                         altDescription: .alt\n              
+                       }),\n              
+                       ocrText: map(.autoOCR),\n              
+                       captions: map(.autoCaption)\n            
+                     }"
+                   }
+                 ], 
+                 maxTokens: 1500, 
+                 temperature: 0.7
+               }
+             }
+           ) {
+             error
+             groupedResult
+             metadata {
+               finishReason
+               usage {
+                 inputTokens
+                 outputTokens
+                 totalTokens
+               }
+             }
+           }
+         }
+         url
+         autoCaption
+         alt
+         autoOCR
+         originalName
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
@@ -188,4 +189,4 @@ This example demonstrates how to analyze multiple images along with their metada
 ```
 </Collapse>
 
-Learn more about advanced generation search features in our [Generative Search Guide](/content-api/generative).
+Learn more about generative search in detail in our [Generative Search Guide](/content-api/generative).

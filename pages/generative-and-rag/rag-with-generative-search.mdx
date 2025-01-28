@@ -1,62 +1,62 @@
 import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
+# RAG With Generative Search
 
-# Rag With Generative Search
-Unbody gives you various ways to perform Rag - from generating insights from single documents to analyzing multiple sources at once. Let's explore from simple to advanced approaches.
+Unbody gives you various ways to perform RAG - from generating insights from single documents to analyzing multiple sources at once.
 
-## Generate from single document
-Let's say you have a PDF document and want to create a quick summary of its contents. This example shows how to generate an AI response that references any part of the document.
+## Generate from every single document
+When you need AI-generated insights from a specific document, use [`.generate.fromOne()`](/content-api/generative#from-one). For example, create quick summaries from PDF files with direct references to the content.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    }  = await unbody.get.textDocument
-          .where({ mimeType: "application/pdf" })
-          .generate
-          .fromOne("Summarize this: {text}")
-          .select("title", "originalName")
-          .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(
-          where: {
-            operator: Equal, 
-            path: "mimeType", 
-            valueText: "application/pdf"
-          }
-        ) {
-          _additional {
-            generate(
-              singleResult: {
-                prompt: "Summarize this: {text}"
-              }
-            ) {
-              error
-              singleResult
-              metadata {
-                finishReason
-                usage {
-                  inputTokens
-                  outputTokens
-                  totalTokens
-                }
-              }
-            }
-          }
-          title
-          originalName
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .where({ mimeType: "application/pdf" })
+                   .generate.fromOne("Summarize this: {text}")
+                   .select("title", "originalName")
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(
+         where: {
+           operator: Equal, 
+           path: "mimeType", 
+           valueText: "application/pdf"
+         }
+       ) {
+         _additional {
+           generate(
+             singleResult: {
+               prompt: "Summarize this: {text}"
+             }
+           ) {
+             error
+             singleResult
+             metadata {
+               finishReason
+               usage {
+                 inputTokens
+                 outputTokens
+                 totalTokens
+               }
+             }
+           }
+         }
+         title
+         originalName
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
@@ -86,73 +86,74 @@ Let's say you have a PDF document and want to create a quick summary of its cont
 </Collapse>
 
 ## Generate from every single document with options
-Need more control over how the AI processes your documents? You can fine-tune parameters like creativity level and response length to get exactly the kind of output you need.
+Fine-tune your generated content by adding parameters to `.generate.fromOne()`. Adjust creativity levels, response length, and other settings to get exactly the output you need. [Learn more about options](/content-api/generative#options).
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    }   = await unbody.get.textDocument
-            .where({ mimeType: "text/markdown" })
-            .generate.fromOne({
-                prompt: "Create a short report for these: {text}",
-                options: {
-                    model: "gpt-4",
-                    topP: 0.7,
-                    maxTokens: 1000,
-                    temperature: 0.7,
-                    presencePenalty: 0,
-                    frequencyPenalty: 0,
-                },
-            })
-            .select("originalName")
-            .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(
-          where: {
-            operator: Equal, 
-            path: "mimeType", 
-            valueText: "text/markdown"
-          }
-        ) {
-          _additional {
-            generate(
-              singleResult: {
-                prompt: "Create a short report for these: {text}", 
-                options: {
-                  model: "gpt-4", 
-                  topP: 0.7, 
-                  maxTokens: 1000, 
-                  temperature: 0.7, 
-                  presencePenalty: 0, 
-                  frequencyPenalty: 0
-                }
-              }
-            ) {
-              error
-              singleResult
-              metadata {
-                finishReason
-                usage {
-                  inputTokens
-                  outputTokens
-                  totalTokens
-                }
-              }
-            }
-          }
-          originalName
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .where({ mimeType: "text/markdown" })
+                   .generate.fromOne({
+                     prompt: "Create a short report for these: {text}",
+                     options: {
+                       model: "gpt-4",
+                       topP: 0.7,
+                       maxTokens: 1000,
+                       temperature: 0.7,
+                       presencePenalty: 0,
+                       frequencyPenalty: 0
+                     }
+                   })
+                   .select("originalName")
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(
+         where: {
+           operator: Equal, 
+           path: "mimeType", 
+           valueText: "text/markdown"
+         }
+       ) {
+         _additional {
+           generate(
+             singleResult: {
+               prompt: "Create a short report for these: {text}", 
+               options: {
+                 model: "gpt-4", 
+                 topP: 0.7, 
+                 maxTokens: 1000, 
+                 temperature: 0.7, 
+                 presencePenalty: 0, 
+                 frequencyPenalty: 0
+               }
+             }
+           ) {
+             error
+             singleResult
+             metadata {
+               finishReason
+               usage {
+                 inputTokens
+                 outputTokens
+                 totalTokens
+               }
+             }
+           }
+         }
+         originalName
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
@@ -180,53 +181,55 @@ Need more control over how the AI processes your documents? You can fine-tune pa
 ```
 </Collapse>
 
+
 ## Generate from multiple documents
-Have information spread across several documents? You can combine specific fields from multiple sources to create a unified summary or analysis.
+Have information spread across several documents? You can combine specific fields from multiple sources to create a unified summary or analysis by using [`.generate.fromMany()`](/content-api/generative#from-many).
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument
-          .generate
-          .fromMany("Create a 100 words summary:", ["text", "title"])
-          .select("title", "originalName")
-          .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument {
-          _additional {
-            generate(
-              groupedResult: {
-                task: "Create a 100 words summary:", 
-                properties: ["text", "title"]
-              }
-            ) {
-              error
-              groupedResult
-              metadata {
-                finishReason
-                usage {
-                  inputTokens
-                  outputTokens
-                  totalTokens
-                }
-              }
-            }
-          }
-          title
-          originalName
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .generate.fromMany("Create a 100 words summary:", ["text", "title"])
+                   .select("title", "originalName")
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument {
+         _additional {
+           generate(
+             groupedResult: {
+               task: "Create a 100 words summary:", 
+               properties: ["text", "title"]
+             }
+           ) {
+             error
+             groupedResult
+             metadata {
+               finishReason
+               usage {
+                 inputTokens
+                 outputTokens
+                 totalTokens
+               }
+             }
+           }
+         }
+         title
+         originalName
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
+
 
 <Collapse title="Response">
 ```typescript
@@ -255,77 +258,79 @@ Have information spread across several documents? You can combine specific field
 </Collapse>
 
 ## Generate from multiple documents with options
-Looking to process multiple documents while maintaining precise control over the output? This approach lets you combine document properties while fine-tuning the AI's response characteristics.
+When you need both multi-document analysis and precise output control, use advanced multi-document generation with [options](/content-api/generative#options). This combines document properties while letting you fine-tune the AI's response.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument
-          .where({ mimeType: "text/markdown" })
-          .generate.fromMany({
-              task: "Write a short report based on these topics:",
-              properties: ["title", "text", "tags"],
-              options: {
-                  model: "gpt-4",
-                  topP: 0.7,
-                  maxTokens: 1000,
-                  temperature: 0.7,
-                  presencePenalty: 0,
-                  frequencyPenalty: 0,
-              },
-          })
-          .select("originalName", "title")
-          .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(
-          where: {
-            operator: Equal, 
-            path: "mimeType", 
-            valueText: "text/markdown"
-          }
-        ) {
-          _additional {
-            generate(
-              groupedResult: {
-                task: "Write a short report based on these topics:", 
-                properties: ["title", "text", "tags"], 
-                options: {
-                  model: "gpt-4", 
-                  topP: 0.7, 
-                  maxTokens: 1000, 
-                  temperature: 0.7, 
-                  presencePenalty: 0, 
-                  frequencyPenalty: 0
-                }
-              }
-            ) {
-              error
-              groupedResult
-              metadata {
-                finishReason
-                usage {
-                  inputTokens
-                  outputTokens
-                  totalTokens
-                }
-              }
-            }
-          }
-          originalName
-          title
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .where({ mimeType: "text/markdown" })
+                   .generate.fromMany({
+                     task: "Write a short report based on these topics:",
+                     properties: ["title", "text", "tags"],
+                     options: {
+                       model: "gpt-4",
+                       topP: 0.7,
+                       maxTokens: 1000,
+                       temperature: 0.7,
+                       presencePenalty: 0,
+                       frequencyPenalty: 0
+                     }
+                   })
+                   .select("originalName", "title")
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(
+         where: {
+           operator: Equal, 
+           path: "mimeType", 
+           valueText: "text/markdown"
+         }
+       ) {
+         _additional {
+           generate(
+             groupedResult: {
+               task: "Write a short report based on these topics:", 
+               properties: ["title", "text", "tags"], 
+               options: {
+                 model: "gpt-4", 
+                 topP: 0.7, 
+                 maxTokens: 1000, 
+                 temperature: 0.7, 
+                 presencePenalty: 0, 
+                 frequencyPenalty: 0
+               }
+             }
+           ) {
+             error
+             groupedResult
+             metadata {
+               finishReason
+               usage {
+                 inputTokens
+                 outputTokens
+                 totalTokens
+               }
+             }
+           }
+         }
+         originalName
+         title
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
+
 
 <Collapse title="Response">
 ```typescript
@@ -353,4 +358,5 @@ Looking to process multiple documents while maintaining precise control over the
 ```
 </Collapse>
 
-Learn more about advanced generation features in our [Generative Search Guide](/content-api/generative).
+
+Learn more about generative search in detail in our [Generative Search Guide](/content-api/generative).

@@ -1,42 +1,37 @@
 import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
-
-# Multimodal Rag Using Generative API
+# Multimodal RAG Using Generative API
 
 Generate insights by analyzing text and images together. Multimodal capabilities allow combining different types of data - like diagrams with text descriptions or images with metadata - to create comprehensive understanding.
 
 ## Using Multimodal RAG to Analyze Technical Architecture Diagrams
-In this example, we combine multiple input types to analyze a system architecture diagram. The system acts as a technical expert, receiving both the image and specific instructions about what aspects to focus on. This is particularly useful for getting detailed insights about complex technical diagrams.
+When you want to analyze images using both image and text prompts and generate expert insights, use [`.generate.text()`](/generative-api/text-gen) with [Message-Based Input](/generative-api/text-gen#example-3---message-based-input). For example, you can examine technical diagrams for system architectures, data flows, and bottlenecks by combining system instructions, image input, and specific prompts.
 
 ```typescript
-    const {
-      data: { payload },
-    } = await unbody.generate
-            .text(
-                [
-                    {
-                        role: "system",
-                        content: "You are an expert at analyzing technical diagrams.",
-                    },
-                    {
-                        type: "image",
-                        content: {
-                            url: "https://www.aporia.com/wp-content/uploads/2024/02/image-4.png",
-                        },
-                    },
-                    {
-                        role: "user",
-                        content:
-                            "Analyze this LLM architecture diagram, focusing on data flow and bottlenecks.",
-                    },
-                ],
-                {
-                    model: "gpt-4-turbo",
-                    temperature: 0.7,
-                    maxTokens: 1500,
-                }
-            );
+const {
+  data: { payload }
+} = await unbody.generate
+                .text([
+                  {
+                    role: "system",
+                    content: "You are an expert at analyzing technical diagrams."
+                  },
+                  {
+                    type: "image",
+                    content: {
+                      url: "https://www.aporia.com/wp-content/uploads/2024/02/image-4.png"
+                    }
+                  },
+                  {
+                    role: "user",
+                    content: "Analyze this LLM architecture diagram, focusing on data flow and bottlenecks."
+                  }
+                ], {
+                  model: "gpt-4-turbo",
+                  temperature: 0.7,
+                  maxTokens: 1500
+                });
 ```
 
 <Collapse title="Response">
@@ -57,30 +52,29 @@ In this example, we combine multiple input types to analyze a system architectur
 </Collapse>
 
 ## Using Multimodal RAG to Generate Tarantino-Style Dialogue
-//TODO: add explanation text
+Want to create content that draws from multiple types of reference material? Use a combination of search queries and [`.generate.text()`](/generative-api/text-gen) to collect and analyze diverse data sources like scripts, videos, subtitles, and images. Perfect for creative writing that requires deep understanding of specific styles or themes.
 
 ```typescript
-
 const queries = [
   unbody.get.textDocument.search
-    .find("Quentin Tarantino")
-    .select("title", "text", "autoSummary"),
+                         .find("Quentin Tarantino")
+                         .select("title", "text", "autoSummary"),
 
   unbody.get.videoFile.search
-    .find("Quentin Tarantino")
-    .select("originalName", "autoSummary"),
+                      .find("Quentin Tarantino")
+                      .select("originalName", "autoSummary"),
 
   unbody.get.subtitleFile.search
-    .find("Quentin Tarantino")
-    .select(
-      "entries.SubtitleEntry.start",
-      "entries.SubtitleEntry.end",
-      "entries.SubtitleEntry.text"
-    ),
+                        .find("Quentin Tarantino")
+                        .select(
+                          "entries.SubtitleEntry.start",
+                          "entries.SubtitleEntry.end",
+                          "entries.SubtitleEntry.text"
+                        ),
 
   unbody.get.imageBlock.search
-    .find("Quentin Tarantino")
-    .select("url", "autoCaption"),
+                       .find("Quentin Tarantino")
+                       .select("url", "autoCaption")
 ];
 
 // Execute all queries in parallel
@@ -90,34 +84,35 @@ const [textDocs, videos, subtitles, images] = data;
 
 // Generate a Tarantino-style script using all the reference material
 const {
-  data: { payload: scriptGeneration },
-} = await unbody.generate.text(
-            `Study these examples from Tarantino's films and create a new scene in his style:
+  data: { payload: scriptGeneration }
+} = await unbody.generate
+                .text(
+                  `Study these examples from Tarantino's films and create a new scene in his style:
 
-            From the scripts and articles:
-            ${JSON.stringify(textDocs)}
+                  From the scripts and articles:
+                  ${JSON.stringify(textDocs)}
 
-            From his movies:
-            ${JSON.stringify(videos)}
+                  From his movies:
+                  ${JSON.stringify(videos)}
 
-            Character dialogues:
-            ${JSON.stringify(subtitles)}
+                  Character dialogues:
+                  ${JSON.stringify(subtitles)}
 
-            Images from his films:
-            ${JSON.stringify(images)}
+                  Images from his films:
+                  ${JSON.stringify(images)}
 
-            Using these references, write a short 2-character scene (2-3 pages) that captures Tarantino's signature elements:
-            1. A seemingly mundane conversation that builds tension
-            2. Pop culture references
-            3. Sharp dialogue switches between casual and intense
-            4. Detailed scene description in his style
-            5. A surprise twist ending`,
-            {
-                model: "gpt-4-turbo",
-                temperature: 0.8,
-                maxTokens: 1000,
-            }
-        );
+                  Using these references, write a short 2-character scene (2-3 pages) that captures Tarantino's signature elements:
+                  1. A seemingly mundane conversation that builds tension
+                  2. Pop culture references
+                  3. Sharp dialogue switches between casual and intense
+                  4. Detailed scene description in his style
+                  5. A surprise twist ending`,
+                  {
+                    model: "gpt-4-turbo",
+                    temperature: 0.8,
+                    maxTokens: 1000
+                  }
+                );
 ```
 
 <Collapse title="Response">
@@ -138,8 +133,4 @@ const {
 </Collapse>
 
 
-
 Learn more in our [Generative API Guide](/generative-api/overview).
-
-
-
