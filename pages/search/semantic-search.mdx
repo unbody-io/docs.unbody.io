@@ -3,21 +3,21 @@ import { Tabs } from "nextra/components"
 
 # Semantic Search
 
-Search based on meaning rather than exact keyword matches, allowing users to find relevant content even when exact terms don't match.
+Search based on meaning rather than exact keyword matches, allowing users to find relevant content even when exact terms don't match. [Learn more about Semantic Search](/content-api/search/semantic-search.mdx).
 
 ## Basic Search
-Let's say you want to find documents discussing "AI applications" - but the relevant content might use terms like "machine learning systems" or "neural networks" instead. Semantic search []() understands these conceptual relationships and returns relevant results regardless of exact term matches.
+Sometimes you need to find documents about a topic, but they might use different terminology. For example, using `search.about()`, when searching for "AI applications", you'll find relevant documents even if they use terms like "machine learning systems" instead.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
     const {
-      data: { payload },
-    }  = await unbody.get.textDocument
-        .search
-        .about("AI applications")
-        .select("title", "autoSummary", "text")
-        .exec();
+      data: { payload }
+    } = await unbody.get
+                    .textDocument
+                    .search.about("AI applications")
+                    .select("title", "autoSummary", "text")
+                    .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -56,23 +56,24 @@ const response = {
 
 
 ## Search with Concept Boost
-Let's say you need to perform a semantic search for "AI applications" but want to prioritize results that are more closely related to specific concepts like "Deep Learning," "LLM," and "chatbot." To achieve this, we can use concept boosting, which adjusts the search results to align more strongly with these concepts by applying a weighted influence (force factor). This ensures that the most relevant results, based on the given priorities, are returned.
+When your search needs to prioritize specific aspects, you can boost certain concepts. For instance, if you're looking for AI applications but want results focused on "Deep Learning", "LLM", and "chatbot", use concept boosting to get more relevant results.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-      const {
-         data: { payload },
-      } = await unbody.get.textBlock.search
-              .about("AI applications", {
-                moveTo: {
-                  concepts: ["Deep Learning", "LLM", "chatbot"],
-                  force: 0.5,
-                },
-              })
-              .select("text")
-              .limit(5)
-              .exec();
+    const {
+      data: { payload }
+    } = await unbody.get
+                    .textBlock
+                    .search.about("AI applications", {
+                      moveTo: {
+                        concepts: ["Deep Learning", "LLM", "chatbot"],
+                        force: 0.5
+                      }
+                    })
+                    .select("text")
+                    .limit(5)
+                    .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -80,7 +81,13 @@ Let's say you need to perform a semantic search for "AI applications" but want t
     {
       Get {
         TextBlock(
-          nearText: {concepts: ["AI applications"], moveTo: {concepts: ["Deep Learning", "LLM", "chatbot"], force: 0.5}}
+          nearText: {
+            concepts: ["AI applications"], 
+            moveTo: {
+              concepts: ["Deep Learning", "LLM", "chatbot"], 
+              force: 0.5
+            }
+          }
           limit: 5
         ) {
           _additional {
@@ -140,42 +147,40 @@ Let's say you need to perform a semantic search for "AI applications" but want t
 </Collapse>
 
 ## Advanced Search with Concept Steering
-When building an AI knowledge base, you might want to find modern AI-related content while specifically excluding outdated approaches. For example, when searching for chatbot documentation, you want to focus on modern NLP and Large Language Models while avoiding legacy rule-based systems. Concept steering lets you push the search toward desired concepts and away from unwanted ones simultaneously.
+When you need to focus on specific concepts while avoiding others, concept steering is the answer. For example, to find modern chatbot documentation while excluding legacy approaches, you can steer the search toward NLP and LLMs while steering away from rule-based systems.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-       const {
-      data: { payload },
-    } = await unbody.get.textDocument.search
-      .about(
-        ["Modern AI Chatbots", "Large Language Models", "Conversational AI"],
-        {
-          moveTo: {
-            concepts: [
-              "Natural Language Processing",
-              "ChatGPT",
-              "Machine Learning",
-              "Customer Service Automation",
-            ],
-            force: 0.7,
-          },
-          moveAwayFrom: {
-            concepts: [
-              "Rule-based Chatbots",
-              "Legacy Systems",
-              "Basic FAQ Bots",
-              "Traditional IVR",
-            ],
-            force: 0.8,
-          },
-          certainty: 0.6,
-        }
-      )
-      .select("title", "autoSummary", "tags", "createdAt")
-      .sort("createdAt", "desc")
-      .limit(5)
-      .exec();
+    const {
+      data: { payload }
+    } = await unbody.get
+                    .textDocument
+                    .search.about(["Modern AI Chatbots", "Large Language Models", "Conversational AI"], {
+                      moveTo: {
+                        concepts: [
+                          "Natural Language Processing",
+                          "ChatGPT",
+                          "Machine Learning",
+                          "Customer Service Automation"
+                        ],
+                        force: 0.7
+                      },
+                      moveAwayFrom: {
+                        concepts: [
+                          "Rule-based Chatbots",
+                          "Legacy Systems",
+                          "Basic FAQ Bots",
+                          "Traditional IVR"
+                        ],
+                        force: 0.8
+                      },
+                      certainty: 0.6
+                    })
+                    .select("title", "autoSummary", "tags", "createdAt")
+                    .sort("createdAt", "desc")
+                    .limit(5)
+                    .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -183,7 +188,18 @@ When building an AI knowledge base, you might want to find modern AI-related con
     {
       Get {
         TextDocument(
-          nearText: {concepts: ["Modern AI Chatbots", "Large Language Models", "Conversational AI"], moveTo: {concepts: ["Natural Language Processing", "ChatGPT", "Machine Learning", "Customer Service Automation"], force: 0.7}, moveAwayFrom: {concepts: ["Rule-based Chatbots", "Legacy Systems", "Basic FAQ Bots", "Traditional IVR"], force: 0.8}, certainty: 0.6}
+          nearText: {
+            concepts: ["Modern AI Chatbots", "Large Language Models", "Conversational AI"],
+            moveTo: {
+              concepts: ["Natural Language Processing", "ChatGPT", "Machine Learning", "Customer Service Automation"],
+              force: 0.7
+            },
+            moveAwayFrom: {
+              concepts: ["Rule-based Chatbots", "Legacy Systems", "Basic FAQ Bots", "Traditional IVR"],
+              force: 0.8
+            },
+            certainty: 0.6
+          }
           sort: {order: desc, path: "createdAt"}
           limit: 5
         ) {

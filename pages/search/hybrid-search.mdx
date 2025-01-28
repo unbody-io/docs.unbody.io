@@ -6,41 +6,41 @@ import { Tabs } from "nextra/components"
 Combines both semantic and keyword search capabilities to provide comprehensive results that match both meaning and specific terms.
 
 ## Basic Search
-Let's say you have a large collection of documents and need to find content that is both conceptually relevant and contains specific key terms. Hybrid search combines semantic understanding with keyword matching to deliver more comprehensive results than either method alone.
+When you need results that match both concepts and exact terms, [Hybrid Search](/content-api/search/hybrid-search) is your solution. For example, searching for "AI in healthcare" will find documents that are conceptually about healthcare AI and contain those specific keywords. 
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument
-        .search
-        .hybrid("AI in healthcare", {
-            properties: ["text", "title"]
-        })
-        .select("title", "text", "autoSummary")
-        .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(hybrid: {
-          query: "AI in healthcare",
-          properties: ["text", "title"]
-        }) {
-          _additional {
-            score
-          }
-          title
-          text
-          autoSummary
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .search.hybrid("AI in healthcare", {
+                     properties: ["text", "title"]
+                   })
+                   .select("title", "text", "autoSummary")
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(hybrid: {
+         query: "AI in healthcare",
+         properties: ["text", "title"]
+       }) {
+         _additional {
+           score
+         }
+         title
+         text
+         autoSummary
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
@@ -67,47 +67,47 @@ Let's say you have a large collection of documents and need to find content that
 </Collapse>
 
 ## Advanced Search
-Sometimes you need more precise control over search results, especially when dealing with technical or specialized content. For instance, when searching for "Generative AI" documents, you might want to prioritize results that match specific semantic vectors (representing particular concepts or themes) while also ensuring they contain relevant keywords in their titles and tags. This approach is particularly useful for creating targeted content recommendations or building specialized knowledge bases.
+Sometimes you need to fine-tune your search results by combining semantic vectors with specific keyword matching. Using [Advanced Hybrid Search](/content-api/search/hybrid-search#advanced-usage), you can prioritize certain fields like titles and tags while maintaining semantic relevance. 
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.googleDoc
-        .search
-        .hybrid("Generative AI", {
-            alpha: 0.7,
-            vector: [0.0055148206, 0.013368472, 0.035909854],
-            fusionType: "relativeScoreFusion",
-            properties: ["title", "tags"]
-        })
-        .exec()
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(
-          hybrid: {
-            query: "Generative AI",
-            alpha: 0.7,
-            vector: [0.0055148206, 0.013368472, 0.035909854],
-            fusionType: relativeScoreFusion,
-            properties: ["title", "tags"]
-          }
-        ) {
-          _additional {
-            score
-          }
-          title
-          autoSummary
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .googleDoc
+                   .search.hybrid("Generative AI", {
+                     alpha: 0.7,
+                     vector: [0.0055148206, 0.013368472, 0.035909854],
+                     fusionType: "relativeScoreFusion",
+                     properties: ["title", "tags"]
+                   })
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(
+         hybrid: {
+           query: "Generative AI",
+           alpha: 0.7,
+           vector: [0.0055148206, 0.013368472, 0.035909854],
+           fusionType: relativeScoreFusion,
+           properties: ["title", "tags"]
+         }
+       ) {
+         _additional {
+           score
+         }
+         title
+         autoSummary
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">

@@ -1,61 +1,62 @@
 import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
-
 # Similarity Search
 
 Find similar content across text, images, and records based on their characteristics and patterns.
 
 ## Text Similarity
-Let's say you have several documents about AI technology and want to find related content discussing machine learning advancements. This example shows how to search across your documents to find conceptually related content.
+When you want to find related documents based on their concepts, use text similarity search. For example, if you have a document about AI technology, use `similar.text()` to find other documents discussing related concepts like machine learning.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const data = await unbody.get.textBlock
-        .similar
-        .text("artificial intelligence", {
-            certainty: 0.8
-        })
-        .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(
-          nearText: {
-            concepts: ["resume"],
-            certainty: 0.8
-          }
-        ) {
-          _additional {
-            certainty
-            distance
-          }
-          createdAt
-          html
-          mimeType
-          modifiedAt
-          originalName
-          path
-          pathString
-          remoteId
-          sourceId
-          subtitle
-          description
-          tags
-          text
-          title
-          properties
-          toc
-          authors
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textBlock
+                   .similar.text("artificial intelligence", {
+                     certainty: 0.8
+                   })
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(
+         nearText: {
+           concepts: ["resume"],
+           certainty: 0.8
+         }
+       ) {
+         _additional {
+           certainty
+           distance
+         }
+         createdAt
+         html
+         mimeType
+         modifiedAt
+         originalName
+         path
+         pathString
+         remoteId
+         sourceId
+         subtitle
+         description
+         tags
+         text
+         title
+         properties
+         toc
+         authors
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
@@ -81,48 +82,56 @@ Let's say you have several documents about AI technology and want to find relate
 </Collapse>
 
 ## Advanced Text Similarity
-Need to discover content that aligns with specific concepts while maintaining high relevance? Advanced text similarity lets you steer your search toward particular themes or topics while filtering out unrelated results.
+Sometimes you need to steer your search results toward specific themes while maintaining similarity. Use advanced text similarity with concept steering to fine-tune your results based on particular topics.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument.similar
-      .text(["AI", "machine learning"], {
-        certainty: 0.65,
-        moveTo: {
-          concepts: ["future"],
-          force: 0.5,
-        },
-      })
-      .select("title", "text", "autoSummary", "authors", "createdAt")
-      .limit(2)
-      .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(
-          nearText: {concepts: ["AI", "machine learning"], certainty: 0.65, moveTo: {concepts: ["future"], force: 0.5}}
-          limit: 2
-        ) {
-          _additional {
-            certainty
-            distance
-          }
-          title
-          text
-          autoSummary
-          authors
-          createdAt
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .similar.text(["AI", "machine learning"], {
+                     certainty: 0.65,
+                     moveTo: {
+                       concepts: ["future"],
+                       force: 0.5
+                     }
+                   })
+                   .select("title", "text", "autoSummary", "authors", "createdAt")
+                   .limit(2)
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(
+         nearText: {
+           concepts: ["AI", "machine learning"], 
+           certainty: 0.65, 
+           moveTo: {
+             concepts: ["future"], 
+             force: 0.5
+           }
+         }
+         limit: 2
+       ) {
+         _additional {
+           certainty
+           distance
+         }
+         title
+         text
+         autoSummary
+         authors
+         createdAt
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
@@ -162,48 +171,45 @@ Need to discover content that aligns with specific concepts while maintaining hi
 </Collapse>
 
 ## Image Similarity
-Looking for images that share visual characteristics like colors, objects, or composition? Image similarity search helps you find visually related content regardless of filenames or metadata.
+When you need to find visually similar images regardless of their metadata, use `similar.image()` method. This helps you discover images with matching colors, objects, or compositions. [Learn more about Visual Similarity](/content-api/search/visual-similarity).
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.imageBlock.similar
-      .image(
-        "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg",
-        {
-          certainty: 0.65,
-        }
-      )
-      .select("originalName", "url")
-      .limit(5)
-      .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-     query {
-        Get {
-          ImageBlock(
-            nearImage: {
-              image: "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg"
-              certainty: 0.65
-            }
-            limit: 5
-          ) {
-            _additional {
-              certainty
-              distance
-            }
-            originalName
-            url
-          }
-        }
-      }
-
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .imageBlock
+                   .similar.image("https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg", {
+                     certainty: 0.65
+                   })
+                   .select("originalName", "url")
+                   .limit(5)
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   query {
+     Get {
+       ImageBlock(
+         nearImage: {
+           image: "https://www.treadfirst.co.uk/wp-content/uploads/2023/05/riseBlog.jpg"
+           certainty: 0.65
+         }
+         limit: 5
+       ) {
+         _additional {
+           certainty
+           distance
+         }
+         originalName
+         url
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
@@ -255,92 +261,46 @@ Looking for images that share visual characteristics like colors, objects, or co
 </Collapse>
 
 ## Record Similarity
-Found a valuable document and want to discover similar content? Record similarity uses an existing document as a reference point to uncover related records that might be missed through traditional search methods.
+When you have a document you like and want to find similar ones, use `.similar.record()` method. [Learn more about Record Similarity](/content-api/search/record-similarity).
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument.similar
-      .record("201704f2-1aee-53bc-b6d2-463baf3f160f", {
-        certainty: 0.75,
-      })
-      .select("title", "originalName", "autoSummary", "authors")
-      .limit(5)
-      .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    query {
-        Get {
-          TextDocument(
-            nearObject: {
-              id: "201704f2-1aee-53bc-b6d2-463baf3f160f"
-              certainty: 0.75
-            }
-            limit: 5
-          ) {
-            _additional {
-              certainty
-              distance
-            }
-            title
-            originalName
-            autoSummary
-            authors
-          }
-        }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .similar.record("201704f2-1aee-53bc-b6d2-463baf3f160f", {
+                     certainty: 0.75
+                   })
+                   .select("title", "originalName", "autoSummary", "authors")
+                   .limit(5)
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   query {
+     Get {
+       TextDocument(
+         nearObject: {
+           id: "201704f2-1aee-53bc-b6d2-463baf3f160f"
+           certainty: 0.75
+         }
+         limit: 5
+       ) {
+         _additional {
+           certainty
+           distance
+         }
+         title
+         originalName
+         autoSummary
+         authors
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
-<Collapse title="Response">
-```typescript
-
-[
-    {
-        "_additional": {
-            "certainty": 0.9999997019767761,
-            "distance": 5.9604645e-7
-        },
-        "authors": "",
-        "autoSummary": null,
-        "originalName": "Quentin Tarantino_ Master of Cinematic Artistry.docx",
-        "title": ""
-    },
-    {
-        "_additional": {
-            "certainty": 0.9096074402332306,
-            "distance": 0.18078512
-        },
-        "authors": "",
-        "autoSummary": null,
-        "originalName": "Quentin Tarantino and Diego Maradona_ A Tale of Two Mavericks.docx",
-        "title": "Quentin Tarantino and Diego Maradona: A Tale of Two Mavericks"
-    },
-    {
-        "_additional": {
-            "certainty": 0.8034366071224213,
-            "distance": 0.3931268
-        },
-        "authors": "",
-        "autoSummary": null,
-        "originalName": "The Rise of Electric Vehicles in Urban Environments.docx",
-        "title": "The Rise of Electric Vehicles in Urban Environments"
-    },
-    {
-        "_additional": {
-            "certainty": 0.7638762593269348,
-            "distance": 0.47224748
-        },
-        "authors": "",
-        "autoSummary": null,
-        "originalName": "Overcoming Challenges in the Adoption of Electric Vehicles_ A Roadmap for Urban Transformation.docx",
-        "title": "Overcoming Challenges in the Adoption of Electric Vehicles: A Roadmap for Urban Transformation"
-    }
-]
-```
-</Collapse>

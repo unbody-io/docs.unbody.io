@@ -4,41 +4,41 @@ import { Tabs } from "nextra/components"
 
 # Keyword Search
 
-Search based on exact keyword matches within your data, ideal for precise matching when users know specific terms they're looking for.
+Search based on exact keyword matches within your data, ideal for precise matching when users know specific terms they're looking for. [Learn more about Keyword Search](/content-api/search/keyword-search).
 
 ## Basic Search
-When you need to find documents containing specific terms exactly as written, keyword search is your best option. For instance, searching for "machine learning" will return only documents that contain that exact phrase.
+When you need to find documents containing specific terms exactly as written, [Keyword Search](/content-api/search/keyword-search) is your best option. For instance, searching for "machine learning" will return only documents that contain that exact phrase.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument
-        .search
-        .find("machine learning")
-        .select("originalName", "text", "autoSummary")
-        .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(bm25: {
-          query: "machine learning"
-        }) {
-          _additional {
-            score
-          }
-          originalName
-          text
-          autoSummary
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .search.find("machine learning")
+                   .select("originalName", "text", "autoSummary")
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(bm25: {
+         query: "machine learning"
+       }) {
+         _additional {
+           score
+         }
+         originalName
+         text
+         autoSummary
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
@@ -68,38 +68,38 @@ When you need to find documents containing specific terms exactly as written, ke
 Sometimes you want to search for keywords only in certain parts of your documents - like titles or summaries - while ignoring the main content.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument
-        .search
-        .find("neural networks", ["title", "autoSummary"])
-        .select("originalName", "properties", "autoSummary")
-        .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(
-          bm25: {
-            query: "neural networks",
-            properties: ["title", "autoSummary"]
-          }
-        ) {
-          _additional {
-            score
-          }
-          originalName
-          properties
-          autoSummary
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .search.find("neural networks", ["title", "autoSummary"])
+                   .select("originalName", "properties", "autoSummary")
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(
+         bm25: {
+           query: "neural networks",
+           properties: ["title", "autoSummary"]
+         }
+       ) {
+         _additional {
+           score
+         }
+         originalName
+         properties
+         autoSummary
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
