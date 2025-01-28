@@ -1,44 +1,41 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
-# Multimodal Rag Using Generative API
+# Multimodal RAG Using Generative API
 
 Generate insights by analyzing text and images together. Multimodal capabilities allow combining different types of data - like diagrams with text descriptions or images with metadata - to create comprehensive understanding.
 
-## Technical Diagram Analysis
-In this example, we combine multiple input types to analyze a system architecture diagram. The system acts as a technical expert, receiving both the image and specific instructions about what aspects to focus on. This is particularly useful for getting detailed insights about complex technical diagrams.
+## Using Multimodal RAG to Analyze Technical Architecture Diagrams
+When you want to analyze images using both image and text prompts and generate expert insights, use [`.generate.text()`](/generative-api/text-gen) with [Message-Based Input](/generative-api/text-gen#example-3---message-based-input). For example, you can examine technical diagrams for system architectures, data flows, and bottlenecks by combining system instructions, image input, and specific prompts.
 
 ```typescript
-    const {
-      data: { payload },
-    } = await unbody.generate
-            .text(
-                [
-                    {
-                        role: "system",
-                        content: "You are an expert at analyzing technical diagrams.",
-                    },
-                    {
-                        type: "image",
-                        content: {
-                            url: "https://www.aporia.com/wp-content/uploads/2024/02/image-4.png",
-                        },
-                    },
-                    {
-                        role: "user",
-                        content:
-                            "Analyze this LLM architecture diagram, focusing on data flow and bottlenecks.",
-                    },
-                ],
-                {
-                    model: "gpt-4-turbo",
-                    temperature: 0.7,
-                    maxTokens: 1500,
-                }
-            );
+const {
+  data: { payload }
+} = await unbody.generate
+                .text([
+                  {
+                    role: "system",
+                    content: "You are an expert at analyzing technical diagrams."
+                  },
+                  {
+                    type: "image",
+                    content: {
+                      url: "https://www.aporia.com/wp-content/uploads/2024/02/image-4.png"
+                    }
+                  },
+                  {
+                    role: "user",
+                    content: "Analyze this LLM architecture diagram, focusing on data flow and bottlenecks."
+                  }
+                ], {
+                  model: "gpt-4-turbo",
+                  temperature: 0.7,
+                  maxTokens: 1500
+                });
 ```
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 {
     "content": "This diagram outlines the architecture and data flow for a language model (LLM) system. It includes several components that manage the flow of data, optimize queries, and ensure output quality. I'll break down the data flow process and point out potential bottlenecks:\n\n### Data Flow Analysis\n1. **End User Interaction**:\n   - The process starts with the end user sending a query through a user interface (UI). This is part of the telemetry service which likely also tracks user interaction data for analytics and system improvement.\n\n2. **Query Processing**:\n   - The query is then sent to the embedding model where a copy of the query is embedded into a vector format. This embedding model is critical as it transforms the query into a format that can be understood and processed by the vector database.\n\n3. **Vector Database**:\n   - The embedded query is used to retrieve similar findings from a vector database based on contextual relevance. This database must be highly optimized for fast retrieval to avoid delays in response time.\n\n4. **Initial Prompt Formation**:\n   - Filtered context snippets from the vector database are injected into an initial prompt setup. This step involves combining the user's query with relevant data fetched from the database.\n\n5. **Prompt Optimization**:\n   - The initial prompt is then optimized using a prompt optimization tool. This tool refines the prompt to improve the interaction with the LLM.\n\n6. **LLM Processing**:\n   - The optimized prompt is sent to the LLM through an API hosted on an LLM host. The LLM processes the prompt and produces an output.\n\n7. **Content Filtering**:\n   - Before the output is sent to the user, it passes through a content classifier or filter that scans for harmful or offensive content, ensuring the output is appropriate.\n\n8. **Output Delivery**:\n   - The final, filtered output is then sent back to the user via the UI.\n\n### Potential Bottlenecks\n1. **Embedding Model**:\n   - The embedding model must process the query into vectors efficiently. If the model is slow or the embedding process is complex, it could delay the entire query processing cycle.\n\n2. **Vector Database Retrieval**:\n   - The speed at which the vector database retrieves contextually relevant data is crucial. If the database is large or not well-indexed, it could slow down the retrieval process, creating a bottleneck.\n\n3. **Prompt Optimization Tool**:\n   - The efficiency of the prompt optimization tool is vital. If the optimization process is computationally intensive, it might delay the delivery of the prompt to the LLM, affecting overall response time.\n\n4. **Content Classifier**:\n   - The content classifier must quickly scan and filter the output without significantly delaying the delivery to the user. If the classifier is not well-tuned or if it requires heavy computational resources, it can become a bottleneck.\n\n5. **LLM Cache**:\n   - The diagram shows that outputs might be stored or retrieved from an LLM cache. The effectiveness and speed of this cache are crucial, especially for repeated queries or similar prompt scenarios. A slow or inefficient cache system could hinder performance.\n\n### Conclusion\nOverall, the architecture is designed to optimize the query processing and ensure quality outputs in an LLM system. However, attention must be paid to potential bottlenecks, especially in embedding, data retrieval, prompt optimization, and content filtering to maintain a smooth and efficient user experience.",
@@ -52,5 +49,88 @@ In this example, we combine multiple input types to analyze a system architectur
     }
 }
 ```
+</Collapse>
+
+## Using Multimodal RAG to Generate Tarantino-Style Dialogue
+Want to create content that draws from multiple types of reference material? Use a combination of search queries and [`.generate.text()`](/generative-api/text-gen) to collect and analyze diverse data sources like scripts, videos, subtitles, and images. Perfect for creative writing that requires deep understanding of specific styles or themes.
+
+```typescript
+const queries = [
+  unbody.get.textDocument.search
+                         .find("Quentin Tarantino")
+                         .select("title", "text", "autoSummary"),
+
+  unbody.get.videoFile.search
+                      .find("Quentin Tarantino")
+                      .select("originalName", "autoSummary"),
+
+  unbody.get.subtitleFile.search
+                        .find("Quentin Tarantino")
+                        .select(
+                          "entries.SubtitleEntry.start",
+                          "entries.SubtitleEntry.end",
+                          "entries.SubtitleEntry.text"
+                        ),
+
+  unbody.get.imageBlock.search
+                       .find("Quentin Tarantino")
+                       .select("url", "autoCaption")
+];
+
+// Execute all queries in parallel
+const { data } = await unbody.exec(...queries);
+
+const [textDocs, videos, subtitles, images] = data;
+
+// Generate a Tarantino-style script using all the reference material
+const {
+  data: { payload: scriptGeneration }
+} = await unbody.generate
+                .text(
+                  `Study these examples from Tarantino's films and create a new scene in his style:
+
+                  From the scripts and articles:
+                  ${JSON.stringify(textDocs)}
+
+                  From his movies:
+                  ${JSON.stringify(videos)}
+
+                  Character dialogues:
+                  ${JSON.stringify(subtitles)}
+
+                  Images from his films:
+                  ${JSON.stringify(images)}
+
+                  Using these references, write a short 2-character scene (2-3 pages) that captures Tarantino's signature elements:
+                  1. A seemingly mundane conversation that builds tension
+                  2. Pop culture references
+                  3. Sharp dialogue switches between casual and intense
+                  4. Detailed scene description in his style
+                  5. A surprise twist ending`,
+                  {
+                    model: "gpt-4-turbo",
+                    temperature: 0.8,
+                    maxTokens: 1000
+                  }
+                );
+```
+
+<Collapse title="Response">
+```typescript
+
+{
+    "content": "**INT. DUSKY, LOW-LIT DINER - NIGHT**\n\nThe camera pans across a diner filled with the aroma of coffee and the low murmur of a late-night crowd. A jukebox in the corner belts out a classic 70s rock tune.\n\nAt a booth, VINCE, a rugged, sharp-dressed man in his 40s, sits across from ELLA, a seemingly innocent-looking woman with a retro style, her eyes hiding more than they reveal. They both sip coffee, a chess board between them.\n\n**VINCE**  \n(*chuckling*)  \nYou really think Zeppelin’s \"Kashmir\" beats Floyd’s \"Echoes\"? C’mon, Ella, it’s like comparing a fine scotch to a damn good bourbon.\n\n**ELLA**  \n(*smirking, moving her bishop*)  \nIt’s all about the journey, Vince. Page and Plant take you on an expedition. “Echoes” just... floats you in space.\n\nVince reaches over, moving his knight. The clink of the chess pieces punctuates their words.\n\n**VINCE**  \nSpace? That’s exactly it. It's ethereal. You need to elevate your taste.\n\nElla gives a small, mysterious smile and pushes her pawn forward.\n\n**ELLA**  \nSpeaking of tastes, how'd you find yourself in this mess? We’re not exactly playing chess for fun, are we, Vince?\n\nThe clink grows sharper, the tension subtly building.\n\n**VINCE**  \n(*leaning in*)  \nWe all got debts, darling. You, out of all people, should know. Heard you’ve been running with the Valentino crew since Joey took a dive.\n\n**ELLA**  \n(*leaning back, unfazed*)  \nJoey had a loose tongue. And running’s a stretch. I prefer... gliding through the chaos.\n\nShe captures Vince’s knight, her fingers delicately precise. Vince's eyes narrow slightly, but he chuckles.\n\n**VINCE**  \nGlide, run, or dance, we all end up in the same hole, Ella. What’s your end game here?\n\n**ELLA**  \nTo not end up like Joey.\n\nThere’s a beat of silence as they both take a sip of coffee, the music from the jukebox switching to something moodier.\n\n**VINCE**  \nYou ever think about that last scene in *Thelma & Louise*? Sometimes going off the cliff is the only way to keep flying.\n\n**ELLA**  \n(*softly*)  \nOr you ensure you’re not the one driving.\n\nAbruptly, Ella stands, her movement fluid. Vince watches, puzzled. She slides out a small envelope and tosses it on the table.\n\n**ELLA**  \nCheckmate.\n\nVince opens the envelope, finding a lone chess piece — a queen.\n\n**VINCE**  \nWhat’s this?\n\n**ELLA**  \nYour ticket out—or your plunge off the cliff. You disappear tonight. New identity, new life.\n\nVince looks up, but Ella is already heading towards the door, her figure a shadow against the diner’s retro lights.\n\n**VINCE**  \nAnd what about you, Ella?\n\nShe stops at the door, half-turning, a cryptic smile playing on her lips.\n\n**ELLA**  \nI’m not the one driving, remember?\n\nShe exits. Vince sits there, the queen piece in hand, a mix of confusion and realization dawning on him as the screen fades to black.\n\n**CUT TO BLACK.**",
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 5001,
+            "outputTokens": 727,
+            "totalTokens": 5728
+        }
+    }
+}
+```
+</Collapse>
+
 
 Learn more in our [Generative API Guide](/generative-api/overview).

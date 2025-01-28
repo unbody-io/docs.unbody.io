@@ -1,3 +1,5 @@
+import Collapse from '@/components/Collapse'
+
 # Building Advanced Schema: Extending ImageBlock with Custom Fields for Product Catalog
 Create a product catalog system with enhanced schema capabilities, including image handling and custom fields. This example demonstrates cross-collection relationships and complex field definitions.
 
@@ -112,6 +114,25 @@ const {
   )
   .exec();
 ```
+
+<Collapse title="Response">
+```typescript
+
+[
+    {
+        "originalName": "blob",
+        "url": "https://cdn.unbody.io/febde0d7-b89e-48b2-9aef-c134bdf97d6b/misc/67391560-a490-5897-ac27-d6d94856a77b",
+        "xCategory": "Apparel",
+        "xDescription": "Premium cotton t-shirt",
+        "xInStock": true,
+        "xPrice": 29.99,
+        "xProductName": "Classic T-Shirt",
+        "xStockQuantity": 100
+    }
+]
+
+```
+</Collapse>
 
 ## Learn More
 - [Custom Schema Documentation](/project-configurations/custom-schemas)

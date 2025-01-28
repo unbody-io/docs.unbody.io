@@ -1,3 +1,4 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
 # Use vars inside a prompt
@@ -107,8 +108,9 @@ The processed data is then injected into a message prompt using `context` syntax
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
+
 [
     {
         "_additional": {
@@ -137,4 +139,5 @@ The processed data is then injected into a message prompt using `context` syntax
     }
 ]
 ```
+</Collapse>
 

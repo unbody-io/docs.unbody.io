@@ -1,3 +1,4 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
 # Hybrid Search
@@ -5,45 +6,45 @@ import { Tabs } from "nextra/components"
 Combines both semantic and keyword search capabilities to provide comprehensive results that match both meaning and specific terms.
 
 ## Basic Search
-In this example, we demonstrate a hybrid search combining semantic and keyword matching. The code uses the `.search.hybrid()` method on the `textDocument` collection to search for "AI in healthcare" within `text` and `title` fields.
+When you need results that match both concepts and exact terms, [Hybrid Search](/content-api/search/hybrid-search) is your solution. For example, searching for "AI in healthcare" will find documents that are conceptually about healthcare AI and contain those specific keywords. 
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.textDocument
-        .search
-        .hybrid("AI in healthcare", {
-            properties: ["text", "title"]
-        })
-        .select("title", "text", "autoSummary")
-        .exec();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(hybrid: {
-          query: "AI in healthcare",
-          properties: ["text", "title"]
-        }) {
-          _additional {
-            score
-          }
-          title
-          text
-          autoSummary
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .textDocument
+                   .search.hybrid("AI in healthcare", {
+                     properties: ["text", "title"]
+                   })
+                   .select("title", "text", "autoSummary")
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(hybrid: {
+         query: "AI in healthcare",
+         properties: ["text", "title"]
+       }) {
+         _additional {
+           score
+         }
+         title
+         text
+         autoSummary
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
 [
     {
         "_additional": {
@@ -63,53 +64,54 @@ In this example, we demonstrate a hybrid search combining semantic and keyword m
     }
 ]
 ```
+</Collapse>
 
 ## Advanced Search
-In this example, we demonstrate an advanced hybrid search with custom parameters. The code uses the `.search.hybrid()` method on the `googleDoc` collection, specifying fusion settings, vector values, and search properties for more precise results.
+Sometimes you need to fine-tune your search results by combining semantic vectors with specific keyword matching. Using [Advanced Hybrid Search](/content-api/search/hybrid-search#advanced-usage), you can prioritize certain fields like titles and tags while maintaining semantic relevance. 
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
-  <Tabs.Tab>
-    ```typescript
-    const {
-      data: { payload },
-    } = await unbody.get.googleDoc
-        .search
-        .hybrid("Generative Ai", {
-            alpha: 0.7,
-            vector: [0.0055148206, 0.013368472, 0.035909854],
-            fusionType: "relativeScoreFusion",
-            properties: ["title", "tags"]
-        })
-        .exec()
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```graphql
-    {
-      Get {
-        TextDocument(
-          hybrid: {
-            query: "Generative Ai",
-            alpha: 0.7,
-            vector: [0.0055148206, 0.013368472, 0.035909854],
-            fusionType: relativeScoreFusion,
-            properties: ["title", "tags"]
-          }
-        ) {
-          _additional {
-            score
-          }
-          title
-          autoSummary
-        }
-      }
-    }
-    ```
-  </Tabs.Tab>
+ <Tabs.Tab>
+   ```typescript
+   const {
+     data: { payload }
+   } = await unbody.get
+                   .googleDoc
+                   .search.hybrid("Generative AI", {
+                     alpha: 0.7,
+                     vector: [0.0055148206, 0.013368472, 0.035909854],
+                     fusionType: "relativeScoreFusion",
+                     properties: ["title", "tags"]
+                   })
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql
+   {
+     Get {
+       TextDocument(
+         hybrid: {
+           query: "Generative AI",
+           alpha: 0.7,
+           vector: [0.0055148206, 0.013368472, 0.035909854],
+           fusionType: relativeScoreFusion,
+           properties: ["title", "tags"]
+         }
+       ) {
+         _additional {
+           score
+         }
+         title
+         autoSummary
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
 [
     {
         "_additional": {
@@ -127,5 +129,6 @@ In this example, we demonstrate an advanced hybrid search with custom parameters
     }
 ]
 ```
+</Collapse>
 
 Learn more in our [Hybrid Search Guide](/content-api/search/hybrid-search).

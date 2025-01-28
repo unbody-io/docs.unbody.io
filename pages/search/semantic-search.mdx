@@ -1,22 +1,23 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
 
 # Semantic Search
 
-Search based on meaning rather than exact keyword matches, allowing users to find relevant content even when exact terms don't match.
+Search based on meaning rather than exact keyword matches, allowing users to find relevant content even when exact terms don't match. [Learn more about Semantic Search](/content-api/search/semantic-search.mdx).
 
 ## Basic Search
-In this example, we demonstrate how to perform a semantic search. The code initiates a search query using the `.search.about()` method on the `textDocument` collection, selecting specific fields (`title`, `autoSummary`, `text`) to return.
+Sometimes you need to find documents about a topic, but they might use different terminology. For example, using `search.about()`, when searching for "AI applications", you'll find relevant documents even if they use terms like "machine learning systems" instead.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
     const {
-      data: { payload },
-    }  = await unbody.get.textDocument
-        .search
-        .about("AI applications")
-        .select("title", "autoSummary", "text")
-        .exec();
+      data: { payload }
+    } = await unbody.get
+                    .textDocument
+                    .search.about("AI applications")
+                    .select("title", "autoSummary", "text")
+                    .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -40,49 +41,39 @@ In this example, we demonstrate how to perform a semantic search. The code initi
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
-
-[
-    {
-        "_additional": {
-            "certainty": 0.89,
-            "distance": 0.21
-        },
-        "title": "AI in Healthcare",
-        "autoSummary": "Artificial Intelligence applications in healthcare, including disease diagnosis, drug discovery, and patient care optimization. The system uses machine learning algorithms to analyze medical imaging and predict patient outcomes.",
-        "text": "Detailed exploration of how AI is transforming healthcare..."
-    },
-    {
-        "_additional": {
-            "certainty": 0.85,
-            "distance": 0.25
-        },
-        "title": "AI in Finance",
-        "autoSummary": "Implementation of AI applications in financial services, focusing on fraud detection, algorithmic trading, and risk assessment models.",
-        "text": "Comprehensive overview of AI applications in finance..."
-    }
-]
+const response = {
+  "_additional": {
+    "certainty": 0.89,
+    "distance": 0.21
+  },
+  "title": "AI in Healthcare",
+  "autoSummary": "AI applications in healthcare..."
+}
 ```
+</Collapse>
+
 
 ## Search with Concept Boost
-In this example, we demonstrate how to perform a semantic search with concept boosting. The code uses the `.search.about()` method on the textBlock collection, enhancing results towards specific concepts with a force factor, while selecting the text field and limiting to 5 results.
+When your search needs to prioritize specific aspects, you can boost certain concepts. For instance, if you're looking for AI applications but want results focused on "Deep Learning", "LLM", and "chatbot", use concept boosting to get more relevant results.
 
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-      const {
-         data: { payload },
-      } = await unbody.get.textBlock.search
-              .about("AI applications", {
-                moveTo: {
-                  concepts: ["Deep Learning", "LLM", "chatbot"],
-                  force: 0.5,
-                },
-              })
-              .select("text")
-              .limit(5)
-              .exec();
+    const {
+      data: { payload }
+    } = await unbody.get
+                    .textBlock
+                    .search.about("AI applications", {
+                      moveTo: {
+                        concepts: ["Deep Learning", "LLM", "chatbot"],
+                        force: 0.5
+                      }
+                    })
+                    .select("text")
+                    .limit(5)
+                    .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -90,7 +81,13 @@ In this example, we demonstrate how to perform a semantic search with concept bo
     {
       Get {
         TextBlock(
-          nearText: {concepts: ["AI applications"], moveTo: {concepts: ["Deep Learning", "LLM", "chatbot"], force: 0.5}}
+          nearText: {
+            concepts: ["AI applications"], 
+            moveTo: {
+              concepts: ["Deep Learning", "LLM", "chatbot"], 
+              force: 0.5
+            }
+          }
           limit: 5
         ) {
           _additional {
@@ -105,9 +102,8 @@ In this example, we demonstrate how to perform a semantic search with concept bo
   </Tabs.Tab>
 </Tabs>
 
-
+<Collapse title="Response">
 ```typescript
-// Response
 
 [
     {
@@ -148,43 +144,43 @@ In this example, we demonstrate how to perform a semantic search with concept bo
 ]
 
 ```
+</Collapse>
 
 ## Advanced Search with Concept Steering
-In this example, we demonstrate an advanced semantic search with concept steering. The code uses the `.search.about()` method on the `textDocument` collection with multiple concepts, using `moveTo` to enhance relevance towards modern AI concepts and `moveAwayFrom` to filter out legacy systems. The query includes sorting by `createdAt`, filtering by certainty, and limiting to 5 results.
+When you need to focus on specific concepts while avoiding others, concept steering is the answer. For example, to find modern chatbot documentation while excluding legacy approaches, you can steer the search toward NLP and LLMs while steering away from rule-based systems.
+
 <Tabs items={['Unbody SDK', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
-       const {
-      data: { payload },
-    } = await unbody.get.textDocument.search
-      .about(
-        ["Modern AI Chatbots", "Large Language Models", "Conversational AI"],
-        {
-          moveTo: {
-            concepts: [
-              "Natural Language Processing",
-              "ChatGPT",
-              "Machine Learning",
-              "Customer Service Automation",
-            ],
-            force: 0.7,
-          },
-          moveAwayFrom: {
-            concepts: [
-              "Rule-based Chatbots",
-              "Legacy Systems",
-              "Basic FAQ Bots",
-              "Traditional IVR",
-            ],
-            force: 0.8,
-          },
-          certainty: 0.6,
-        }
-      )
-      .select("title", "autoSummary", "tags", "createdAt")
-      .sort("createdAt", "desc")
-      .limit(5)
-      .exec();
+    const {
+      data: { payload }
+    } = await unbody.get
+                    .textDocument
+                    .search.about(["Modern AI Chatbots", "Large Language Models", "Conversational AI"], {
+                      moveTo: {
+                        concepts: [
+                          "Natural Language Processing",
+                          "ChatGPT",
+                          "Machine Learning",
+                          "Customer Service Automation"
+                        ],
+                        force: 0.7
+                      },
+                      moveAwayFrom: {
+                        concepts: [
+                          "Rule-based Chatbots",
+                          "Legacy Systems",
+                          "Basic FAQ Bots",
+                          "Traditional IVR"
+                        ],
+                        force: 0.8
+                      },
+                      certainty: 0.6
+                    })
+                    .select("title", "autoSummary", "tags", "createdAt")
+                    .sort("createdAt", "desc")
+                    .limit(5)
+                    .exec();
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -192,7 +188,18 @@ In this example, we demonstrate an advanced semantic search with concept steerin
     {
       Get {
         TextDocument(
-          nearText: {concepts: ["Modern AI Chatbots", "Large Language Models", "Conversational AI"], moveTo: {concepts: ["Natural Language Processing", "ChatGPT", "Machine Learning", "Customer Service Automation"], force: 0.7}, moveAwayFrom: {concepts: ["Rule-based Chatbots", "Legacy Systems", "Basic FAQ Bots", "Traditional IVR"], force: 0.8}, certainty: 0.6}
+          nearText: {
+            concepts: ["Modern AI Chatbots", "Large Language Models", "Conversational AI"],
+            moveTo: {
+              concepts: ["Natural Language Processing", "ChatGPT", "Machine Learning", "Customer Service Automation"],
+              force: 0.7
+            },
+            moveAwayFrom: {
+              concepts: ["Rule-based Chatbots", "Legacy Systems", "Basic FAQ Bots", "Traditional IVR"],
+              force: 0.8
+            },
+            certainty: 0.6
+          }
           sort: {order: desc, path: "createdAt"}
           limit: 5
         ) {
@@ -211,8 +218,8 @@ In this example, we demonstrate an advanced semantic search with concept steerin
   </Tabs.Tab>
 </Tabs>
 
+<Collapse title="Response">
 ```typescript
-// Response
 
 [
     {
@@ -247,5 +254,6 @@ In this example, we demonstrate an advanced semantic search with concept steerin
     }
 ]
 ```
+</Collapse>
 
 Learn more in our [Semantic Search Guide](/content-api/search/semantic-search).

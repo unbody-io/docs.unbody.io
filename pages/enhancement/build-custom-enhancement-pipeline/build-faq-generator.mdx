@@ -1,3 +1,5 @@
+import Collapse from '@/components/Collapse'
+
 # Build FAQ Generator From PDFs
 A guide to creating an automated FAQ generator that processes PDF documents and extracts structured Q&A pairs using Unbody's Enhancement Pipeline.
 
@@ -111,10 +113,8 @@ const {
   .exec();
 ```
 
-## Example Response
-Example of the structured FAQ data returned by the enhancement pipeline:
-
-```json
+<Collapse title="Response">
+```typescript
 [
   {
     "title": "Product Manual",
@@ -123,6 +123,7 @@ Example of the structured FAQ data returned by the enhancement pipeline:
   }
 ]
 ```
+</Collapse>
 
 ## Learn More
 

@@ -1,4 +1,6 @@
+import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+
 
 # Role-based Prompting
 
@@ -33,9 +35,8 @@ The example demonstrates role-based messaging with [Zod](https://zod.dev/) schem
             }
         );
 ```
-
+<Collapse title="Response">
 ```typescript
-// Response
 {
     "content": {
         "companyName": "Meta Corp",
@@ -51,5 +52,6 @@ The example demonstrates role-based messaging with [Zod](https://zod.dev/) schem
     }
 }
 ```
+</Collapse>
 
 Learn more about advanced role-based prompting in our [JSON Generation API Guide](/generative-api/json-gen).
