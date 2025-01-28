@@ -26,6 +26,22 @@ Generative Modules work as part of your project’s **pipeline**:
 
 ---
 
+## **Supported Models**
+
+| Model Name          | Provider  | Context Window (Tokens) | Max Tokens | Image Input Support |
+| ------------------- | --------- | ----------------------- | ---------- | ------------------- |
+| `gpt-3.5-turbo`     | OpenAI    | 16,384                  | 4,096      |                     |
+| `gpt-4`             | OpenAI    | 8,192                   | 8,192      |                     |
+| `gpt-4-turbo`       | OpenAI    | 128,000                 | 4,096      | ✔                   |
+| `gpt-4o`            | OpenAI    | 128,000                 | 4,096      | ✔                   |
+| `gpt-4o-mini`       | OpenAI    | 128,000                 | 16,384     | ✔                   |
+| `command`           | Cohere    | 4,096                   | 4,096      |                     |
+| `command-light`     | Cohere    | 4,096                   | 4,096      |                     |
+| `command-r`         | Cohere    | 128,000                 | 4,096      |                     |
+| `command-r-plus`    | Cohere    | 128,000                 | 4,096      |                     |
+| `open-mistral-7b`   | MistralAI | 32,000                  |            |                     |
+| `open-mixtral-8x7b` | MistralAI | 32,000                  |            |                     |
+
 ## **Configuring Generative Modules**
 
 You can configure Generative Modules via the Dashboard or the Admin API.
