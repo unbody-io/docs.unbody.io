@@ -1,5 +1,5 @@
-import {Tabs, Tab} from "@nextui-org/react";
-import {Callout} from "nextra/components";
+import { Tab, Tabs } from "@nextui-org/react";
+import { Callout } from "nextra/components";
 
 # Hybrid Search
 
@@ -13,7 +13,7 @@ Hybrid search can be performed on any text (`string`) field of any object. Here'
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
 <Tab title={"SDK (.ts)"}>
-    ```javascript copy
+    ```typescript copy
     await unbody.get
                 .<object_name>
                 .search
@@ -45,7 +45,7 @@ Hybrid search can be performed on any text (`string`) field of any object. Here'
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
 <Tab title={"SDK (.ts)"}>
-    ```javascript copy
+    ```typescript copy
     const {data: {payload}} = await unbody.get
                                           .googleDoc
                                           .search
@@ -53,7 +53,7 @@ Hybrid search can be performed on any text (`string`) field of any object. Here'
                                           .exec()
     ```
 </Tab>
-<Tab title={"GraphQl"}>
+<Tab title={"GraphQL"}>
     ```graphql
     query{
       Get{
@@ -74,7 +74,7 @@ Hybrid search can be performed on any text (`string`) field of any object. Here'
 ### Example 2 - Discord Messages
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .discordMessage
                                               .search
@@ -104,7 +104,7 @@ Hybrid search can be performed on any text (`string`) field of any object. Here'
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .textBlock
                                               .search
@@ -132,29 +132,30 @@ Hybrid search can be performed on any text (`string`) field of any object. Here'
 ### Example 4 - Google Docs with specific fields
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .googleDoc
                                               .search
-                                              .hybrid("specific keyword and broad concept", ["title", "autoSummary"])
+                                              .hybrid("specific keyword and broad concept", {
+                                                    properties: ["title", "text", "autoSummary"]
+                                              })
                                               .exec()
 
         ```
     </Tab>
     <Tab title={"GraphQl"}>
         ```graphql
-        query{
-          Get{
-            GoogleDoc(
+        query {
+            Get {
+                GoogleDoc(
                 hybrid: {
-                    query: "specific keyword and broad concept",
-                    properties: ["title", "autoSummary"]
+                    query: "specific keyword and broad concept"
+                    properties: ["title", "text", "autoSummary"]
                 }
-            ){
-                title
-                autoSummary
+                ) {
+                  ...fields
+                }
             }
-          }
         }
         ```
     </Tab>
@@ -164,11 +165,11 @@ Hybrid search can be performed on any text (`string`) field of any object. Here'
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| query | string |  | Query string |
-| alpha | float |  | Search weight |
-| fusionType | rankedFusion
-relativeScoreFusion |  | Algorithm used for fusing results from vector and keyword search. |
-| properties | string[] |  | Specify which fields to search |
+| query* | string | - | The search query string to match against documents |
+| properties | string[] | - | Array of field names to limit the keyword search to specific properties |
+| alpha | number | - | Weight factor between keyword and semantic search (0 to 1). Higher values give more weight to semantic search |
+| vector | number[] | - | Custom vector to use for semantic similarity matching |
+| fusionType | 'rankedFusion' \| 'relativeScoreFusion' | 'rankedFusion' | Fusion algorithm to combine keyword and semantic search results:<br/>- `rankedFusion`: Combines results based on their rank positions<br/>- `relativeScoreFusion`: Combines results based on normalized scores |
 
 ## Advanced Usage
 ### Fusion (Ranking) Method: Fine-Tune Your Results
@@ -179,7 +180,7 @@ When you're working with Hybrid Search, the way keyword and vector search result
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .googleDoc
                                               .search
@@ -189,104 +190,61 @@ When you're working with Hybrid Search, the way keyword and vector search result
                                               .exec()
         ```
     </Tab>
-    <Tab title={"GraphQl"}>
+    <Tab title={"GraphQL"}>
         ```graphql copy
         query {
-            Get {
-                GoogleDoc (
-                    limit: 3
-                    hybrid: { query: "coding in Python", fusionType: relativeScoreFusion }
-                    ) {
-                    title
-                }
-            }
-        }
+  Get {
+    GoogleDoc(hybrid: { query: "ai", fusionType: relativeScoreFusion }) {
+      ...fields
+    }
+  }
+}
+
         ```
     </Tab>
 </Tabs>
 
-### Target Specific Properties: Get Precise
+### Target Specific Properties for Search
 
 <Callout>
     NOTE: This feature is available from v1.19.0 onwards
 </Callout>
 
-Unbody allows you to focus your search on specific fields of your data. you can target particular properties for the keyword portion of your search. Moreover, this doesn't affect the vector search, ensuring your semantic search remains broad and context-aware. Liked that? I guess, yesss!!
+Unbody allows you to focus your search on specific fields of your data by specifying properties in the search options. The keyword search will be limited to these properties while the semantic search continues to use all available content for broader context matching.
 
-**Example: Focus on Title**
+**Example: Search only in document titles**
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         const {data: {payload}} = await unbody.get
-                                              .googleDoc
-                                              .search
-                                              .hybrid("specific keyword and broad concept", {
-                                                properties: ["title"]
-                                              })
-                                              .exec()
+                                             .googleDoc
+                                             .search
+                                             .hybrid("specific keyword and broad concept", {
+                                                 properties: ["title"]
+                                             })
+                                             .exec()
         ```
     </Tab>
-    <Tab title={"GraphQl"}>
+    <Tab title={"GraphQL"}>
         ```graphql copy
         query {
-            Get {
-                GoogleDoc(
-                    limit: 3
-                    hybrid: {
-                        query: "coding in Python",
-                        properties: ["title"],
-                        alpha: 0.25
-                    }) {
-                        title
-                }
+          Get {
+            GoogleDoc(
+              hybrid: {
+                query: "specific keyword and broad concept"
+                properties: ["title"]
+              }
+            ) {
+              ...fields
             }
+          }
         }
         ```
     </Tab>
 </Tabs>
 
-### Boosting Properties: Give Priority Where Needed
-
-Isn’t it true that some things deserve more attention than others? Well, the same is true for data. Sometimes, certain parts of your data might be more important than others. With property weighting, you can tell Unbody to give more importance to specific fields during the BM25 keyword search.
-
-**Example: Boosting title**
-
-<Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"SDK (.ts)"}>
-        ```javascript copy
-        const {data: {payload}} = await unbody.get
-                                              .googleDoc
-                                              .search
-                                              .hybrid("specific keyword and broad concept", {
-                                                properties: ["title^2", "text"]
-                                              })
-                                              .exec();
-        ```
-    </Tab>
-    <Tab title={"GraphQl"}>
-        ```graphql copy
-        query {
-            Get {
-                GoogleDoc(
-                    limit: 3
-                    hybrid: {
-                        query: "coding"
-                        properties: ["title^2", "text"]
-                        alpha: 0.25
-                    }) {
-                        title
-                        text
-                    }
-                }
-            }
-        ```
-    </Tab>
-</Tabs>
-
-In the example given above, Unbody’s Hybrid Search considers matches in the title to be twice as important as matches in the content.
-
-### Bring Your Own Vectors: Customized Semantic Search
+### Bring Your Own Vectors: Customized Hybrid Search
 
 Have you got your own vector? Great! You can provide it directly to the Hybrid Search and Unbody will use it for the vector part of the search. It will still consider your query string for the keyword search. This is perfect for when you have a very specific semantic context in mind.
 
@@ -309,13 +267,11 @@ Have you got your own vector? Great! You can provide it directly to the Hybrid S
         query {
             Get {
                 GoogleDoc(
-                limit: 3
                 hybrid: {
                     query: "coding in js"
                     vector: [...your_vector_here...]
                 }) {
-                    title
-                    text
+                    ...fields
                 }
             }
         }
@@ -325,42 +281,33 @@ Have you got your own vector? Great! You can provide it directly to the Hybrid S
 
 ### Add a Conditional Filter: Refine Your Search
 
-You can add conditional filters to your hybrid search queries. These filters will refine the results without impacting the ranking. For example, if you want to search for articles about "coding in Python" but only if they are tagged as "tutorials", you can write the query as given below.
+You can add conditional filters to your hybrid search queries. These filters will refine the results without impacting the ranking. For example, if you want to search for documents about "Electric Cars" but only if their title contains "Vehicles", you can write the query as shown below.
 
-**Example: Search when tags are equal to `tutorial`**
+**Example: Search for documents with title containing `Vehicles`**
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         const {data: {payload}} = await unbody.get
-                                              .googleDoc
-                                              .where(({Equal}) => ({
-                                                  tags: Equal("tutorial")
-                                              }))
-                                              .search
-                                              .hybrid("specific keyword and broad concept")
-                                              .exec();
+                                             .googleDoc
+                                             .where(({ Like }) => ({
+                                                 title: Like("Vehicles"),
+                                             }))
+                                             .search.hybrid("Electric Cars")
+                                             .exec();
         ```
     </Tab>
-    <Tab title={"GraphQl"}>
+    <Tab title={"GraphQL"}>
         ```graphql copy
         query {
-            Get {
-                GoogleDoc(
-                    limit: 3
-                    hybrid: {
-                        query: "Classical Mechanics"
-                    }
-                    where: {
-                        path: ["tags"],
-                        operator: Equal,
-                        valueText: "tutorial"
-                    }) {
-                            title
-                            text
-                            tags
-                    }
+          Get {
+            GoogleDoc(
+              where: { operator: Like, path: "title", valueText: "Vehicles" }
+              hybrid: { query: "Electric Cars" }
+            ) {
+              ...fields
             }
+          }
         }
         ```
     </Tab>
