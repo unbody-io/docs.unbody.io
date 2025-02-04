@@ -11,7 +11,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```jsx
+        ```typescript copy
         unbody.get
               .<collectionName>
               .search
@@ -42,7 +42,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 ### Example 1 - Google Docs
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```jsx
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .googleDoc
                                               .search
@@ -71,7 +71,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```jsx
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .textBlock
                                               .search
@@ -100,7 +100,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```jsx
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .googleDoc
                                               .search
@@ -129,7 +129,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 
 ## Arguments
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| query * | string |  |  |
-| properties | string[] |  | Specify which properties to search |
+| Name | Type | Description |
+| --- | --- | --- |
+| query* | string | The keyword or phrase to search for |
+| properties | string[] | Array of field names to limit the search to specific properties |

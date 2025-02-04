@@ -127,15 +127,16 @@ You can perform semantic searches on virtually any text (`string`) field of any 
 
 ## Arguments
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| concepts | string[] |  | Specify what concepts to look into |
-| moveTo | object |  | Move your search closer to another vector described by keywords |
-| moveAwayFrom | object |  | Move your search further away to another vector described by keywords |
-| targets | object |  | Subsearch list |
-| targetVectors | string[] | | Target vectors |
-| distance | float | | The required degree of similarity between an object's characteristics and the provided filter values |
-| certainty | float | | Normalized distance between the result item and the search vector |
+| Name | Type | Description |
+| --- | ---  | --- |
+| concepts* | string \| string[] | The concept(s) to search for |
+| moveTo | object | Boost results towards specified concepts or objects with a force factor |
+| moveAwayFrom | object | Move results away from specified concepts or objects with a force factor |
+| certainty | number | Minimum certainty threshold for results (0 to 1) |
+| distance | number | Distance threshold for similarity matching |
+| autocorrect | boolean | Enable automatic correction of search terms |
+
+We can keep the complex type details in the code examples or in a separate type reference section if needed. This makes the table much more readable while still conveying the essential information.
 
 ## Semantic Search: Continued
 In this section we're going to explore more sophisticated functionalities to enhance the search capabilities. Let’s dive in, folks!
@@ -178,8 +179,7 @@ For example, let's' consider you’re searching for articles related to web deve
                 }
               }
             ){
-              title
-              text
+              ...fields
             }
           }
         }
@@ -251,27 +251,7 @@ You can also apply [filters](/content-api/filters) to your semantic search queri
               where: { operator: Equal, path: "mimeType", valueText: "text/markdown" }
               nearText: { concepts: ["web development"] }
             ) {
-              _additional {
-                certainty
-                distance
-              }
-              createdAt
-              html
-              mimeType
-              modifiedAt
-              originalName
-              path
-              pathString
-              remoteId
-              sourceId
-              subtitle
-              description
-              tags
-              text
-              title
-              properties
-              toc
-              authors
+              ...fields
             }
           }
         }
