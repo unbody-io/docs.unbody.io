@@ -1,7 +1,7 @@
-import {Tab, Tabs} from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
 
 # Keyword Search
-Keyword search is a method that allows users to search your data based on specific keywords. Unlike [semantic search]/content-api/semantic-search) which focuses on the meaning of the search query, keyword search relies on exact matches of the keywords used in the search query.
+Keyword search is a method that allows users to search your data based on specific keywords. Unlike [semantic search](/content-api/semantic-search) which focuses on the meaning of the search query, keyword search relies on exact matches of the keywords used in the search query.
 
 This method is best to use when you want to provide quick and straightforward search results. It is especially effective when dealing with large databases where users are familiar with the specific keywords used within the data.
 
@@ -13,9 +13,9 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
     <Tab title={"SDK (.ts)"}>
         ```jsx
         unbody.get
-              .<object_name>
+              .<collectionName>
               .search
-              .find("query", {...options})
+              .find("query", [...properties])
               .exec()
         ```
     </Tab>
@@ -23,10 +23,10 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
         ```graphql
         query{
           Get{
-            <ObjectName>(
+            <collectionName>(
                 bm25: {
                     query: "query",
-                        ...options
+                    properties: [...properties]
                 }
             ){
                 ...fields
@@ -96,7 +96,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
     </Tab>
 </Tabs>
 
-### Example 3 - Google Docs - specific fields
+### Example 3 - Google Docs - search in specific properties
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
@@ -131,5 +131,5 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| query * | string, string[] |  |  |
-| fields | string[] |  | Specify which fields to search,  |
+| query * | string |  |  |
+| properties | string[] |  | Specify which properties to search |
