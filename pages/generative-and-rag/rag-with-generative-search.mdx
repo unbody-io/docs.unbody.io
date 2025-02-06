@@ -8,7 +8,7 @@ Unbody gives you various ways to perform RAG - from generating insights from sin
 ## Generate from every single document
 When you need AI-generated insights from a specific document, use [`.generate.fromOne()`](/content-api/generative#from-one). For example, create quick summaries from PDF files with direct references to the content.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
    ```typescript
    const {
@@ -88,7 +88,7 @@ When you need AI-generated insights from a specific document, use [`.generate.fr
 ## Generate from every single document with options
 Fine-tune your generated content by adding parameters to `.generate.fromOne()`. Adjust creativity levels, response length, and other settings to get exactly the output you need. [Learn more about options](/content-api/generative#options).
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
    ```typescript
    const {
@@ -185,7 +185,7 @@ Fine-tune your generated content by adding parameters to `.generate.fromOne()`. 
 ## Generate from multiple documents
 Have information spread across several documents? You can combine specific fields from multiple sources to create a unified summary or analysis by using [`.generate.fromMany()`](/content-api/generative#from-many).
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
    ```typescript
    const {
@@ -260,7 +260,7 @@ Have information spread across several documents? You can combine specific field
 ## Generate from multiple documents with options
 When you need both multi-document analysis and precise output control, use advanced multi-document generation with [options](/content-api/generative#options). This combines document properties while letting you fine-tune the AI's response.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
    ```typescript
    const {

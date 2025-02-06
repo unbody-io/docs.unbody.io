@@ -8,7 +8,7 @@ Search based on meaning rather than exact keyword matches, allowing users to fin
 ## Basic Search
 Sometimes you need to find documents about a topic, but they might use different terminology. For example, using `search.about()`, when searching for "AI applications", you'll find relevant documents even if they use terms like "machine learning systems" instead.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
     const {
@@ -58,7 +58,7 @@ const response = {
 ## Search with Concept Boost
 When your search needs to prioritize specific aspects, you can boost certain concepts. For instance, if you're looking for AI applications but want results focused on "Deep Learning", "LLM", and "chatbot", use concept boosting to get more relevant results.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
     const {
@@ -149,7 +149,7 @@ When your search needs to prioritize specific aspects, you can boost certain con
 ## Advanced Search with Concept Steering
 When you need to focus on specific concepts while avoiding others, concept steering is the answer. For example, to find modern chatbot documentation while excluding legacy approaches, you can steer the search toward NLP and LLMs while steering away from rule-based systems.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
     ```typescript
     const {
