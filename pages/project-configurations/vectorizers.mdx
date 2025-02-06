@@ -1,8 +1,8 @@
 # Vectorizers
 
-Vectorizers are a core component of Unbody, converting unstructured data like text or images into numerical vectors that AI systems can understand. This transformation enables powerful operations like semantic search, recommendations, and more.
+Vectorizers are a core component of Unbody, converting unstructured data like text or images into numerical vectors that AI systems can understand. This transformation enables powerful operations like [semantic search](/content-api/search/semantic-search), recommendations, and more.
 
-Unbody supports multiple vectorization models, ensuring flexibility and performance for various use cases. You can configure vectorizers programmatically using the Admin API or through the dashboard.
+Unbody supports multiple vectorization models, ensuring flexibility and performance for various use cases. You can configure vectorizers programmatically using the [Admin API](/admin-api) or through the [dashboard](https://app.unbody.io/projects/).
 
 ---
 
@@ -29,33 +29,30 @@ Unbody supports two main types of vectorizers:
         - **Img2Vec-Neural**: Default vectorizer for image processing.
         - **Multi2Vec-Clip**: Advanced multimodal image-to-text vectorizer (coming soon).
 
-For a complete list of available vectorizers, refer to the [Vectorizers Reference](/project-configurations/vectorizers).
+{/* For a complete list of available vectorizers, refer to the [Vectorizers Reference](/project-configurations/vectorizers). */}
 
 ---
 
 ### Supported Embeddings and Vectorizers
+{/* TODO: this needs to be rechecked again. I need the full list */}
 
-| Model Name          | Provider  | Context Window (Tokens) | Max Tokens | Image Input Support |
-| ------------------- | --------- | ----------------------- | ---------- | ------------------- |
-| `gpt-3.5-turbo`     | OpenAI    | 16,384                  | 4,096      |                     |
-| `gpt-4`             | OpenAI    | 8,192                   | 8,192      |                     |
-| `gpt-4-turbo`       | OpenAI    | 128,000                 | 4,096      | ✔                   |
-| `gpt-4o`            | OpenAI    | 128,000                 | 4,096      | ✔                   |
-| `gpt-4o-mini`       | OpenAI    | 128,000                 | 16,384     | ✔                   |
-| `command`           | Cohere    | 4,096                   | 4,096      |                     |
-| `command-light`     | Cohere    | 4,096                   | 4,096      |                     |
-| `command-r`         | Cohere    | 128,000                 | 4,096      |                     |
-| `command-r-plus`    | Cohere    | 128,000                 | 4,096      |                     |
-| `open-mistral-7b`   | MistralAI | 32,000                  |            |                     |
-| `open-mixtral-8x7b` | MistralAI | 32,000                  |            |                     |
+| Model Name | Provider | Dimension | Multilingual | Description |
+| --- | --- | --- | --- | --- |
+| `text-embedding-3-small` | OpenAI | 1536 | ✔ | Latest embedding model, optimized for multilingual tasks |
+| `text-embedding-3-large` | OpenAI | 3072 | ✔ | Higher dimensional model for maximum accuracy |
+| `text-embedding-ada-002` | OpenAI | 1536 | Limited | Legacy model, good English performance |
+| `multilingual-22-12` | Cohere | 768 | ✔ | Optimized for cross-lingual tasks |
+| `english-light-v3.0` | Cohere | 384 | | Lightweight English-focused model |
+| `contextionary` | Unbody | 300 | | Fast, lightweight model for basic tasks |
+| `img2vec-neural` | Unbody | 512 | N/A | Image vectorization model |
 
 ### Configuring Vectorizers via Admin API
 
-To configure vectorizers for your project, use the Admin API. Follow these steps:
+To configure vectorizers for your project, use the [Admin API](/admin-api). Follow these steps:
 
 ### **1. Initialize the Admin Client**
 
-```tsx
+```tsx copy
 import { UnbodyAdmin, TextVectorizer } from 'unbody/admin';
 
 const admin = new UnbodyAdmin({
@@ -71,7 +68,7 @@ const admin = new UnbodyAdmin({
 
 ### **2. Set a Text Vectorizer**
 
-```tsx
+```tsx copy
 import { ProjectSettings, TextVectorizer } from 'unbody/admin';
 
 const settings = new ProjectSettings();
@@ -90,7 +87,7 @@ console.log(`Configured text vectorizer for project: ${project.name}`);
 
 ### **3. Set an Image Vectorizer**
 
-```tsx
+```tsx copy
 import { ImageVectorizer } from 'unbody/admin';
 
 const settings = new ProjectSettings();
@@ -116,7 +113,7 @@ You can also configure vectorizers directly from the Unbody dashboard:
 3. Choose the vectorizer model for text or image data.
 4. Save your changes.
 
-For detailed instructions, see the [Dashboard Configuration Guide](/get-started/step-1-setup/setup-with-dashboard).
+For detailed instructions, see the [First Project Guide](/first-project).
 
 ---
 
@@ -126,24 +123,9 @@ For detailed instructions, see the [Dashboard Configuration Guide](/get-started/
 
 Unbody allows assigning different vectorizers to specific data types or workflows. For example:
 
-```tsx
+```tsx copy
 settings.set(new TextVectorizer(TextVectorizer.Cohere.MultilingualV3));
-settings.set(new ImageVectorizer(ImageVectorizer.Multi2VecClip));
-
-```
-
-### Dynamic Model Selection
-
-You can dynamically select vectorizers based on runtime conditions:
-
-```tsx
-const vectorizer = new TextVectorizer(ctx => {
-  return ctx.language === 'en'
-    ? TextVectorizer.OpenAI.TextEmbedding3Small
-    : TextVectorizer.Cohere.MultilingualV3;
-});
-
-settings.set(vectorizer);
+settings.set(new ImageVectorizer(ImageVectorizer.Img2VecNeural.Default));
 
 ```
 
@@ -166,5 +148,4 @@ Once vectorizers are configured:
 
 For further details, explore:
 
-- [Vectorizers Reference](/project-configurations/vectorizers)
 - [Admin API Documentation](/admin-api)

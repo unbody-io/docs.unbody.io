@@ -1,10 +1,10 @@
-# **Custom Schemas**
+# Custom Schemas
 
 Custom Schemas in Unbody allow you to define and manage your own data structures. This flexibility enables developers to handle unique data requirements, extend built-in schemas, and integrate deeply with their applications.
 
 ---
 
-## **What Are Custom Schemas?**
+## What Are Custom Schemas?
 
 Custom Schemas let you:
 
@@ -19,38 +19,39 @@ For example:
 
 ---
 
-## **Why Use Custom Schemas?**
+## Why Use Custom Schemas?
 
 - **Flexibility**: Adapt data structures to your app’s unique needs.
 - **Extensibility**: Extend existing schemas instead of starting from scratch.
 - **AI-Ready**: Customize schemas to include fields optimized for vectorization and enrichment.
 
 ---
-
+{/*  TODO: currently there is no way to set custom schema from dashboard
 ## **Configuring Custom Schemas**
 
-Custom Schemas can be configured via the **Dashboard** or programmatically using the **Admin API**.
+Custom Schemas can be configured via the [**Dashboard**](https://app.unbody.io/projects) or programmatically using the [**Admin API**](/admin-api).
 
 ---
 
 ### **1. Dashboard Setup**
 
-1. Go to your **Project Settings**.
+1. Go to your [**Project Settings**](https://app.unbody.io/projects).
 2. Navigate to **Custom Schemas**.
 3. Define your collections and fields.
 4. Save and apply the schema to your project.
 
 ---
 
-### **2. Admin API Configuration**
+### **2. Admin API Configuration** 
+*/}
 
-You can define and manage Custom Schemas programmatically. Here’s how:
+## Configuring Custom Schemas Using Admin API
 
----
+You can define and manage Custom Schemas programmatically. Learn more about [Admin API](/admin-api)
 
-### **Example: Creating a Custom Schema**
+### Example: Creating a Custom Schema
 
-```tsx
+```ts copy
 import { UnbodyAdmin, CustomSchema, ProjectSettings } from 'unbody/admin'
 
 // Initialize Admin API
@@ -74,7 +75,7 @@ blogPostCollection.add(new CustomSchema.Field.Date('publishedAt', 'Published Dat
 customSchema.add(blogPostCollection)
 
 const projectSettings = new ProjectSettings()
-projectSettings.settings.set(customSchema)
+projectSettings.set(customSchema)
 
 const project = await admin.projects.ref({
   name: "My First Project",
@@ -89,9 +90,9 @@ console.log(`Custom Schema applied to project: ${project.name}`)
 
 ---
 
-## **Key Components of Custom Schemas**
+## Key Components of Custom Schemas
 
-### **1. Collections**
+### 1. Collections
 
 Collections are the top-level entities in Custom Schemas, similar to tables in a database.
 
@@ -99,11 +100,11 @@ Collections are the top-level entities in Custom Schemas, similar to tables in a
 
 ---
 
-### **2. Fields**
+### 2. Fields
 
 Fields define the structure of data within a collection.
 
-### **Available Field Types**
+### Available Field Types
 
 | Type | Description |
 | --- | --- |
@@ -118,7 +119,7 @@ Fields define the structure of data within a collection.
 
 ---
 
-### **3. Extending Built-in Schemas**
+### 3. Extending Built-in Schemas
 
 Built-in schemas like `VideoFile` or `TextDocument` can be extended with custom fields.
 
@@ -139,7 +140,7 @@ customSchema.extend(videoFileCollection)
 
 ---
 
-### **4. Field Arguments**
+### 4. Field Arguments
 
 When defining fields, the following arguments are available:
 
@@ -151,7 +152,7 @@ When defining fields, the following arguments are available:
 
 ---
 
-## **Best Practices**
+## Best Practices
 
 1. **Naming Conventions**:
     - Use PascalCase for collections (e.g., `BlogPost`).
@@ -163,6 +164,3 @@ When defining fields, the following arguments are available:
 4. **Cross-References**:
     - Use `Field.Cref` to link collections for relational data.
 
----
-
-This detailed explanation of Custom Schemas ensures developers can leverage their full potential, from setup to advanced configurations. Let me know if you want further elaboration on any section!
