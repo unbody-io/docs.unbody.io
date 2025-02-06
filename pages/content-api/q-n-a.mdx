@@ -12,7 +12,7 @@ The `ask{}` operator allows you to input a question directly into the query, and
 Here's how to structure your queries using the `ask{}` operator in both GraphQL and the JavaScript SDK to effectively use the Generative Q&A feature:
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .<collectionName>
                     .ask("Your question here", ["property1", "property2"])
@@ -50,7 +50,7 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
 ### Example 1 - Generative Q&A for Document Retrieval
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .textDocument
                     .ask("Who directed '2001: A Space Odyssey'?", {
@@ -96,7 +96,7 @@ Both the JavaScript SDK and GraphQL responses for an `ask{}` query include detai
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```json
+        ```typescript
         {
             "title": "2001: A Space Odyssey",
             "answer": {
@@ -111,7 +111,7 @@ Both the JavaScript SDK and GraphQL responses for an `ask{}` query include detai
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```json
+        ```typescript
         {
             "data": {
                 "Get": {
