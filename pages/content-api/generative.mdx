@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
 import { Callout } from "nextra/components";
 
 # Generative Search
@@ -11,9 +11,9 @@ For instance, if your data includes various historical events, users can simply 
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-    ```javascript copy
+    ```typescript copy
     await unbody.get
-                .<object_name>
+                .<collectionName>
                 .generate
                 .fromOne("prompt {propertyName}")
                 .exec()
@@ -51,7 +51,7 @@ This method generates a result for each object based on a single prompt. You can
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-    ```javascript copy
+    ```typescript copy
     await unbody.get
                 .textDocument
                 .generate
@@ -89,7 +89,7 @@ This method generates a result by applying a single prompt to a group of objects
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .textDocument
                     .generate
@@ -189,7 +189,7 @@ This allows you to provide images as part of the context for generating a result
 **Example: Using images**
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-```javascript copy
+```typescript copy
 await unbody.get
             .imageBlock
             .limit(2)
@@ -286,101 +286,88 @@ When using cross-references (relations) in `vars` or within message content, you
 **Example: Using Cross-References**
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-```javascript copy
-await unbody.get
-            .videoFile
-            .select('subtitles.SubtitleFile.entries.SubtitleEntry.__typename')
-            .limit(1)
-            .generate.fromOne({
-                options: {
-                    vars: [
-                    {
-                        name: 'subtitles',
-                        formatter: 'jq',
-                        expression: `(.subtitles//[]) | map({ entries })`,
-                    },
-                    {
-                        name: 'context',
-                        formatter: 'jq',
-                        expression: `{
-                        originalName,
-                        transcription: $subtitles[0].entries
-                        }`,
-                    },
-                    ],
-                },
-                messages: [
-                    {
-                        content: `Summarize the video's transcription:
-                        \`\`\`json
-                        {context}
-                        \`\`\`
-                    `,
-                    }
-                ],
-            })
-            .exec()
-```
+        ```typescript copy
+        await unbody.get
+                   .videoFile
+                   .select('subtitles.SubtitleFile.entries.SubtitleEntry.__typename')
+                   .limit(1)
+                   .generate.fromOne({
+                       options: {
+                           vars: [
+                               {
+                                   name: 'subtitles',
+                                   formatter: 'jq',
+                                   expression: '(.subtitles//[]) | map({ entries })',
+                               },
+                               {
+                                   name: 'context',
+                                   formatter: 'jq',
+                                   expression: '{originalName, transcription: $subtitles[0].entries}',
+                               },
+                           ],
+                       },
+                       messages: [
+                           {
+                               content: 'Summarize the video\'s transcription:\n```json\n{context}\n```',
+                           }
+                       ],
+                   })
+                   .exec()
+        ```
     </Tab>
-    <Tab title={"GraphQl"}>
-```graphql copy
-query {
-  Get{
-    VideoFile(limit: 1){
-      _additional{
-        generate(singleResult: {
-          options: {
-            model: "gpt-4o-mini"
-            vars:[
-              {
-                formatter:"jq",
-                name: "subtitles",
-                expression: """
-                  (.subtitles//[])|map({
-                    entries
-                  })  
-                """
-              },
-              {
-                formatter: "jq",
-                name: "context",
-                expression: """
-                  {
-                    originalName,
-                    transcription: $subtitles[0].entries
+    <Tab title={"GraphQL"}>
+        ```graphql copy
+        query {
+          Get {
+            VideoFile(limit: 1) {
+              _additional {
+                generate(
+                  singleResult: {
+                    messages: [
+                      {
+                        content: "Summarize the video's transcription:\n```json\n{context}\n```"
+                      }
+                    ],
+                    options: {
+                      vars: [
+                        {
+                          name: "subtitles",
+                          formatter: "jq",
+                          expression: "(.subtitles//[]) | map({ entries })"
+                        },
+                        {
+                          name: "context",
+                          formatter: "jq",
+                          expression: "{originalName, transcription: $subtitles[0].entries}"
+                        }
+                      ]
+                    }
                   }
-                """
+                ) {
+                  error
+                  singleResult
+                  metadata {
+                    finishReason
+                    usage {
+                      inputTokens
+                      outputTokens
+                      totalTokens
+                    }
+                  }
+                }
               }
-            ]
-          }
-          messages: [
-            {
-              content: """
-              Summarize the video's transcription: 
-              {context}
-              """
-            }
-          ]
-        }) {
-          error
-          groupedResult
-          singleResult
-        }
-      }
-      originalName
-      
-      subtitles{
-        ... on SubtitleFile{
-          entries{
-            ... on SubtitleEntry{
-              __typename # in order to use the entries in the context
+              subtitles {
+                ... on SubtitleFile {
+                  entries {
+                    ... on SubtitleEntry {
+                      __typename
+                    }
+                  }
+                }
+              }
             }
           }
         }
-      }
-    }
-  }
-}
-```
+        ```
     </Tab>
 </Tabs>

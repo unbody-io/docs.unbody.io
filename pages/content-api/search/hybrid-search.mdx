@@ -15,7 +15,7 @@ Hybrid search can be performed on any text (`string`) field of any object. Here'
 <Tab title={"SDK (.ts)"}>
     ```typescript copy
     await unbody.get
-                .<object_name>
+                .<collectionName>
                 .search
                 .hybrid("query", {...options})
                 .exec()
@@ -25,7 +25,7 @@ Hybrid search can be performed on any text (`string`) field of any object. Here'
     ```graphql
     query{
       Get{
-        <ObjectName>(
+        <collectionName>(
             hybrid: {
                 query: "query",
                 ...options
