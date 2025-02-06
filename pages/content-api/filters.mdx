@@ -1,19 +1,19 @@
-import { Tabs, Callout } from "nextra/components";
+import { Callout, Tabs } from "nextra/components";
 
 # Filters
 
 Let us deep dive into the core concepts of GraphQL queries. We will focus specifically on filtering, and explore the syntax, operators, and logic used to retrieve data based on specific criteria.
 
-## Basic Structure of a GraphQL Query
+## Basic Query Syntax
 
-In GraphQL, a query is structured in such a way that provides you specifically the data you need. If you wish to apply filters, you can use the `where` clause. You can specify the conditions within `where` clause that your data shall meet.
+Unbody provides flexible querying capabilities through both SDK and GraphQL. To filter your data, you can use the `where` clause, which allows you to specify conditions that your data must meet.
 
 The syntax of the `where` clause is shown in the example given below.
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 
   <Tabs.Tab>
-```tsx
+```typescript
 await unbody.get
             .ClassName
             .where(...)
@@ -46,7 +46,7 @@ Now you know that the `where` clause is used to filter the data, let us take a l
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 
   <Tabs.Tab>
-```tsx
+```typescript
 .where(({ OPERATOR }) => { 
     return { fieldName: OPERATOR(VALUE) } 
   }
@@ -99,7 +99,7 @@ If you are wondering how you can combine multiple queries, then you may know tha
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 <Tabs.Tab>
-```tsx
+```typescript
 await unbody.get
             .googleDoc
             .where(({ GreaterThan }) => ({ size: GreaterThan(100) }))
@@ -129,17 +129,19 @@ query {
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 <Tabs.Tab>
-```tsx
+```typescript
 await unbody.get
-            .googleDoc
-            .where(({ GreaterThan, LessThan, And }) => {
-              return And(({ size: GreaterThan(100), createdAt: LessThan("2023-01-01T00:00:00Z") }))
-            })
-            .select('title')
-            .exec()
+           .googleDoc
+           .where(({ GreaterThan, LessThan, And }) => 
+             And({
+               size: GreaterThan(100), 
+               createdAt: LessThan(new Date("2023-01-01T00:00:00Z"))
+             })
+           )
+           .select('title')
+           .exec()
 ```
 </Tabs.Tab>
-
 <Tabs.Tab>
 ```graphql copy
 query {
@@ -148,12 +150,8 @@ query {
       where: {
         operator: And
         operands: [
-          { path: ["size"], operator: GreaterThan, valueInt: 100 }
-          {
-            path: ["createdAt"]
-            operator: LessThan
-            valueDate: "2023-01-01T00:00:00Z"
-          }
+          { path: ["size"], operator: GreaterThan, valueInt: 100 },
+          { path: ["createdAt"], operator: LessThan, valueDate: "2023-01-01T00:00:00Z" }
         ]
       }
     ) {
@@ -164,9 +162,7 @@ query {
   }
 }
 ```
-
 </Tabs.Tab>
-
 </Tabs>
 
 - **Combining Conditions with** `Or`
@@ -174,11 +170,11 @@ query {
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 <Tabs.Tab>
-```tsx
+```typescript
 await unbody.get
             .googleDoc
             .where(({ GreaterThan, Like, Or }) => {
-              return Or(({ size: GreaterThan(100), title: Like("*report*") }))
+              return Or(({ size: GreaterThan(100), title: Like("report") }))
             })
             .select('title')
             .exec()
@@ -193,7 +189,7 @@ query {
         operator: Or
         operands: [
           { path: ["size"], operator: GreaterThan, valueInt: 100 }
-          { path: ["title"], operator: Like, valueText: "*report*" }
+          { path: ["title"], operator: Like, valueText: "report" }
         ]
       }
     ) {
@@ -213,14 +209,20 @@ query {
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 
 <Tabs.Tab>
-```tsx
+```typescript
 await unbody.get
-            .googleDoc
-            .where(({ GreaterThan, And, Like, Or }) => { 
-              return And(({ size: GreaterThan(100) }), Or(({ pathString: Like("*report*"), title: Like("*report*") })))
-            })
-            .select('title')
-            .exec()
+          .googleDoc
+          .where(({ GreaterThan, And, Like, Or }) => 
+            And(
+              { size: GreaterThan(100) }, 
+              Or({ 
+                pathString: Like("report"), 
+                title: Like("report") 
+              })
+            )
+          )
+          .select('title')
+          .exec()
 ```
 </Tabs.Tab>
 <Tabs.Tab>
@@ -235,8 +237,8 @@ query {
           {
             operator: Or
             operands: [
-              { path: ["title"], operator: Like, valueText: "*report*" }
-              { path: ["pathString"], operator: Like, valueText: "*report*" }
+              { path: ["title"], operator: Like, valueText: "report" }
+              { path: ["pathString"], operator: Like, valueText: "report" }
             ]
           }
         ]
@@ -252,10 +254,6 @@ query {
 </Tabs.Tab>
 </Tabs>
   
-<Callout type="info" emoji="ℹ️">
-  Note that in this query, we have used the `len()` function to get the length of the `sharedWith` array.
-</Callout>
-
 For constructing effective GraphQL queries to retrieve the data you need based on specific conditions and criteria it is crucial that you understand these concepts, operators, and their syntax.
 
 We are glad that you made it here. Now you can use the knowledge gained to effectively manage your content using Unbody.

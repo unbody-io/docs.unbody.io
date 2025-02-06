@@ -1,4 +1,5 @@
-import { Tabs, Callout } from "nextra/components";
+import Collapse from '@/components/Collapse';
+import { Callout, Tabs } from "nextra/components";
 
 # Get
 
@@ -15,12 +16,11 @@ We have given below an example to fetch the title and summary of all Google Docs
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-```tsx copy
-const response = await unbody.get
-                             .googleDoc
-                             .select("title", "summary")
-                             .exec();
-console.log(response);
+```typescript copy
+await unbody.get
+            .googleDoc
+            .select("title", "summary")
+            .exec();
 ```
 </Tabs.Tab>
 
@@ -38,9 +38,8 @@ console.log(response);
   </Tabs.Tab>
 </Tabs>
 
-**Expected response:**
-
-```json
+<Collapse title="Expected response">
+```typescript
 {
   "data": {
     "Get": {
@@ -59,6 +58,7 @@ console.log(response);
   }
 }
 ```
+</Collapse>
 
 ## **Cross-references**
 
@@ -66,15 +66,15 @@ You can also deep dive and fetch properties that are cross-referenced to other c
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-```tsx copy
-const response = unbody.get
-                       .googleDoc
-                       .select(
-                         "title",
-                         "summary",
-                         "blocks.imageBlocks.url"
-                       )
-                       .exec()
+```typescript copy
+unbody.get
+      .googleDoc
+      .select(
+        "title",
+        "summary",
+        "blocks.imageBlocks.url"
+      )
+      .exec()
 ```
 </Tabs.Tab>
   <Tabs.Tab>
@@ -97,9 +97,9 @@ const response = unbody.get
 
 </Tabs>
 
-**Expected response:**
 
-```json
+<Collapse title="Expected response">
+```typescript
 {
   "data": {
     "Get": {
@@ -120,6 +120,7 @@ const response = unbody.get
   }
 }
 ```
+</Collapse>
 
 ## **List of Supported Arguments**
 
@@ -129,8 +130,8 @@ Given below is a list of all arguments that you can use with the **Get** method 
 - **`limit`:** It sets the maximum number of objects returned.
 - **`offset`:** If you need to skip a specified number of objects, you can use this argument.
 - **`orderBy`:** This argument returns the objects that are sorted based on a specific property.
-- **`nearText`:** This argument helps you find objects that are semantically similar to the given text. You can learn more about semantic search [here](/content-api/search/semantic-search).
-- **`nearVector`:** This argument helps you find objects with Vector similarity. In simple words, vector similarity is the nearest neighbor search where two objects in high-dimensional space are compared using vectors.
+- **`nearText`:** This argument helps you find objects that are semantically similar to the given text. [Learn here](/content-api/search/semantic-search).
+- **`nearVector`:** This argument helps you find objects with Vector similarity. In simple words, vector similarity is the nearest neighbor search where two objects in high-dimensional space are compared using vectors. [Learn more](content-api/search/semantic-search#utilizing-custom-vectors)
 - **`nearObject`:** This argument returns similar to another object.
 - **`includeMeta`:** If you need to include additional meta-information about query results, you can use this argument in the Get query.
 
