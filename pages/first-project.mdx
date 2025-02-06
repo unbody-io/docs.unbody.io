@@ -29,7 +29,7 @@ A **project** in Unbody is your workspace. It includes:
 - Configurable AI tools like [**vectorizers**](/project-configurations/vectorizers), [**enhancers**](/project-configurations/enhancers), and [**generative modules**](/project-configurations/generative-modules).
 - One or more **data sources**, defining where your data comes from.
 
-When you set up a project, you’re defining the tools and processes that transform raw data into actionable knowledge. Once the data is ingested, Unbody processes, vectorizes, and enriches it. Afterward, you can query and interact with the AI-ready data through the [**Content API**](/content-api/authorization).
+When you set up a project, you’re defining the tools and processes that transform raw data into actionable knowledge. Once the data is ingested, Unbody processes, vectorizes, and enriches it. Afterward, you can query and interact with the AI-ready data through the [**Content API**](/content-api/overview).
 
 <Steps>
 ## Step 1: Create a Project and configure it
@@ -150,20 +150,16 @@ Data sources define where your project gets its data. Unbody supports both [preb
   </Tabs.Tab>
 </Tabs>
 
-{/* At this point, unbody will ingest, process, vectorize, and enrich the data automatically. This process will take while, you can keep track of progress in the data source page under logs section.
-
-At this point you have nothing to do on dashboard and can move to next step which is about start building. The following will be provided in [SDK (typescript)](/content-api/authorization) and [Graphql](/content-api/authorization). Each project has a graphql playground where you can play around with the given queries. */}
-
 At this point, Unbody will ingest, process, vectorize, and enrich the data automatically. This process will take a while, and you can monitor the progress in the logs section:
 ![Processing status in logs](/images/docs/get-started/logs.png)
 {/* *Track initialization progress and processing status* */}
 
-At this point you have nothing to do on dashboard and can move to next step which is about start building. The following will be provided in [SDK (typeScript)](/content-api/authorization) and Graphql. Each project has a graphql playground where you can play around with the given queries. 
+When processing completes, you can move to the next step which is about start building. The following will be provided in [SDK (typeScript)](/content-api/overview) and Graphql. Each project has a graphql playground where you can play around with the given queries. 
 ![GraphQL playground interface](/images/docs/get-started/graphql-playground.png)
 {/* *Built-in GraphQL playground for testing queries* */}
 
 ## Step 3: Interact with Your Data
-Once your data is ready, use the [**Content API**](/content-api/authorization) to perform tasks like  [semantic search](/content-api/search/semantic-search) or content generation. 
+Once your data is ready, use the [**Content API**](/content-api/overview) to perform tasks like  [semantic search](/content-api/search/semantic-search) or content generation. 
 
 Fetch [google docs](/content-api/data-types/googledoc)
 
