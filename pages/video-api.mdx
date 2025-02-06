@@ -1,4 +1,5 @@
-import { Tabs, Callout } from "nextra/components";
+import Collapse from '@/components/Collapse';
+import { Callout, Tabs } from "nextra/components";
 
 # Video API
 
@@ -20,7 +21,7 @@ Every video in Unbody is associated with a Mux asset. To stream a video with Mux
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 <Tabs.Tab>
 
-```tsx
+```tsx copy
 await unbody.get
             .videoFile
             .select("playbackId", "hlsUrl")
@@ -30,7 +31,7 @@ await unbody.get
 </Tabs.Tab>
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     VideoFile {
@@ -53,7 +54,7 @@ Here are some examples:
 <Tabs items={['Mux React Player', 'HLS.js']}>
 <Tabs.Tab>
 
-```js
+```ts copy
 import MuxVideo from "@mux/mux-video-react";
 
 const VideoPlayer = ({ title, playbackId }) => {
@@ -108,12 +109,12 @@ Similarly, for the animated image:
 
 For more detailed guides, please consult the [Mux Documentation](https://docs.mux.com/guides/get-images-from-a-video).
 
-Below are the steps to retrieve the thumbnail and animated image URLs using GraphQL and TypeScript:
+Below are the steps to retrieve the thumbnail and animated image URLs:
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 <Tabs.Tab>
 
-```tsx
+```ts copy
 const { data: { payload: videoFiles }, } = await unbody.get
                                                        .videoFile
                                                        .select("thumbnailUrl.png", "animatedImageUrl.gif")
@@ -125,7 +126,7 @@ const { thumbnailUrl: { png }, animatedImageUrl: { gif }, } = videoFiles[0];
 </Tabs.Tab>
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     VideoFile {
@@ -145,7 +146,7 @@ query {
 
 You can integrate the thumbnail URLs directly into your application as placeholders for the video. Below is an example demonstrating how to utilize the animated image URL with the Mux React Player:
 
-```js
+```tsx copy
 <MuxVideo
   {
     /* Other props */
@@ -165,15 +166,8 @@ Unbody stores these captions as `SubtitleFile` and `SubtitleEntry` objects, here
 
 <Tabs.Tab>
 
-```ts
-import { Unbody } from "unbody";
-
-const unbody = new Unbody({
-  apiKey: "your-api-key",
-  projectId: "your-project-id",
-});
-
-const { data: { payload: subtitleFiles }, } = await unbody.get
+```ts copy
+const { data: { payload: subtitleFiles } } = await unbody.get
                                                           .subtitleFile
                                                           .where({
                                                             media: {
@@ -196,7 +190,7 @@ const { entries } = subtitleFiles[0];
 
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     SubtitleFile(
@@ -222,11 +216,59 @@ query {
 
 </Tabs>
 
+<Collapse title="Expected response">
+```typescript
+[
+  {
+      "end": "00:00:03.560",
+      "start": "00:00:00.000",
+      "text": "\"To catch her in the ride.\""
+  },
+  {
+      "end": "00:00:04.560",
+      "start": "00:00:03.560",
+      "text": "\"One.\""
+  },
+  {
+      "end": "00:00:09.440",
+      "start": "00:00:04.560",
+      "text": "\"If you really want to hear about it, the first thing you'll probably want to"
+  },
+  {
+      "end": "00:00:09.520",
+      "start": "00:00:09.440",
+      "text": "know"
+  },
+  {
+      "end": "00:00:14.060",
+      "start": "00:00:09.520",
+      "text": "is where I was born and what my lousy childhood was like and how my parents"
+  },
+  {
+      "end": "00:00:15.040",
+      "start": "00:00:14.060",
+      "text": "were occupied"
+  },
+  {
+      "end": "00:00:19.440",
+      "start": "00:00:15.040",
+      "text": "and all before they had me and all that David Copperfield kind of crap."
+  },
+  {
+      "end": "00:00:22.800",
+      "start": "00:00:19.440",
+      "text": "But I don't feel like going into it if you want to know the truth."
+  },
+  ...
+]
+```
+</Collapse>
+
 Here are some examples of how you can leverage the auto-generated captions:
 
-- Perform semantic search to find videos or specific parts of videos based on your query.
-- Use the `ask` operator to get answers based on the video transcription.
-- Use the `generate` operator to perform RAG (Retrieval-Augmented Generation) on video transcriptions.
+- Perform [`semantic search`](/content-api/search/semantic-search) to find videos or specific parts of videos based on your query.
+- Use the [`ask`](/content-api/q-n-a) operator to get answers based on the video transcription.
+- Use the [`generate`](/content-api/generative) operator to perform RAG (Retrieval-Augmented Generation) on video transcriptions.
 
 Furthermore, if you have the auto-generated fields feature enabled in your project, Unbody utilizes the transcriptions to generate summaries, extract keywords, named entities, and more. These additional fields are added to both the `VideoFile` and `SubtitleFile` objects.
 
@@ -237,7 +279,7 @@ Mux generates multiple MP4 renditions of video files in different resolutions an
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 <Tabs.Tab>
 
-```tsx
+```tsx copy
 const { data: { payload: videoFiles }, } = await unbody.get
                                                        .videoFile
                                                        .select("files.url", "files.name", "files.width", "files.height")
@@ -249,7 +291,7 @@ const mp4Files = videoFiles[0].files;
 </Tabs.Tab>
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     VideoFile {
@@ -270,7 +312,7 @@ query {
 ## User Limits 
 
 <Callout type="info">
-  See pricing details [here](/pricing).
+  See pricing details [here](https://unbody.io/pricing).
 </Callout>
 
 
