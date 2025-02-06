@@ -1,8 +1,8 @@
-import {Tabs, Tab} from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
 
 # Generative QnA
 
-Generative Q&A leverages the `ask{}` operator to directly extract answers from data objects, offering an intuitive querying tool for developers. This feature is accessible through our GraphQL interface or directly via our JavaScript SDK, making it versatile for different development environments.
+Generative QnA leverages the `ask{}` operator to directly extract answers from data objects, offering an intuitive querying tool for developers. This feature is accessible through our GraphQL interface or directly via our JavaScript SDK, making it versatile for different development environments.
 
 The `ask{}` operator allows you to input a question directly into the query, and Unbody returns the specific answer, streamlining the process of extracting precise information from large datasets.
 
@@ -13,10 +13,8 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
     <Tab title={"SDK (.ts)"}>
         ```javascript copy
         await unbody.get
-                    .<object_name>
-                    .ask("Your question here", {
-                        properties: ["property1", "property2"],
-                    })
+                    .<collectionName>
+                    .ask("Your question here", ["property1", "property2"])
                     .exec()
         ```
     </Tab>
@@ -24,7 +22,7 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
         ```graphql
         query {
             Get {
-                <ObjectName>(
+                <collectionName>(
                     ask: {
                         question: "Your question here",
                         properties: ["property1", "property2"],
@@ -55,8 +53,9 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
         await unbody.get
                     .textDocument
                     .ask("Who directed '2001: A Space Odyssey'?", {
-                        properties: ["summary"]
+                        properties: ["autoSummary"]
                     })
+                    .select('title')
                     .exec()
 
         // This query returns the document's title where the answer is located
@@ -69,7 +68,7 @@ Here's how to structure your queries using the `ask{}` operator in both GraphQL 
                 TextDocument(
                     ask: {
                         question: "Who directed '2001: A Space Odyssey'?",
-                        properties: ["summary"]
+                        properties: ["autoSummary"]
                     }
                     limit: 1
                 ){
