@@ -1,25 +1,37 @@
+import { Callout } from "nextra/components";
+
 # Push Api
 
 The `unbody/push` package provides an easy-to-use interface to manually upload files and push custom data into your projects.
 
 - **Uploading Files**: Manually upload and manage files like images and videos.
-- **Pushing Custom Data**: Push structured JSON data with your own schema.
+- **Pushing Custom Data**: Push structured JSON data with your own schema. Learn more about [custom schema](/project-configurations/custom-schemas).
 
 ## Authentication
 
-The Push API requires authentication using a **Project API Key**, which can be generated on the Unbody dashboard under the project settings. Use this API key to authenticate your requests.
+The Push API requires three credentials for authentication:
 
-```ts
-import { UnbodyPushAPI } from 'unbody/push'
+```typescript
+import { UnbodyPushAPI } from '@unbody-io/push-api'
 
 const pushApi = new UnbodyPushAPI({
-  projectId: '[project-id]',
-  sourceId: '[push-api-source-id]',
+  projectId: '[project-id]',      
+  sourceId: '[source-id]',        
   auth: {
-    apiKey: 'pk_...', // Your project API key
+    apiKey: 'pk_...',           
   },
 })
 ```
+
+### Getting Credentials
+
+1. `projectId`: **Settings** menu
+2. `sourceId`: Create Push API source using [Admin API](/admin-api)
+3. `apiKey`: **Settings** → **Developer Settings** → Create API key
+
+<Callout type="warning">
+Store credentials securely using environment variables
+</Callout>
 
 ## Usage
 
@@ -27,7 +39,7 @@ const pushApi = new UnbodyPushAPI({
 
 You can upload files to your Unbody project using the `.files.upload()` method. The file should have a valid name and extension.
 
-```js
+```ts
 // Uploading a file
 const { data } = await pushApi.files.upload({
   id: 'file-uuid', // Unique ID for the file
@@ -72,7 +84,7 @@ await pushApi.files.upload({
 
 To delete a file, use the `.files.delete()` method:
 
-```js
+```ts
 await pushApi.files.delete({
   id: 'file-unique-id', // Unique ID for the file
 })
@@ -82,7 +94,7 @@ await pushApi.files.delete({
 
 You can list uploaded files with pagination options:
 
-```js
+```ts
 await pushApi.files.list({
   cursor: 'cursor', // Optional
   limit: 10, // Optional
@@ -121,7 +133,7 @@ console.log(data.data.type) // Record type; `file` or `record`
 
 The `.records.update()` method allows you to replace the entire payload of a record or file's extra fields:
 
-```js
+```ts
 await pushApi.records.update({
   id: 'record-unique-id',
   collection: 'CustomCollection',
@@ -141,7 +153,7 @@ await pushApi.records.update({
 
 The `.records.patch()` method lets you partially update the record's payload or file's extra fields:
 
-```js
+```ts
 await pushApi.records.patch({
   id: 'record-unique-id',
   collection: 'CustomCollection',
@@ -178,20 +190,23 @@ await pushApi.records.patch({
 
 To delete a specific data record:
 
-```js
+```ts
 await pushApi.records.delete({
   id: 'record-unique-id',
   collection: 'CustomCollection',
 })
 ```
 
-**Note**: This method cannot be used to delete files. For deleting files, use `pushApi.files.delete` method instead.
+<Callout type="info">
+This method cannot be used to delete files. For deleting files, use `pushApi.files.delete` method instead.
+</Callout>
+
 
 ### List Data Records
 
 You can list all records in a specific collection:
 
-```js
+```ts
 await pushApi.records.list({
   collection: 'CustomCollection', // Optional
   cursor: 'cursor', // Optional
@@ -204,6 +219,10 @@ await pushApi.records.list({
 
 - The `id` for both files and records must be unique across the same source. For instance, a file and a record cannot share the same `id`. When processing records through the Push API, the `remoteId` field will contain this `id`.
 - Data within a **source** is isolated, meaning **cross-references** cannot be created between records or files that belong to different sources. All operations are limited to the current source.
+
+<Callout type="info">
+Initialize your Push API source using it. Learn more [Admin API source documentation](/admin-api#project-sources).
+</Callout>
 
 ## Endpoints
 
