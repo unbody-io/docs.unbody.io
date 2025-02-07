@@ -1,5 +1,6 @@
 const meta = {
-  "build-custom-enhancement-pipeline": "Build Custom Enhancement Pipeline",
+  "image-metadata-extraction-pipeline": "Image metadata extraction pipeline",
+  "build-faq-generator": "Build FAQ Generator From PDFs",
 };
 
 export default meta;
