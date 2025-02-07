@@ -1,12 +1,28 @@
 import Collapse from '@/components/Collapse'
 
-# Building Advanced Schema: Extending ImageBlock with Custom Fields for Product Catalog
-Create a product catalog system with enhanced schema capabilities, including image handling and custom fields. This example demonstrates cross-collection relationships and complex field definitions.
+# Importing Advanced Custom Schema Including File
 
-## Project Configuration
-Configure a project that extends the existing `ImageBlock` collection with custom e-commerce fields. By extending `ImageBlock`, we maintain all original image functionality while adding product-specific fields prefixed with 'x' as required by custom schemas:
+When you need to import custom data, including files and complex structures, you can extend built-in collections with your schema. This recipe shows how to:
+- Extend ImageBlock with custom fields
+- Upload images with custom product data
+- Fetch custom imported data
 
 ```typescript copy
+import { BooleanField, NumberField, StringField, Unbody, IImageBlock } from "unbody";
+import {
+  AutoSummary,
+  AutoVision,
+  CustomSchema,
+  Generative,
+  ImageVectorizer,
+  ProjectSettings,
+  SourceTypes,
+  TextVectorizer,
+  UnbodyAdmin,
+} from "unbody/admin";
+import { UnbodyPushAPI } from "@unbody-io/push-api";
+
+// 1. Create project with settings
 const projectSettings = new ProjectSettings();
 projectSettings
   .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
@@ -14,126 +30,124 @@ projectSettings
   .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
   .set(new AutoVision(AutoVision.OpenAI.GPT4o));
 
+// Create admin instance with credentials
+const admin = new UnbodyAdmin({
+    auth: {
+        username: "93156549-...", // ID
+        password: "ak_7660b....", // Secret
+    },
+});
+
 const project = admin.projects.ref({
   name: "Product Catalog Images",
   settings: projectSettings,
 });
 
-// Define enhanced schema for product images
+// 2. Define enhanced schema for product images
 const customSchema = new CustomSchema();
 const productImageBlock = new CustomSchema.Collection("ImageBlock");
 
-// Add e-commerce specific fields
-productImageBlock.add(
-  new CustomSchema.Field.Text("xProductName", "Product Name")
-);
-productImageBlock.add(
-  new CustomSchema.Field.Text("xDescription", "Product Description")
-);
-productImageBlock.add(
-  new CustomSchema.Field.Number("xPrice", "Product Price")
-);
-productImageBlock.add(
-  new CustomSchema.Field.Text("xCategory", "Product Category")
-);
-productImageBlock.add(
-  new CustomSchema.Field.Boolean("xInStock", "Stock Status")
-);
-productImageBlock.add(
-  new CustomSchema.Field.Number("xStockQuantity", "Stock Quantity")
-);
+// Add product-specific fields
+productImageBlock.add(new CustomSchema.Field.Text("productName", "Product Name"));
+productImageBlock.add(new CustomSchema.Field.Text("description", "Product Description"));
+productImageBlock.add(new CustomSchema.Field.Number("price", "Product Price"));
+productImageBlock.add(new CustomSchema.Field.Text("category", "Product Category"));
+productImageBlock.add(new CustomSchema.Field.Boolean("inStock", "Stock Status"));
+productImageBlock.add(new CustomSchema.Field.Number("stockQuantity", "Stock Quantity"));
 
 customSchema.extend(productImageBlock);
 project.settings.set(customSchema);
 await project.save();
-```
 
-## Push API Configuration
-Create and initialize a Push API source for data ingestion. The source enables us to upload files and metadata to our enhanced schema:
-
-```typescript copy
+// 3. Set up Push API source
 const source = project.sources.ref({
   name: "Push API Source",
   type: SourceTypes.PushApi,
 });
-
 await project.sources.save(source);
 await source.initialize();
-```
 
-## Uploading Product Data
-Use the Push API instance to upload both image files and associated product metadata. The FormData combines the image file with structured product information:
+// 4. Upload product image with product data
 
-```typescript copy
+// Create pushApi instance with credentials
+const pushApi = new UnbodyPushAPI({
+    projectId: "22e0b...", // Project ID
+    sourceId: "9d98...", // "Push API Source" -> Source ID
+    auth: {
+        apiKey: "pk_.....", // Project Api Key
+    },
+});
+
 const formData = new FormData();
 formData.append("id", `image-${Date.now()}`);
 formData.append("file", fileBlob);
 formData.append(
   "payload",
   JSON.stringify({
-    xProductName: "Classic T-Shirt",
-    xDescription: "Premium cotton t-shirt",
-    xPrice: 29.99,
-    xCategory: "Apparel",
-    xInStock: true,
-    xStockQuantity: 100,
+    productName: "Classic T-Shirt",
+    description: "Premium cotton t-shirt",
+    price: 29.99,
+    category: "Apparel",
+    inStock: true,
+    stockQuantity: 100,
   })
 );
 
 const { data: imageData } = await pushApi.files.upload({
   form: formData,
 });
-```
 
-## Data Retrieval
-Query enhanced image collection using TypeScript interfaces. The interface extends `IImageBlock` to include our custom product fields:
+// 5. Fetch custom imported data
 
-```typescript copy
+// Create unbody sdk instance
+const unbody = new Unbody({
+    apiKey: "pk_.....", // Project Api Key
+    projectId: "22e0b...", // Project ID
+});
+
 interface ExtendedImageBlock extends IImageBlock {
-  xProductName: StringField;
-  xDescription: StringField;
-  xPrice: NumberField;
-  xCategory: StringField;
-  xInStock: BooleanField;
-  xStockQuantity: NumberField;
+  productName: StringField;
+  description: StringField;
+  price: NumberField;
+  category: StringField;
+  inStock: BooleanField;
+  stockQuantity: NumberField;
 }
 
-const {
-  data: { payload },
-} = await unbody.get
+const { data: { payload } } = await unbody.get
   .collection<ExtendedImageBlock>("ImageBlock")
   .select(
-    "xProductName",
-    "xDescription",
-    "xPrice",
-    "xCategory",
-    "xInStock",
-    "xStockQuantity",
+    "productName",
+    "description",
+    "price",
+    "category",
+    "inStock",
+    "stockQuantity",
     "url",
     "originalName"
   )
   .exec();
 ```
 
-<Collapse title="Response">
-```typescript copy
 
+
+<Collapse title={'Response'}>
+```typescript copy
 [
     {
         "originalName": "blob",
         "url": "https://cdn.unbody.io/febde0d7-b89e-48b2-9aef-c134bdf97d6b/misc/67391560-a490-5897-ac27-d6d94856a77b",
-        "xCategory": "Apparel",
-        "xDescription": "Premium cotton t-shirt",
-        "xInStock": true,
-        "xPrice": 29.99,
-        "xProductName": "Classic T-Shirt",
-        "xStockQuantity": 100
+        "category": "Apparel",
+        "description": "Premium cotton t-shirt",
+        "inStock": true,
+        "price": 29.99,
+        "productName": "Classic T-Shirt",
+        "stockQuantity": 100
     }
 ]
-
 ```
 </Collapse>
 
-## Learn More
-- [Custom Schema Documentation](/project-configurations/custom-schemas)
-- [Push API Documentation](/data-ingestion/push-api)
+## Related Resources
+- [Custom Schema Guide](/project-configurations/custom-schemas)
+- [Push API Guide](/data-ingestion/push-api)

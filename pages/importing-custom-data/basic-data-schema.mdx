@@ -1,17 +1,29 @@
 import Collapse from '@/components/Collapse'
 
-# Building Simple Data Schema: A Push API and Schema Definition Example
+# Importing Basic Custom Data Schema
 
-This guide demonstrates how to create a simple product catalog using Unbody. We'll create a project with a custom schema, set up a Push API source, and show how to add and retrieve data.
+When you can't import your custom data through third-party [data providers](/providers/overview), you need to define a schema and use [Push API](/data-ingestion/push-api) to import your data. This recipe shows how to:
+- Create a custom schema for your data
+- Import data using Push API
+- Fetch imported custom data
 
-## Creating Project with Custom Schema
+```typescript copy
+import { BooleanField, NumberField, StringField, Unbody } from "unbody";
+import {
+  AutoSummary,
+  AutoVision,
+  CustomSchema,
+  Generative,
+  ImageVectorizer,
+  ProjectSettings,
+  SourceTypes,
+  TextVectorizer,
+  UnbodyAdmin,
+} from "unbody/admin";
+import { UnbodyPushAPI } from "@unbody-io/push-api";
 
-First, let's create a project with necessary settings and define a simple product schema with basic fields:
-
-```tsx copy
-// Creating Projects with custom schema
+// 1. Create project with settings
 const projectSettings = new ProjectSettings();
-
 projectSettings
     .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
     .set(new ImageVectorizer(ImageVectorizer.Img2VecNeural.Default))
@@ -19,15 +31,23 @@ projectSettings
     .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
     .set(new AutoVision(AutoVision.OpenAI.GPT4o));
 
+// create an admin instance with credentials
+const admin = new UnbodyAdmin({
+    auth: {
+    username: "93156549-...", // ID
+    password: "ak_7660b....", // Secret
+    },
+});
+
 const project = admin.projects.ref({
     name: "Products Projects",
     settings: projectSettings,
 });
 
+// 2. Define product schema
 const customSchema = new CustomSchema();
 const productCollection = new CustomSchema.Collection("ProductCollection");
 
-// Add fields to Product collection
 productCollection.add(new CustomSchema.Field.Text("name", "Product Name"));
 productCollection.add(
     new CustomSchema.Field.Number("price", "Product Price")
@@ -39,102 +59,68 @@ productCollection.add(
     new CustomSchema.Field.Boolean("inStock", "Stock Status")
 );
 
-// Add the collection to schema
 customSchema.add(productCollection);
 project.settings.set(customSchema);
-    
-// Saving the project will create the project
 await project.save();
-```
 
-## Setting Up Push API Source
-
-After creating the project, we need to set up a Push API source to enable data ingestion:
-
-```tsx copy
-// Create Push Api Source
-const project = await admin.projects.get({
-    id: "de272ab3-a4e3-445a-8b0e-6e73d44857d3",
-});
-
-// Create source reference
+// 3. Set up Push API source
 const source = project.sources.ref({
     name: "Push API Source",
     type: SourceTypes.PushApi,
 });
-
 await project.sources.save(source);
-```
 
-## Adding Product Data
-
-Now we can use the Push API to add product data to our collection:
-
-```tsx copy
-// Upload custom Data using Push Api
-// Product Data
+// 4. Add product data
 const productData = {
-        name: "Wireless Mouse",
-        price: 29.99,
-        description: "Ergonomic wireless mouse with long battery life",
-        inStock: true,
-    };
-      
+    name: "Wireless Mouse",
+    price: 29.99,
+    description: "Ergonomic wireless mouse with long battery life",
+    inStock: true,
+};
+
+// Create pushApi instance with credentials
+const pushApi = new UnbodyPushAPI({
+    projectId: "22e0b...", // Project ID
+    sourceId: "9d98...", //  "Push API Source" -> Source ID
+    auth: {
+    apiKey: "pk_.....", //  Project Api key
+    },
+});
+
 const { data } = await pushApi.records.create({
-        id: `product-${Date.now()}`,
-        collection: "ProductCollection",
-        payload: productData,
-    });      
-```
-
-## Initializing the Source
-
-For the changes to take effect, we need to initialize the source:
-
-```tsx copy
-const project = await admin.projects.get({
-    id: "de272ab3-a4e3-445a-8b0e-6e73d44857d3",
+    id: `product-${Date.now()}`,
+    collection: "ProductCollection",
+    payload: productData,
 });
 
-// Using "Push API Source" as source id
-const source = await project.sources.get({
-    id: "c47a5279-cf03-4d4c-89b4-96a27d7ae796",
+// 5. Initialize source
+await source.initialize(); // used source instance
+
+// 6. Fetch imported data
+
+// Create unbody sdk instance
+const unbody = new Unbody({
+    apiKey: "pk_.....",
+    projectId: "22e0b...", // Project Api Key
 });
 
-await source.initialize();
-```
-
-## Fetching Product Data
-
-Finally, let's retrieve the product data using TypeScript interfaces for type safety:
-
-```typescript copy
-import {
-  BooleanField,
-  NumberField,
-  StringField,
-} from "unbody"
-
-// Define Typescript interface and use imported unbody field types
 interface IProduct {
-  name: StringField;
-  price: NumberField;
-  description: StringField;
-  inStock: BooleanField;
+    name: StringField;
+    price: NumberField;
+    description: StringField;
+    inStock: BooleanField;
 }
 
-// Use unbody.get to fetch `ProductCollection` Data
 const {
-  data: { payload },
+    data: { payload },
 } = await unbody.get
-  .collection<IProduct>("ProductCollection")
-  .select("name", "description", "price", "inStock")
-  .exec();
-```  
+    .collection<IProduct>("ProductCollection")
+    .select("name", "description", "price", "inStock")
+    .exec();
+```
 
-<Collapse title="Response">
+<Collapse title={'Response'}>
 ```typescript copy
-
 [
     {
         "description": "Ergonomic wireless mouse with long battery life",
@@ -146,8 +132,6 @@ const {
 ```
 </Collapse>
 
-## Learn More
-
-For more detailed information, check out these guides:
+## Related Resources
 - [Custom Schema Guide](/project-configurations/custom-schemas)
 - [Push API Guide](/data-ingestion/push-api)
