@@ -3,17 +3,17 @@ import { Tabs } from "nextra/components"
 
 
 # Multimodal Rag Using Generative Search
-
-Create comprehensive insights by processing multiple types of data simultaneously - visual content (images), text (OCR, captions), and metadata. Multimodal RAG combines these different modalities to generate richer, more contextual understanding of your content.
+{/* TODO: needs improvement here */}
+Create comprehensive insights by processing multiple types of data simultaneously - image, text, video and audio. Multimodal RAG combines these different modalities to generate richer, more contextual understanding of your content.
 
 ## Image Analysis with Metadata
 Need to analyze multiple images while considering their metadata, OCR text, and captions? Use [`.generate.fromMany()`](/content-api/generative#example-2---from-many) with [Messages](/content-api/generative#using-messages-instead-of-prompts) and [Vars](/content-api/generative#using-vars) to combine visual analysis with metadata examination for comprehensive image insights.
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
-     data: { payload }
+     data: { generate }
    } = await unbody.get
                    .imageBlock
                    .where({ mimeType: "image/jpeg" })
@@ -69,8 +69,9 @@ Need to analyze multiple images while considering their metadata, OCR text, and 
                    .exec();
    ```
  </Tabs.Tab>
+ {/* TODO: this graphql is not usable */}
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    {
      Get {
        ImageBlock(
@@ -154,38 +155,49 @@ Need to analyze multiple images while considering their metadata, OCR text, and 
 
 <Collapse title="Response">
 ```typescript
-
-[
-    {
-        "_additional": {
-            "generate": {
-                "error": null,
-                "groupedResult": "### Analysis Report\n\n#### Image 1 Analysis\n- **Visual Content**: The first image displays a classic, silver-colored Jaguar E-Type car parked in a covered area with hay bales in the background. The setting appears to be a barn-like structure with a brick floor.\n- **Generated Caption**: \"Classic car parked in a barn with hay bales.\" This caption is accurate as it successfully identifies the key elements in the image – the classic car and the barn setting with hay bales.\n- **OCR Text**: The OCR text for this image is empty (\"\"). This is appropriate since there is no visible text in the image to recognize or transcribe.\n- **Alt Description**: \"6\". The alt description provided is not descriptive of the image content and does not aid in understanding or accessibility.\n\n#### Image 2 Analysis\n- **Visual Content**: The second image shows a classic, green Jaguar E-Type convertible parked on a paved area, surrounded by a lush green grassy field with trees in the background. The car is facing towards the viewer.\n- **Generated Caption**: \"A classic green convertible car parked on a paved area with a grassy background.\" This caption is very accurate and descriptive, highlighting the main features of the image such as the color and type of the car, as well as the setting.\n- **OCR Text**: Similar to the first image, the OCR text for this image is empty (\"\"). This is correct since there is no readable text in the image.\n- **Alt Description**: \"1\". Again, this alt description does not provide any useful information about the image and lacks descriptive value.\n\n### Summary:\n1. **Caption Accuracy**: Both auto-generated captions accurately describe the scenes in the respective images. They successfully capture the type and color of the cars, as well as their settings.\n2. **OCR Text Relation**: In both cases, the OCR text is empty, which is appropriate as there are no textual elements in either of the images.\n3. **Alt Description Comparison**: The alt descriptions (\"6\" and \"1\") are not informative and do not convey any visual content of the images. Alt descriptions could be improved by providing brief, relevant descriptions of the images to enhance accessibility.\n\nOverall, the captions and OCR text are handled appropriately, but the alt descriptions need significant improvement to be useful.",
-                "metadata": {
-                    "finishReason": "stop",
-                    "usage": {
-                        "inputTokens": 1308,
-                        "outputTokens": 468,
-                        "totalTokens": 1776
+{
+    "from": [
+        {
+            "_additional": {
+                "generate": {
+                    "error": null,
+                    "groupedResult": "Based on the details provided and analyzing the visual content of the images:\n\n1. **Accuracy of Auto-Generated Captions**:\n   - The first image's caption, \"A barred owl perched on a tree branch with a blurred background of autumn leaves,\" is accurate. It describes the subject (a barred owl), its action (perched), and the setting (tree branch with autumn leaves) effectively.\n   - The second image's caption, \"A classic car driving on a country road,\" is also accurate. It captures the essence of the scene showing a classic car, specifically a Jaguar E-Type, in motion on a road that appears to be in a rural or country setting.\n\n2. **Relevance of OCR Text to Visual Content**:\n   - The OCR text \"HVK 809C\" extracted from the second image corresponds to the license plate of the car. This information is accurate and relevant as it provides specific identification for the car shown in the image.\n\n3. **Comparison of Alt Descriptions with Visible Content**:\n   - The alt descriptions provided as \"2\" and \"5\" for the respective images are generic and do not provide any descriptive information about the content of the images. These descriptions are not useful for understanding or interpreting the images and do not align well with the visual content.\n\nIn summary, the captions generated for the images are accurate and appropriately describe the scenes. The OCR text correctly identifies a detail from the second image (the car’s license plate), enhancing the contextual understanding of the image. The alt descriptions, however, are minimal and not descriptive, offering no value in terms of content interpretation.",
+                    "metadata": {
+                        "finishReason": "stop",
+                        "usage": {
+                            "inputTokens": 1450,
+                            "outputTokens": 329,
+                            "totalTokens": 1779
+                        }
                     }
                 }
-            }
+            },
+            "alt": "2",
+            "autoCaption": "A barred owl perched on a tree branch with a blurred background of autumn leaves.",
+            "autoOCR": "",
+            "originalName": "2.jpg",
+            "url": "https://images.cdn.unbody.io/a2f450e8-2638-4201-8dab-f2cca67df9ce/image/76a4db5e-2abb-58fb-bf02-a30e0b4f7a0d.jpg"
         },
-        "alt": "6",
-        "autoCaption": "Classic car parked in a barn with hay bales",
-        "autoOCR": "",
-        "originalName": "6.jpg",
-        "url": "https://images.cdn.unbody.io/8a3c7426-d45b-4833-aa89-003b1573ff70/image/798d7f1b-1902-5209-99d7-2ff13072b18b.jpg"
-    },
-    {
-        "_additional": null,
-        "alt": "1",
-        "autoCaption": "A classic green convertible car parked on a paved area with a grassy background.",
-        "autoOCR": "",
-        "originalName": "1.jpeg",
-        "url": "https://images.cdn.unbody.io/8a3c7426-d45b-4833-aa89-003b1573ff70/image/aaf76382-2c0e-5065-af32-2e4b577e02f0.jpeg"
+        {
+            "_additional": null,
+            "alt": "5",
+            "autoCaption": "A classic car driving on a country road",
+            "autoOCR": "HVK 809C",
+            "originalName": "5.jpg",
+            "url": "https://images.cdn.unbody.io/a2f450e8-2638-4201-8dab-f2cca67df9ce/image/590c698c-eb11-512f-b305-8d36b01c345d.jpg"
+        }
+    ],
+    "result": "Based on the details provided and analyzing the visual content of the images:\n\n1. **Accuracy of Auto-Generated Captions**:\n   - The first image's caption, \"A barred owl perched on a tree branch with a blurred background of autumn leaves,\" is accurate. It describes the subject (a barred owl), its action (perched), and the setting (tree branch with autumn leaves) effectively.\n   - The second image's caption, \"A classic car driving on a country road,\" is also accurate. It captures the essence of the scene showing a classic car, specifically a Jaguar E-Type, in motion on a road that appears to be in a rural or country setting.\n\n2. **Relevance of OCR Text to Visual Content**:\n   - The OCR text \"HVK 809C\" extracted from the second image corresponds to the license plate of the car. This information is accurate and relevant as it provides specific identification for the car shown in the image.\n\n3. **Comparison of Alt Descriptions with Visible Content**:\n   - The alt descriptions provided as \"2\" and \"5\" for the respective images are generic and do not provide any descriptive information about the content of the images. These descriptions are not useful for understanding or interpreting the images and do not align well with the visual content.\n\nIn summary, the captions generated for the images are accurate and appropriately describe the scenes. The OCR text correctly identifies a detail from the second image (the car’s license plate), enhancing the contextual understanding of the image. The alt descriptions, however, are minimal and not descriptive, offering no value in terms of content interpretation.",
+    "error": null,
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 1450,
+            "outputTokens": 329,
+            "totalTokens": 1779
+        }
     }
-]
+}
 ```
 </Collapse>
 
