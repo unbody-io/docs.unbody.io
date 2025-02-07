@@ -7,7 +7,8 @@ import { Tabs } from "nextra/components"
 Create comprehensive insights by processing multiple types of data simultaneously - image, text, video and audio. Multimodal RAG combines these different modalities to generate richer, more contextual understanding of your content.
 
 ## Image Analysis with Metadata
-Need to analyze multiple images while considering their metadata, OCR text, and captions? Use [`.generate.fromMany()`](/content-api/generative#example-2---from-many) with [Messages](/content-api/generative#using-messages-instead-of-prompts) and [Vars](/content-api/generative#using-vars) to combine visual analysis with metadata examination for comprehensive image insights.
+When you need to understand multiple images beyond their visual content by combining OCR results, auto-generated captions, and metadata, use [`.generate.fromMany()`](/content-api/generative#example-2---from-many) with [messages](/content-api/generative#using-messages-instead-of-prompts) and [vars](/content-api/generative#using-vars). 
+
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>

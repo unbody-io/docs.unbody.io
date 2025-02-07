@@ -67,7 +67,7 @@ When you need results that match both concepts and exact terms, [Hybrid Search](
 </Collapse>
 
 ## Advanced Search
-Sometimes you need to fine-tune your search results by combining semantic vectors with specific keyword matching. Using [Advanced Hybrid Search](/content-api/search/hybrid-search#advanced-usage), you can prioritize certain fields like titles and tags while maintaining semantic relevance. 
+Sometimes you need to fine-tune your search results by combining vectors with specific keyword matching. Using [Advanced Hybrid Search](/content-api/search/hybrid-search#advanced-usage), you can prioritize certain fields like titles and tags while maintaining semantic relevance. 
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
@@ -78,7 +78,7 @@ Sometimes you need to fine-tune your search results by combining semantic vector
                    .googleDoc
                    .search.hybrid("Generative AI", {
                      alpha: 0.7,
-                     vector: [0.0055148206, 0.013368472, 0.035909854],
+                     vector: [0.0055148206, 0.013368472, 0.035909854, ...],
                      fusionType: "relativeScoreFusion",
                      properties: ["title", "tags"]
                    })
@@ -93,7 +93,7 @@ Sometimes you need to fine-tune your search results by combining semantic vector
          hybrid: {
            query: "Generative AI",
            alpha: 0.7,
-           vector: [0.0055148206, 0.013368472, 0.035909854],
+           vector: [0.0055148206, 0.013368472, 0.035909854, ...],
            fusionType: relativeScoreFusion,
            properties: ["title", "tags"]
          }
