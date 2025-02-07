@@ -1,3 +1,5 @@
+import Collapse from '@/components/Collapse'
+
 # FAQ Generator for PDF Documents
 
 When building a knowledge base or documentation system, automatically extracting FAQs from PDF documents can significantly improve content accessibility and searchability. This recipe shows how to:
@@ -5,11 +7,27 @@ When building a knowledge base or documentation system, automatically extracting
 - Store FAQs in a searchable format
 - Maintain type safety for FAQ data
 
-
 ```typescript copy
-import { Enhancement, ProjectSettings, TextVectorizer, Generative, 
-         AutoSummary, AutoVision, PdfParser, CustomSchema } from 'unbody/admin';
-import { StringField, ITextDocument } from 'unbody';
+import { BooleanField, NumberField, StringField, Unbody, ITextDocument } from "unbody";
+import {
+  AutoSummary,
+  AutoVision,
+  CustomSchema,
+  Enhancement,
+  Generative,
+  PdfParser,
+  ProjectSettings,
+  TextVectorizer,
+  UnbodyAdmin,
+} from "unbody/admin";
+
+// Create admin instance with credentials
+const admin = new UnbodyAdmin({
+    auth: {
+        username: "93156549-...", // ID
+        password: "ak_7660b....", // Secret
+    },
+});
 
 // 1. Initialize pipeline for PDF document processing
 const faqPipeline = new Enhancement.Pipeline(
@@ -44,7 +62,7 @@ const generateFAQs = new Enhancement.Step(
   }),
   {
     output: {
-      xFAQs: (ctx) => JSON.stringify(ctx.result.json.faqs),
+      faqs: (ctx) => JSON.stringify(ctx.result.json.faqs),
     },
   }
 );
@@ -68,7 +86,7 @@ projectSettings
     new CustomSchema().extend(
       new CustomSchema.Collection("TextDocument").add(
         new CustomSchema.Field.Text(
-          "xFAQs",
+          "faqs",
           "FAQs generated from the document"
         )
       )
@@ -82,9 +100,15 @@ const project = admin.projects.ref({
 
 await project.save();
 
+// Create unbody instance
+const unbody = new Unbody({
+    apiKey: "pk_.....", // Project Api Key
+    projectId: "22e0b...", // Project Id
+});
+
 // 5. Query documents with type safety
 interface ExtendedTextDocument extends ITextDocument {
-  xFAQs: StringField;
+  faqs: StringField;
 }
 
 const { data: { payload } } = await unbody.get
@@ -92,7 +116,7 @@ const { data: { payload } } = await unbody.get
   .where({
     mimeType: "application/pdf"
   })
-  .select("title", "originalName", "xFAQs")
+  .select("title", "originalName", "faqs")
   .exec();
 ```
 
@@ -103,7 +127,7 @@ const { data: { payload } } = await unbody.get
   {
     "title": "Product Manual",
     "originalName": "manual.pdf",
-    "xFAQs": "[{\"question\":\"How do I install the software?\",\"answer\":\"Download the installer...\"},{\"question\":\"What are the system requirements?\",\"answer\":\"Minimum 8GB RAM...\"}]"
+    "faqs": "[{\"question\":\"How do I install the software?\",\"answer\":\"Download the installer...\"},{\"question\":\"What are the system requirements?\",\"answer\":\"Minimum 8GB RAM...\"}]"
   }
 ]
 ```
