@@ -52,7 +52,7 @@ When you need to generate a result for each object based on a single prompt, use
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -235,7 +235,7 @@ You might want to adjust the maxTokens, creativity level, or use a specific mode
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -352,7 +352,7 @@ When you need to generate from multiple documents together and get a grouped res
 
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 {
     "from": [
         {
@@ -423,7 +423,7 @@ Sometimes you want more control over your multi-document generation. Using fromM
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { generate }
    } = await unbody.get
@@ -446,7 +446,7 @@ Sometimes you want more control over your multi-document generation. Using fromM
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    query {
       Get {
         TextDocument(
@@ -491,7 +491,7 @@ Sometimes you want more control over your multi-document generation. Using fromM
 
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {

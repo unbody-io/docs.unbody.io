@@ -10,7 +10,7 @@ When you want to find related documents based on their concepts, use text simila
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -22,7 +22,7 @@ When you want to find related documents based on their concepts, use text simila
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    {
      Get {
        TextDocument(
@@ -60,7 +60,7 @@ When you want to find related documents based on their concepts, use text simila
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -86,7 +86,7 @@ Sometimes you need to steer your search results toward specific themes while mai
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -104,7 +104,7 @@ Sometimes you need to steer your search results toward specific themes while mai
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    {
      Get {
        TextDocument(
@@ -135,7 +135,7 @@ Sometimes you need to steer your search results toward specific themes while mai
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -175,7 +175,7 @@ When you need to find visually similar images regardless of their metadata, use 
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -189,7 +189,7 @@ When you need to find visually similar images regardless of their metadata, use 
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    query {
      Get {
        ImageBlock(
@@ -213,7 +213,7 @@ When you need to find visually similar images regardless of their metadata, use 
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -265,7 +265,7 @@ When you have a document you like and want to find similar ones, use `.similar.r
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -279,7 +279,7 @@ When you have a document you like and want to find similar ones, use `.similar.r
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    query {
      Get {
        TextDocument(

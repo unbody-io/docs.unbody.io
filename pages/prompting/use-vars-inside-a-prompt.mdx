@@ -14,7 +14,7 @@ The processed data is then injected into a message prompt using `context` syntax
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const {
       data: { payload },
     } = await unbody.get.videoFile
@@ -52,7 +52,7 @@ The processed data is then injected into a message prompt using `context` syntax
     ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     {
       Get {
         VideoFile(limit: 1) {
@@ -109,7 +109,7 @@ The processed data is then injected into a message prompt using `context` syntax
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {

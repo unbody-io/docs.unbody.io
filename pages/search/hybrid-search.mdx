@@ -10,7 +10,7 @@ When you need results that match both concepts and exact terms, [Hybrid Search](
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -23,7 +23,7 @@ When you need results that match both concepts and exact terms, [Hybrid Search](
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    {
      Get {
        TextDocument(hybrid: {
@@ -44,7 +44,7 @@ When you need results that match both concepts and exact terms, [Hybrid Search](
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 [
     {
         "_additional": {
@@ -71,7 +71,7 @@ Sometimes you need to fine-tune your search results by combining semantic vector
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -86,7 +86,7 @@ Sometimes you need to fine-tune your search results by combining semantic vector
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    {
      Get {
        TextDocument(
@@ -111,7 +111,7 @@ Sometimes you need to fine-tune your search results by combining semantic vector
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 [
     {
         "_additional": {

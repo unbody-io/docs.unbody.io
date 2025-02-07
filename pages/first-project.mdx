@@ -72,7 +72,7 @@ For this guide, we use a [**vectorizer**](/admin-api#textvectorizer-configuratio
 
    ### Create a project programmatically:
 
-    ```typescript
+    ```typescript copy
     import { 
           UnbodyAdmin, 
           ProjectSettings,
@@ -174,7 +174,7 @@ Fetch [google docs](/content-api/data-types/googledoc)
   </Tabs.Tab>
 
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
      query {
         Get {
             GoogleDoc {
@@ -195,7 +195,7 @@ Now lets get all [text documents](/content-api/data-types/textdocument) that are
 
 <Tabs items={['SDK (.ts)', 'Graphql']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const { data: {payload} } = await unbody.get
                                             .textDocument
                                             .where({ mimeType: "text/markdown" })
@@ -205,7 +205,7 @@ Now lets get all [text documents](/content-api/data-types/textdocument) that are
   </Tabs.Tab>
 
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     query {
         Get {
             TextDocument(
@@ -229,7 +229,7 @@ Fetch all [images](/content-api/data-types/imageblock)
 
 <Tabs items={['SDK (.ts)', 'Graphql']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const { data: {payload} } = await unbody.get
                                             .imageBlock
                                             .select("url", "originalName")
@@ -238,7 +238,7 @@ Fetch all [images](/content-api/data-types/imageblock)
   </Tabs.Tab>
 
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     query {
         Get {
             ImageBlock {
@@ -255,7 +255,7 @@ Semantic search on images
 
 <Tabs items={['SDK (.ts)', 'Graphql']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const { data: {payload} } = await unbody.get
                                             .imageBlock
                                             .search
@@ -266,7 +266,7 @@ Semantic search on images
   </Tabs.Tab>
 
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     query {
         Get {
             ImageBlock(nearText: {concepts: ["Flight tickets"]}) {
@@ -287,7 +287,7 @@ Simple rag on text files ([generative](/content-api/generative))
 
 <Tabs items={['SDK (.ts)', 'Graphql']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const { data: {payload} } = await unbody.get
                                             .textDocument
                                             .generate
@@ -298,7 +298,7 @@ Simple rag on text files ([generative](/content-api/generative))
   </Tabs.Tab>
 
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     query {
         Get {
             TextDocument {
@@ -335,7 +335,7 @@ Simple rag on images ([generative](/content-api/generative))
 
 <Tabs items={['SDK (.ts)', 'Graphql']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const { data: {payload} } = await unbody.get
                                             .imageBlock
                                             .search
@@ -351,7 +351,7 @@ Simple rag on images ([generative](/content-api/generative))
   </Tabs.Tab>
 
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     query {
         Get {
             ImageBlock(nearText: {concepts: ["Documents"]}) {

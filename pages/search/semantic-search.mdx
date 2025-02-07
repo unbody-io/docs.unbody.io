@@ -10,7 +10,7 @@ Sometimes you need to find documents about a topic, but they might use different
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const {
       data: { payload }
     } = await unbody.get
@@ -21,7 +21,7 @@ Sometimes you need to find documents about a topic, but they might use different
     ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     {
       Get {
         TextDocument(nearText: {
@@ -42,7 +42,7 @@ Sometimes you need to find documents about a topic, but they might use different
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 const response = {
   "_additional": {
     "certainty": 0.89,
@@ -60,7 +60,7 @@ When your search needs to prioritize specific aspects, you can boost certain con
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const {
       data: { payload }
     } = await unbody.get
@@ -77,7 +77,7 @@ When your search needs to prioritize specific aspects, you can boost certain con
     ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     {
       Get {
         TextBlock(
@@ -103,7 +103,7 @@ When your search needs to prioritize specific aspects, you can boost certain con
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -151,7 +151,7 @@ When you need to focus on specific concepts while avoiding others, concept steer
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const {
       data: { payload }
     } = await unbody.get
@@ -184,7 +184,7 @@ When you need to focus on specific concepts while avoiding others, concept steer
     ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     {
       Get {
         TextDocument(
@@ -219,7 +219,7 @@ When you need to focus on specific concepts while avoiding others, concept steer
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {

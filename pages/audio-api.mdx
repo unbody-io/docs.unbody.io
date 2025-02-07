@@ -38,7 +38,7 @@ const { assetId, hlsUrl } = audioFiles[0];
 </Tabs.Tab>
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     AudioFile {
@@ -59,7 +59,7 @@ Here's an example of how you can use Mux React Player to stream your audio:
 <Tabs items={['Mux React Player']}>
 <Tabs.Tab>
 
-```js
+```typescript copy
 import MuxAudio from "@mux/mux-audio-react";
 
 const AudioPlayer = ({ title, assetId, playbackId }) => {
@@ -115,7 +115,7 @@ const { entries } = subtitleFiles[0];
 
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     SubtitleFile(
@@ -168,7 +168,7 @@ const audioFile = audioFiles[0].files[0];
 </Tabs.Tab>
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     AudioFile {

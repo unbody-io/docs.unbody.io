@@ -6,13 +6,13 @@ The `.generate.text()` method creates text content based on a prompt or a sequen
 
 ### Example 1 - Basic Prompt
 Generate text using a simple string prompt:
-```typescript
+```typescript copy
 unbody.generate.text("Explain AI's impact on healthcare.");
 ```
 
 ### Example 2 - Prompt with Options
 Add options to control the output:
-```typescript
+```typescript copy
 unbody.generate.text("Write a report on climate change.", {
   model: "gpt-4",
   topP: 0.7,
@@ -23,7 +23,7 @@ unbody.generate.text("Write a report on climate change.", {
 
 ### Example 3 - Message-Based Input
 Guide the generation using a series of messages:
-```typescript
+```typescript copy
 unbody.generate.text(
   [
     { role: "system", content: "You are an AI specialist." },

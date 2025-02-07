@@ -6,7 +6,7 @@ Create a product catalog system with enhanced schema capabilities, including ima
 ## Project Configuration
 Configure a project that extends the existing `ImageBlock` collection with custom e-commerce fields. By extending `ImageBlock`, we maintain all original image functionality while adding product-specific fields prefixed with 'x' as required by custom schemas:
 
-```typescript
+```typescript copy
 const projectSettings = new ProjectSettings();
 projectSettings
   .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
@@ -51,7 +51,7 @@ await project.save();
 ## Push API Configuration
 Create and initialize a Push API source for data ingestion. The source enables us to upload files and metadata to our enhanced schema:
 
-```typescript
+```typescript copy
 const source = project.sources.ref({
   name: "Push API Source",
   type: SourceTypes.PushApi,
@@ -64,7 +64,7 @@ await source.initialize();
 ## Uploading Product Data
 Use the Push API instance to upload both image files and associated product metadata. The FormData combines the image file with structured product information:
 
-```typescript
+```typescript copy
 const formData = new FormData();
 formData.append("id", `image-${Date.now()}`);
 formData.append("file", fileBlob);
@@ -88,7 +88,7 @@ const { data: imageData } = await pushApi.files.upload({
 ## Data Retrieval
 Query enhanced image collection using TypeScript interfaces. The interface extends `IImageBlock` to include our custom product fields:
 
-```typescript
+```typescript copy
 interface ExtendedImageBlock extends IImageBlock {
   xProductName: StringField;
   xDescription: StringField;
@@ -116,7 +116,7 @@ const {
 ```
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {

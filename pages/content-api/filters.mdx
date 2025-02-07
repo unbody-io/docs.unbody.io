@@ -13,7 +13,7 @@ The syntax of the `where` clause is shown in the example given below.
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 
   <Tabs.Tab>
-```typescript
+```typescript copy
 await unbody.get
             .ClassName
             .where(...)
@@ -46,7 +46,7 @@ Now you know that the `where` clause is used to filter the data, let us take a l
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 
   <Tabs.Tab>
-```typescript
+```typescript copy
 .where(({ OPERATOR }) => { 
     return { fieldName: OPERATOR(VALUE) } 
   }
@@ -99,7 +99,7 @@ If you are wondering how you can combine multiple queries, then you may know tha
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 <Tabs.Tab>
-```typescript
+```typescript copy
 await unbody.get
             .googleDoc
             .where(({ GreaterThan }) => ({ size: GreaterThan(100) }))
@@ -129,7 +129,7 @@ query {
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 <Tabs.Tab>
-```typescript
+```typescript copy
 await unbody.get
            .googleDoc
            .where(({ GreaterThan, LessThan, And }) => 
@@ -170,7 +170,7 @@ query {
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 <Tabs.Tab>
-```typescript
+```typescript copy
 await unbody.get
             .googleDoc
             .where(({ GreaterThan, Like, Or }) => {
@@ -209,7 +209,7 @@ query {
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
 
 <Tabs.Tab>
-```typescript
+```typescript copy
 await unbody.get
           .googleDoc
           .where(({ GreaterThan, And, Like, Or }) => 

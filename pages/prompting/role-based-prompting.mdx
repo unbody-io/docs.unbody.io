@@ -9,7 +9,7 @@ Use message arrays to create rich, context-aware interactions with multiple role
 ## Basic Role-based Generation
 The example demonstrates role-based messaging with [Zod](https://zod.dev/) schema validation. Messages define the user query and system instructions, while the Zod schema enforces response structure (company details as strings and numbers). The result is a type-safe JSON object.
 
-```typescript
+```typescript copy
     import { z } from "zod";
 
     const {
@@ -36,7 +36,7 @@ The example demonstrates role-based messaging with [Zod](https://zod.dev/) schem
         );
 ```
 <Collapse title="Response">
-```typescript
+```typescript copy
 {
     "content": {
         "companyName": "Meta Corp",

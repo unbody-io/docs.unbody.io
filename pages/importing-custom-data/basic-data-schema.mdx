@@ -8,7 +8,7 @@ This guide demonstrates how to create a simple product catalog using Unbody. We'
 
 First, let's create a project with necessary settings and define a simple product schema with basic fields:
 
-```tsx 
+```tsx copy
 // Creating Projects with custom schema
 const projectSettings = new ProjectSettings();
 
@@ -51,7 +51,7 @@ await project.save();
 
 After creating the project, we need to set up a Push API source to enable data ingestion:
 
-```tsx 
+```tsx copy
 // Create Push Api Source
 const project = await admin.projects.get({
     id: "de272ab3-a4e3-445a-8b0e-6e73d44857d3",
@@ -70,7 +70,7 @@ await project.sources.save(source);
 
 Now we can use the Push API to add product data to our collection:
 
-```tsx 
+```tsx copy
 // Upload custom Data using Push Api
 // Product Data
 const productData = {
@@ -91,7 +91,7 @@ const { data } = await pushApi.records.create({
 
 For the changes to take effect, we need to initialize the source:
 
-```tsx 
+```tsx copy
 const project = await admin.projects.get({
     id: "de272ab3-a4e3-445a-8b0e-6e73d44857d3",
 });
@@ -108,7 +108,7 @@ await source.initialize();
 
 Finally, let's retrieve the product data using TypeScript interfaces for type safety:
 
-```typescript
+```typescript copy
 import {
   BooleanField,
   NumberField,
@@ -133,7 +133,7 @@ const {
 ```  
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {

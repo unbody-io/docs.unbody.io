@@ -11,7 +11,7 @@ Retrieve video thumbnails and animated preview images with size filtering to opt
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const {
       data: { payload: videoFiles },
     } = await unbody.get.videoFile
@@ -29,7 +29,7 @@ Retrieve video thumbnails and animated preview images with size filtering to opt
     ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     {
       Get {
         VideoFile(
@@ -56,7 +56,7 @@ Retrieve video thumbnails and animated preview images with size filtering to opt
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -79,7 +79,7 @@ Fetch and work with video subtitles, including timing and text content. This exa
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const {
       data: { payload: subtitleFiles },
     } = await unbody.get.subtitleFile
@@ -102,7 +102,7 @@ Fetch and work with video subtitles, including timing and text content. This exa
     ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     {
       Get {
         SubtitleFile(
@@ -136,7 +136,7 @@ Fetch and work with video subtitles, including timing and text content. This exa
   </Tabs.Tab>
 </Tabs>
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -233,7 +233,7 @@ The example demonstrates advanced video analysis combining subtitle queries with
 
 Results are validated against the schema by [Zod](https://zod.dev/), ensuring consistent analysis format.
 
-```typescript
+```typescript copy
     const {
       data: { payload: subtitleFiles },
     } = await unbody.get.subtitleFile
@@ -290,7 +290,7 @@ Results are validated against the schema by [Zod](https://zod.dev/), ensuring co
 ```
 
 <Collapse title="Response">
-```typescript
+```typescript copy
   
 
 {
