@@ -10,11 +10,11 @@ Similarity search can be performed on any object. Here's how:
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .<collectionName>
                     .similar
-                    .record(objectId, {...options})
+                    .record(recordId, {...options})
                     .exec();
         ```
     </Tab>
@@ -25,7 +25,7 @@ Similarity search can be performed on any object. Here's how:
             Get {
                 <collectionName>(
                     nearObject: {
-                    id: "objectId",
+                    id: "recordId",
                         ...options
                     }
                 ){
@@ -46,7 +46,7 @@ Find Google Docs that are similar to a specific Google Doc.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .googleDoc
                     .similar
@@ -76,7 +76,7 @@ Find Google Docs that are similar to a specific Google Doc.
 ### Example 2 - Discord messages
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .discordMessage
                     .similar
@@ -105,7 +105,7 @@ Find Google Docs that are similar to a specific Google Doc.
 ### Example 3 - Any text block
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .textBlock
                     .similar
