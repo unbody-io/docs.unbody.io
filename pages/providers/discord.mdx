@@ -1,11 +1,11 @@
-import { Tabs, Callout } from "nextra/components";
+import { Callout, Tabs } from "nextra/components";
 
 # Discord
 This guide offers strategic insights into connecting Discord to Unbody.
 
 ### **Entrypoint** — Selecting a Channel
 
-The entry point for Discord integration is a channel, hence one [source](/docs/getting-started#3-connect-your-content-sources) contains the messages from a single channel. The channel can be a text channel, voice channel, or inside a category.
+The entry point for Discord integration is a channel, hence one source contains the messages from a single channel. The channel can be a text channel, voice channel, or inside a category.
 
 **Class objects**
 - `DiscordMessage`
@@ -17,48 +17,45 @@ The entry point for Discord integration is a channel, hence one [source](/docs/g
 - Audio
 
 **Example Queries**
-<Tabs items={['GraphQL', 'TypeScript']}>
+<Tabs items={['SDK (.ts)', 'GraphQL' ]}>
     <Tabs.Tab>
-        ```graphql copy
-            {
-                Get{
-                    DiscordMessage(limit: 100){
-                        content
-                        attachments{
-                            ...on ImageBlock{
-                                url
-                            }
-                            ... on TextDocuments{
-                                text
-                            }
-                        }
-                        _additional{
-                            generate(
-                                groupedResult: {
-                                    task: "These the last 100 messages on our Discord, Generate a summary of them in a markdown format",
-                                    properties: ["content", "attachments.TextDocuments.text"]
-                                }
-                            ){
-                                groupedResult
-                            }
-                        }
-                }
-            }
-            }
-        ```
-    </Tabs.Tab>
-    <Tabs.Tab>
-        ```tsx
+        ```ts copy
             await unbody.get
                         .discordMessage
-                        .select("content", "attachments.TextDocuments.text")
+                        .select("content")
                         .limit(100)
-                        .generate
-                        .fromMany(
+                        .generate.fromMany(
                             "These the last 100 messages on our Discord, Generate a summary of them in a markdown format",
-                            ["content", "attachments.TextDocuments.text"]
+                            ["content", "author"]
                         )
-                        .execute();
+                        .exec();
+        ```
+    </Tabs.Tab>
+     <Tabs.Tab>
+        ```graphql copy
+            {
+                Get {
+                    DiscordMessage(limit: 100) {
+                    _additional {
+                        generate(
+                        groupedResult: {task: "These the last 100 messages on our Discord, Generate a summary of them in a markdown format", properties: ["content", "author"]}
+                        ) {
+                        error
+                        groupedResult
+                        metadata {
+                            finishReason
+                            usage {
+                            inputTokens
+                            outputTokens
+                            totalTokens
+                            }
+                        }
+                        }
+                    }
+                    content
+                    }
+                }
+            }
         ```
     </Tabs.Tab>
 </Tabs>
