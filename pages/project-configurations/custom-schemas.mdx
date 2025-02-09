@@ -47,7 +47,7 @@ Custom Schemas can be configured via the [**Dashboard**](https://app.unbody.io/p
 
 ## Configuring Custom Schemas Using Admin API
 
-You can define and manage Custom Schemas programmatically. Learn more about [Admin API](/admin-api)
+You can define and manage Custom Schemas programmatically. Learn more about [Admin API Custom Schema Configuration](/admin-api#customschema-configuration)
 
 ### Example: Creating a Custom Schema
 
@@ -125,7 +125,7 @@ Built-in schemas like `VideoFile` or `TextDocument` can be extended with custom 
 
 **Example: Adding a Custom Field to VideoFile**
 
-```tsx
+```tsx copy
 const videoFileCollection = new CustomSchema.Collection('VideoFile')
 videoFileCollection.add(
   new CustomSchema.Field.Text(

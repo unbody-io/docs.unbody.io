@@ -1,11 +1,33 @@
-import { Callout } from "nextra/components";
+import { Callout, Cards, Steps, Tabs } from 'nextra/components'
 
 # Push Api
 
-The `unbody/push` package provides an easy-to-use interface to manually upload files and push custom data into your projects.
+The `@unbody-io/push-api` package provides an easy-to-use interface to manually upload files and push custom data into your projects.
 
 - **Uploading Files**: Manually upload and manage files like images and videos.
 - **Pushing Custom Data**: Push structured JSON data with your own schema. Learn more about [custom schema](/project-configurations/custom-schemas).
+
+## Installation
+
+Install PushApi using your preferred package manager.
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+  <Tabs.Tab>
+    ```bash
+    npm install @unbody-io/push-api
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```bash
+    yarn add @unbody-io/push-api
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```bash
+    pnpm add @unbody-io/push-api
+    ```
+  </Tabs.Tab>
+</Tabs>
 
 ## Authentication
 
@@ -221,7 +243,7 @@ await pushApi.records.list({
 - Data within a **source** is isolated, meaning **cross-references** cannot be created between records or files that belong to different sources. All operations are limited to the current source.
 
 <Callout type="info">
-Initialize your Push API source before using it. Learn more [Admin API source documentation](/admin-api#project-sources).
+Before using the Push API source, initialize ite after making any changes. Learn more about [Admin API source documentation](/admin-api#project-sources).
 </Callout>
 
 ## Endpoints

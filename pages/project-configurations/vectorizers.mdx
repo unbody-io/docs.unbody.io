@@ -23,28 +23,15 @@ Unbody supports two main types of vectorizers:
         - **OpenAI**: Advanced proprietary models like `ada-002` and `text-embedding-3-small`.
         - **Cohere**: High-performance multilingual models.
         - **Contextionary**: Lightweight vectorizer optimized for fast lookups.
+        - For a full list of available text vectorizers, see the [Text Vectorizers Reference](/admin-api#textvectorizer-configuration).
 2. **Image Vectorizers**
     - Converts image data into vectors.
     - Supported models include:
         - **Img2Vec-Neural**: Default vectorizer for image processing.
         - **Multi2Vec-Clip**: Advanced multimodal image-to-text vectorizer (coming soon).
-
-{/* For a complete list of available vectorizers, refer to the [Vectorizers Reference](/project-configurations/vectorizers). */}
+        - For a full list of available Image vectorizers, see the [Image Vectorizers Reference](/admin-api#imagevectorizer-configuration).
 
 ---
-
-### Supported Embeddings and Vectorizers
-{/* TODO: this needs to be rechecked again. I need the full list */}
-
-| Model Name | Provider | Dimension | Multilingual | Description |
-| --- | --- | --- | --- | --- |
-| `text-embedding-3-small` | OpenAI | 1536 | ✔ | Latest embedding model, optimized for multilingual tasks |
-| `text-embedding-3-large` | OpenAI | 3072 | ✔ | Higher dimensional model for maximum accuracy |
-| `text-embedding-ada-002` | OpenAI | 1536 | Limited | Legacy model, good English performance |
-| `multilingual-22-12` | Cohere | 768 | ✔ | Optimized for cross-lingual tasks |
-| `english-light-v3.0` | Cohere | 384 | | Lightweight English-focused model |
-| `contextionary` | Unbody | 300 | | Fast, lightweight model for basic tasks |
-| `img2vec-neural` | Unbody | 512 | N/A | Image vectorization model |
 
 ### Configuring Vectorizers via Admin API
 
@@ -106,11 +93,11 @@ console.log(`Configured image vectorizer for project: ${project.name}`);
 
 ### Configuring Vectorizers via Dashboard
 
-You can also configure vectorizers directly from the Unbody dashboard:
+You can also configure vectorizers directly from the Unbody dashboard when creating a Project:
 
-1. Navigate to **Project Settings**.
-2. Select **Vectorizers** under the configuration section.
-3. Choose the vectorizer model for text or image data.
+1. Navigate to [**Unbody Dashboard**](https://app.unbody.io/).
+2. Click on **New Project**.
+3. Select the Advanced tab and choose vectorizer model for text or image data.
 4. Save your changes.
 
 For detailed instructions, see the [First Project Guide](/first-project).
