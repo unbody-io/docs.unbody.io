@@ -4,10 +4,10 @@ import { Tabs } from "nextra/components"
 
 # Working with videos
 
-Use Unbody's Video API powered by [Mux](https://www.mux.com) to work with video content, including streaming, thumbnails, transcriptions, and analysis.
+Process and analyze video content using Unbody's Video API (powered by [Mux]((https://www.mux.com))) for video processing.
 
 ## Fetch Video Assets
-Retrieve video thumbnails and animated preview images with size filtering to optimize loading times.
+When you want summaries, thumbnails, and animated previews from your videos, use Unbody's `videoFile`. Learn more about video in our [Video API Guide](/video-api).
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
@@ -75,7 +75,7 @@ Retrieve video thumbnails and animated preview images with size filtering to opt
 </Collapse>
 
 ## Access Video Subtitles
-Fetch and work with video subtitles, including timing and text content. This example filters videos by type and size.
+Sometimes you want to extract subtitles from your videos along with their timing information. Here's how to fetch and filter subtitle content.
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
@@ -219,19 +219,7 @@ Fetch and work with video subtitles, including timing and text content. This exa
 </Collapse>
 
 ## Analyze Video Content
-# Analyze Video Content
-Analyze subtitle content from videos by extracting story elements and generating structured insights. Perfect for understanding narrative flow and key moments in video transcripts.
-
-The example demonstrates advanced video analysis combining subtitle queries with structured content generation:
-- Fetches video subtitles with size constraints and timing information
-- Uses role-based messages to request story analysis
-- Enforces structured output with Zod schema, capturing:
- - Story context (location, characters, timeframe)
- - Key moments and their significance
- - Humor elements (setup/punchline)
- - Overall narrative tone
-
-Results are validated against the schema by [Zod](https://zod.dev/), ensuring consistent analysis format.
+Often after extracting subtitles, you'll want to analyze what's happening in your videos. Use extracted video transcriptions to [generate structured analysis](/generative-api/json-gen) of story elements, key moments, and narrative context.
 
 ```typescript copy
     const {
@@ -336,4 +324,4 @@ Results are validated against the schema by [Zod](https://zod.dev/), ensuring co
 ```
 </Collapse>
 
-Learn more about advanced video features in our [Advanced Video Api Guide](/video-api).
+Learn more about advanced video features in our [Video Api Guide](/video-api).
