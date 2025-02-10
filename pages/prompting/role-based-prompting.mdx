@@ -7,47 +7,157 @@ import { Tabs } from "nextra/components"
 Use message arrays to create rich, context-aware interactions with multiple roles. This method provides more control over the conversation flow compared to single prompts.
 
 ## Basic Role-based Generation
-The example demonstrates role-based messaging with [Zod](https://zod.dev/) schema validation. Messages define the user query and system instructions, while the Zod schema enforces response structure (company details as strings and numbers). The result is a type-safe JSON object.
+When you want type-safe, structured responses from your prompts, use [Zod](https://zod.dev/) schema validation with role-based messages. The example shows product review analysis with strictly defined response types. 
 
 ```typescript copy
-    import { z } from "zod";
+import { z } from "zod";
 
-    const {
-      data: { payload },
-    } = await unbody.generate
-        .json(
-            [
-                {
-                    role: "user",
-                    content: "What is the structure of a business entity?",
-                },
-                { 
-                    role: "system", 
-                    content: "Explain in detail with examples." 
-                },
-            ],
-            {
-                schema: z.object({
-                    companyName: z.string(),
-                    employees: z.number(),
-                    headquarters: z.string(),
-                }),
-            }
-        );
+const {
+    data: { payload },
+} = await unbody.generate
+                .json(
+                    [
+                        {
+                            role: "system",
+                            content: `You are a product analytics expert. Analyze product reviews to extract:
+                            - Overall sentiment and score
+                            - Key mentioned features and their reception
+                            - Common pain points
+                            - Suggested improvements
+                            Ensure analysis is data-driven and actionable.`,
+                        },
+                        {
+                            role: "user",
+                            content: `Reviews to analyze:
+                            1. "Great battery life but the camera quality could be better. Love the fast charging feature!"
+                            2. "The UI is confusing and takes time to learn. However, performance is solid."
+                            3. "Perfect for daily use. Screen quality is amazing, though price is a bit high."`,
+                        },
+                    ],
+                    {
+                        schema: z.object({
+                            overallSentiment: z.object({
+                            score: z.number().min(0).max(10),
+                            summary: z.string(),
+                            }),
+                            featureAnalysis: z.array(
+                            z.object({
+                                feature: z.string(),
+                                sentiment: z.enum(["positive", "neutral", "negative"]),
+                                mentionCount: z.number(),
+                                keyFeedback: z.string(),
+                            })
+                            ),
+                            painPoints: z.array(
+                            z.object({
+                                issue: z.string(),
+                                severity: z.enum(["low", "medium", "high"]),
+                                impactArea: z.string(),
+                            })
+                            ),
+                            improvements: z.array(
+                            z.object({
+                                suggestion: z.string(),
+                                priority: z.enum(["low", "medium", "high"]),
+                                implementationComplexity: z.enum(["easy", "moderate", "complex"]),
+                            })
+                            ),
+                        }),
+                    }
+                );
 ```
 <Collapse title="Response">
 ```typescript copy
 {
     "content": {
-        "companyName": "Meta Corp",
-        "employees": 8500,
-        "headquarters": "California"
+        "overallSentiment": {
+            "score": 0.6666666666666666,
+            "summary": "Overall positive sentiment with some negative feedback primarily concerning camera quality, UI, and price."
+        },
+        "featureAnalysis": [
+            {
+                "feature": "battery life",
+                "sentiment": "positive",
+                "mentionCount": 1,
+                "keyFeedback": "Great battery life."
+            },
+            {
+                "feature": "camera quality",
+                "sentiment": "negative",
+                "mentionCount": 1,
+                "keyFeedback": "Camera quality could be better."
+            },
+            {
+                "feature": "fast charging",
+                "sentiment": "positive",
+                "mentionCount": 1,
+                "keyFeedback": "Love the fast charging feature."
+            },
+            {
+                "feature": "UI (User Interface)",
+                "sentiment": "negative",
+                "mentionCount": 1,
+                "keyFeedback": "The UI is confusing and takes time to learn."
+            },
+            {
+                "feature": "performance",
+                "sentiment": "positive",
+                "mentionCount": 1,
+                "keyFeedback": "Performance is solid."
+            },
+            {
+                "feature": "screen quality",
+                "sentiment": "positive",
+                "mentionCount": 1,
+                "keyFeedback": "Screen quality is amazing."
+            },
+            {
+                "feature": "price",
+                "sentiment": "negative",
+                "mentionCount": 1,
+                "keyFeedback": "Price is a bit high."
+            }
+        ],
+        "painPoints": [
+            {
+                "issue": "camera quality",
+                "severity": "medium",
+                "impactArea": "imaging experience"
+            },
+            {
+                "issue": "UI complexity",
+                "severity": "medium",
+                "impactArea": "user experience"
+            },
+            {
+                "issue": "high price",
+                "severity": "medium",
+                "impactArea": "affordability"
+            }
+        ],
+        "improvements": [
+            {
+                "suggestion": "Improve camera quality to enhance imaging experience.",
+                "priority": "high",
+                "implementationComplexity": "moderate"
+            },
+            {
+                "suggestion": "Simplify the UI to improve usability and learning curve.",
+                "priority": "high",
+                "implementationComplexity": "complex"
+            },
+            {
+                "suggestion": "Consider pricing strategy to make it more competitive or justify the price with additional premium features.",
+                "priority": "medium",
+                "implementationComplexity": "complex"
+            }
+        ]
     },
     "metadata": {
         "usage": {
-            "inputTokens": 85,
-            "outputTokens": 18,
-            "totalTokens": 103
+            "inputTokens": 329,
+            "outputTokens": 350,
+            "totalTokens": 679
         }
     }
 }
