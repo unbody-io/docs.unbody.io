@@ -1,4 +1,4 @@
-import { Tabs, Callout } from "nextra/components";
+import { Callout, Tabs } from "nextra/components";
 
 # Google Drive
 This guide offers strategic insights into setting up Google Drive for optimal interaction with Unbody.
@@ -34,41 +34,54 @@ To maximize Google Drive's effectiveness you can follow the practices given belo
   ```
   In this structure, all the files for a particular category are stored in one folder without subfolders. To find drafts for the year 2023, you can form you query like given below:
 
-<Tabs items={['GraphQL', 'TypeScript']}>
-<Tabs.Tab>
-  ```graphql copy
-  {
-    query {
-      Get {
-        GoogleDocs(
-            nearText: {
-              concept: "Javascript & philosophy",
-            }
-            where: {
-                path: "2023_Projects_Drafts",
-                operator: Like,
-                valueString: "*"
-            }
-      ) {
-          ...
-        }
-      }
-    }
-  }
-  ```
-</Tabs.Tab>
-<Tabs.Tab>
-```ts
+<Tabs items={[ 'SDK (.ts)', 'GraphQL']}>
+<Tabs.Tab> 
+```ts copy
 
     await unbody.get
-                .googleDocs
+                .googleDoc
                 .search
                 .about("Javascript & philosophy")
                 .where(({Like}) => {
                     return {path: Like("2023_Projects_Drafts")}
                 })
-                .execute();
+                .exec();
 ```
+</Tabs.Tab>
+<Tabs.Tab>
+  ```graphql copy
+  {
+  Get {
+      GoogleDoc(
+        nearText: {concepts: ["Javascript & philosophy"]}
+        where: {operator: Like, path: "path", valueText: "2023_Projects_Drafts"}
+      ) {
+          _additional {
+            certainty
+            distance
+          }
+          createdAt
+          html
+          mimeType
+          modifiedAt
+          originalName
+          path
+          pathString
+          remoteId
+          slug
+          size
+          sourceId
+          subtitle
+          summary
+          tags
+          text
+          title
+          toc
+          mentions
+      }
+    }
+}
+  ```
 </Tabs.Tab>
 </Tabs>
 

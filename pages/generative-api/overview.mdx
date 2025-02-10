@@ -1,3 +1,5 @@
+import { Cards } from 'nextra/components'
+
 # Generative API Overview
 
 The Generative API allows you to generate content independently of any attached data. It is versatile and supports various configurations for flexible use cases.
@@ -8,6 +10,19 @@ The API has the following methods available:
 
 Each method supports optional settings to control output style, length, and other properties.
 
-For detailed examples and usage instructions, see:
-- [Text Generation](./text-gen.md)
-- [JSON Generation](./json-gen.md)
+<Cards>
+    <Cards.Card title={"Text Generation"}
+                href={"/generative-api/json-gen"}
+                arrow={true}>
+        <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
+            Generate natural language responses from prompts or conversations 
+        </div>
+    </Cards.Card>
+    <Cards.Card title={"JSON Generation"}
+                href={"/generative-api/json-gen"}
+                arrow={true}>
+        <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
+            Create structured data with schema validation and transformation
+        </div>
+    </Cards.Card>
+</Cards>

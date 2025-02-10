@@ -9,9 +9,9 @@ Search based on exact keyword matches within your data, ideal for precise matchi
 ## Basic Search
 When you need to find documents containing specific terms exactly as written, [Keyword Search](/content-api/search/keyword-search) is your best option. For instance, searching for "machine learning" will return only documents that contain that exact phrase.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -22,7 +22,7 @@ When you need to find documents containing specific terms exactly as written, [K
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    {
      Get {
        TextDocument(bm25: {
@@ -42,7 +42,7 @@ When you need to find documents containing specific terms exactly as written, [K
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 [
     {
         "_additional": {
@@ -67,9 +67,9 @@ When you need to find documents containing specific terms exactly as written, [K
 ## Field-Specific Search
 Sometimes you want to search for keywords only in certain parts of your documents - like titles or summaries - while ignoring the main content.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -80,7 +80,7 @@ Sometimes you want to search for keywords only in certain parts of your document
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    {
      Get {
        TextDocument(
@@ -103,7 +103,7 @@ Sometimes you want to search for keywords only in certain parts of your document
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 [
     {
         "_additional": {

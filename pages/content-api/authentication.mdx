@@ -1,13 +1,23 @@
-import { Tabs, Callout } from "nextra/components";
+import { Callout, Tabs } from "nextra/components";
 
 # Authentication
 
-Unbody makes it easy for you to handle your content through APIs but we also care for your security. Therefore, to securely interact with Unbody's GraphQL API, you need to include your project ID and API key in the request headers.
+Unbody makes it easy to handle content through APIs while ensuring security. To use the GraphQL API, you'll need two authentication credentials:
 
-You can generate your API key from the Unbody Dashboard in `project settings/ developer settings`. Once you have your API key, you can use it to authenticate your requests to the Unbody API. Additionally, you need to specify the project ID to which you want to send the request.
+1. **API Key**: A secret token that authenticates your requests
+2. **Project ID**: Identifies which project you're accessing
 
-You can do so using the `Authorization` and `X-Project-Id` headers, respectively. The examples given below demonstrate how to set these headers in different environments.
+## Getting Started
 
+1. Generate an API key in [Unbody Dashboard](https://app.unbody.io/projects):
+  - Select your project
+  - Navigate to **Settings** → **Developer Settings**
+
+2. Include both credentials in your API requests using these headers:
+  - `Authorization`: Your API key  
+  - `X-Project-Id`: Your project ID
+
+Below are examples of how to authenticate in different environments:
 <Tabs items={['SDK (.ts)', 'Curl', 'JavaScript']}>
     <Tabs.Tab>
         ```ts
@@ -34,7 +44,7 @@ curl -X POST \\
   </Tabs.Tab>
 
 <Tabs.Tab>
-```jsx copy
+```typescript copy copy
 // Fetch API
 fetch('<https://graphql.unbody.io>', {
     method: 'POST',

@@ -10,9 +10,9 @@ Use Unbody's Image API powered by [Imgix](https://www.imgix.com/) to efficiently
 ## Basic Image Query
 When working with image collections, you need a quick way to retrieve essential information about your images. [Learn more about Image Fetching](/image-api/api-reference#example-1---fetching-your-image-url).
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const {
       data: { payload },
     } = await unbody.get
@@ -23,7 +23,7 @@ When working with image collections, you need a quick way to retrieve essential 
     ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     {
       Get {
         ImageBlock(limit: 5) {
@@ -38,7 +38,7 @@ When working with image collections, you need a quick way to retrieve essential 
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -73,9 +73,9 @@ When working with image collections, you need a quick way to retrieve essential 
 ## Similar Image Search
 When you want to find visually similar images based on a reference image, such as exploring a collection of electric vehicles, this method allows you to retrieve images that share visual characteristics. [Learn more about Visual similarity](/content-api/search/visual-similarity)
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const {
       data: { payload },
     } = await unbody.get
@@ -89,7 +89,7 @@ When you want to find visually similar images based on a reference image, such a
     ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     {
       Get {
         ImageBlock(
@@ -114,7 +114,7 @@ When you want to find visually similar images based on a reference image, such a
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -171,12 +171,10 @@ When you want to find visually similar images based on a reference image, such a
 ```
 </Collapse>
 
-Here are revised explanations:
-
 ## Creating a Face Gallery
 Imagine building a digital yearbook or a mood board of portraits. You want to quickly gather and showcase a collection of human faces from your image library. This example demonstrates how to extract and display faces dynamically, turning a scattered image collection into a compelling visual narrative. [Learn more about Image Transformation](/image-api/api-reference#api-reference)
 
-```typescript
+```typescript copy
 // Fetch images with semantic search
 const { data: { payload: images } } = await unbody.get
                                                   .imageBlock
@@ -199,11 +197,11 @@ const { data: { payload: images } } = await unbody.get
 </div>
 ```
 
-## Face Detection and Cropping with Imgix
+## Face Detection and Cropping Using `react-imgix`
 
 Intelligent face detection allows you to automatically center and crop images to highlight the most important part of a portrait.
 
-```typescript
+```typescript copy
 import Imgix from "react-imgix";
 
 // Face detection and cropping
@@ -222,9 +220,9 @@ const FaceCroppedImage = () => (
 
 ## Responsive Image Handling
 
-When you need to create responsive images that look great on devices from mobile phones to large desktop monitors, this approach ensures your images adapt seamlessly to different screen sizes and resolutions.
+When you need to create responsive images that look great on devices from mobile phones to large desktop monitors and ensure performance, this approach ensures your images adapt seamlessly to different screen sizes and resolutions.
 
-```typescript
+```typescript copy
 const ResponsiveImage = () => {
   const src = "https://images.cdn.unbody.io/a2f450e8-2638-4201-8dab-f2cca67df9ce/image/a4f0d82b-6a6f-5224-a9e7-d7621e4f134a.webp";
   

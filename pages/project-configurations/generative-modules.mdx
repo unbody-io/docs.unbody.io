@@ -1,10 +1,10 @@
-# **Generative Modules**
+# Generative Modules
 
 Generative Modules enable you to integrate retrieval-augmented generation (RAG) and LLM-powered capabilities directly into your Unbody projects. These modules allow your applications to produce intelligent, context-aware outputs by combining structured data with advanced AI models.
 
 ---
 
-## **What are Generative Modules?**
+## What are Generative Modules?
 
 Generative Modules are configurations that enable features like:
 
@@ -16,7 +16,7 @@ They are flexible and model-agnostic, supporting multiple providers such as Open
 
 ---
 
-## **How They Work**
+## How They Work
 
 Generative Modules work as part of your project’s **pipeline**:
 
@@ -24,42 +24,23 @@ Generative Modules work as part of your project’s **pipeline**:
 2. **Context Injection**: Combines retrieved data with a query.
 3. **Generation**: Uses an LLM to produce structured or unstructured outputs.
 
----
-
-## **Supported Models**
-
-| Model Name          | Provider  | Context Window (Tokens) | Max Tokens | Image Input Support |
-| ------------------- | --------- | ----------------------- | ---------- | ------------------- |
-| `gpt-3.5-turbo`     | OpenAI    | 16,384                  | 4,096      |                     |
-| `gpt-4`             | OpenAI    | 8,192                   | 8,192      |                     |
-| `gpt-4-turbo`       | OpenAI    | 128,000                 | 4,096      | ✔                   |
-| `gpt-4o`            | OpenAI    | 128,000                 | 4,096      | ✔                   |
-| `gpt-4o-mini`       | OpenAI    | 128,000                 | 16,384     | ✔                   |
-| `command`           | Cohere    | 4,096                   | 4,096      |                     |
-| `command-light`     | Cohere    | 4,096                   | 4,096      |                     |
-| `command-r`         | Cohere    | 128,000                 | 4,096      |                     |
-| `command-r-plus`    | Cohere    | 128,000                 | 4,096      |                     |
-| `open-mistral-7b`   | MistralAI | 32,000                  |            |                     |
-| `open-mixtral-8x7b` | MistralAI | 32,000                  |            |                     |
-
-## **Configuring Generative Modules**
+## Configuring Generative Modules
 
 You can configure Generative Modules via the Dashboard or the Admin API.
 
 ---
 
-### **1. Dashboard Setup**
+### 1. Dashboard Setup
 
-To enable Generative Modules:
+To enable Generative Modules while creating a new `Project`:
 
-1. Go to your **Project Settings** in the Dashboard.
-2. Navigate to the **Generative Modules** section.
-3. Select and configure a model provider (e.g., OpenAI GPT-4 or Cohere Command).
-4. Save your settings.
+1. Navigate to [**Unbody Dashboard**](https://app.unbody.io/).
+2. Click on **New Project**.
+3. Select the Generative module from `Generative` section.
 
 ---
 
-### **2. Admin API Configuration**
+### 2. Admin API Configuration
 
 You can programmatically configure Generative Modules using the Admin API.
 
@@ -95,7 +76,7 @@ console.log(`Applied Generative Module to project: ${project.name}`)
 
 ---
 
-## **Available Generative Models**
+## Available Generative Models
 
 Unbody supports multiple providers and models. Below is a list of supported options:
 
@@ -106,20 +87,22 @@ Unbody supports multiple providers and models. Below is a list of supported opti
 | **Cohere** | Command | Optimized for content generation tasks. |
 | **Mistral** | OpenMixtral 8x7b | Lightweight, scalable option for RAG. |
 
-For a full list of available models, refer to the [Model Reference Documentation](/project-configurations/generative-modules).
+{/* 
+TODO: Don't know where is the full list
+For a full list of available models, refer to the [Model Reference Documentation](/project-configurations/generative-modules). */}
 
 ---
 
-## **Advanced Settings**
+## Advanced Settings
 
-### **Context Injection Strategies**
+### Context Injection Strategies
 
 Define how retrieved data is injected into prompts for generation:
 
 - **Full Context**: Inject all retrieved results.
 - **Condensed Context**: Use summarization or filtering to reduce context size.
 
-### **Prompt Tuning**
+### Prompt Tuning
 
 Customize prompts to fine-tune model outputs. Use placeholders like:
 
@@ -133,13 +116,13 @@ Customize prompts to fine-tune model outputs. Use placeholders like:
 
 ```
 
-### **Temperature**
+### Temperature
 
 Adjusts creativity levels. Lower values produce deterministic results, while higher values encourage creativity.
 
 ---
 
-## **Best Practices**
+## Best Practices
 
 1. **Model Selection**:
     - Use GPT-4 or GPT-3.5 Turbo for general-purpose tasks.

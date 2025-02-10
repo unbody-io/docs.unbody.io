@@ -1,0 +1,53 @@
+import { Cards } from 'nextra/components'
+
+# Project Configuration Overview
+
+## Understanding Configuration Lifecycle
+
+When creating a new project, you'll configure essential settings that define how your project processes and handles data. These configurations include:
+
+
+<Cards className="grid grid-cols-2 gap-4">
+   <Cards.Card title={"Vectorizers"}
+               href={"/project-configurations/vectorizers"}
+               arrow={true}>
+       <div className={"mx-4 text-sm [&>*]:leading-5 leading-1 opacity-75"}>
+           Configure models for converting text and images into vectors
+       </div>
+   </Cards.Card>
+   <Cards.Card title={"Enhancers"}
+               href={"/project-configurations/enhancers"}
+               arrow={true}>
+       <div className={"mx-4 text-sm [&>*]:leading-5 leading-1 opacity-75"}>
+           Set up enhancement pipelines for data processing and enrichment
+       </div>
+   </Cards.Card>
+   <Cards.Card title={"Generative Modules"}
+               href={"/project-configurations/generative-modules"}
+               arrow={true}>
+       <div className={"mx-4 text-sm [&>*]:leading-5 leading-1 opacity-75"}>
+           Configure AI models for content generation
+       </div>
+   </Cards.Card>
+   <Cards.Card title={"Custom Schemas"}
+               href={"/project-configurations/custom-schemas"}
+               arrow={true}>
+       <div className={"mx-4 text-sm [&>*]:leading-5 leading-1 opacity-75"}>
+           Define and extend data structures for your project
+       </div>
+   </Cards.Card>
+   {/* <Cards.Card title={"Data Processors"}
+               href={"/project-configurations/data-processors"}
+               arrow={true}>
+       <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
+           Set up data processing and transformation pipelines
+       </div>
+   </Cards.Card> */}
+</Cards>
+
+Most of these settings become permanent after project creation to ensure consistency and stability in your data processing pipeline.
+
+{/* TODO: I can't re configure any settings after creating a projects */}
+## Immutable vs Configurable Settings
+
+Once a project is created, most configuration settings are **immutable** and cannot be changed. The only configurable setting after project creation is the **Generator Module Models**.

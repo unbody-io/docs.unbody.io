@@ -1,7 +1,7 @@
-import {Tab, Tabs} from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
 
 # Keyword Search
-Keyword search is a method that allows users to search your data based on specific keywords. Unlike [semantic search]/content-api/semantic-search) which focuses on the meaning of the search query, keyword search relies on exact matches of the keywords used in the search query.
+Keyword search is a method that allows users to search your data based on specific keywords. Unlike [semantic search](/content-api/semantic-search) which focuses on the meaning of the search query, keyword search relies on exact matches of the keywords used in the search query.
 
 This method is best to use when you want to provide quick and straightforward search results. It is especially effective when dealing with large databases where users are familiar with the specific keywords used within the data.
 
@@ -11,22 +11,22 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```jsx
+        ```typescript copy
         unbody.get
-              .<object_name>
+              .<collectionName>
               .search
-              .find("query", {...options})
+              .find("query", [...properties])
               .exec()
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query{
           Get{
-            <ObjectName>(
+            <collectionName>(
                 bm25: {
                     query: "query",
-                        ...options
+                    properties: [...properties]
                 }
             ){
                 ...fields
@@ -42,7 +42,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 ### Example 1 - Google Docs
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```jsx
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .googleDoc
                                               .search
@@ -51,7 +51,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query{
           Get{
             GoogleDoc(
@@ -71,7 +71,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```jsx
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .textBlock
                                               .search
@@ -80,7 +80,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query{
           Get{
             TextBlock(
@@ -96,11 +96,11 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
     </Tab>
 </Tabs>
 
-### Example 3 - Google Docs - specific fields
+### Example 3 - Google Docs - search in specific properties
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```jsx
+        ```typescript copy
         const {data: {payload}} = await unbody.get
                                               .googleDoc
                                               .search
@@ -110,7 +110,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query{
           Get{
             GoogleDoc(
@@ -129,7 +129,7 @@ Keyword search can be operated on an  any object's `string` or `string[]` field.
 
 ## Arguments
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| query * | string, string[] |  |  |
-| fields | string[] |  | Specify which fields to search,  |
+| Name | Type | Description |
+| --- | --- | --- |
+| query* | string | The keyword or phrase to search for |
+| properties | string[] | Array of field names to limit the search to specific properties |

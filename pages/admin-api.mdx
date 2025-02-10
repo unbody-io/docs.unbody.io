@@ -1,6 +1,6 @@
-## Overview
+# Admin API Overview
 
-`UnbodyAdmin` is a TypeScript/JavaScript client for interacting with Unbody’s Admin API. It provides a convenient and unified interface to manage projects, sources, webhooks, keys, and more within your Unbody environment.
+`UnbodyAdmin` is a TypeScript/JavaScript client for interacting with Unbody's Admin API. It provides a convenient and unified interface to manage projects, sources, webhooks, keys, and more within your Unbody environment.
 
 ## Installation
 
@@ -10,12 +10,11 @@ npm install unbody
 
 # using yarn
 yarn add unbody
-
 ```
 
 ## Initialization
 
-To start using `UnbodyAdmin`, you need to create an instance of it. You’ll need to provide valid authentication credentials, such as Admin keys or a JWT access token.
+To start using `UnbodyAdmin`, you need to create an instance of it. You'll need to provide valid authentication credentials, such as Admin keys or a JWT access token.
 
 **Example Initialization:**
 
@@ -27,7 +26,6 @@ const admin = new UnbodyAdmin({
     // credentials go here
   },
 })
-
 ```
 
 ### Authentication Methods
@@ -43,10 +41,9 @@ const admin = new UnbodyAdmin({
     password: '[admin-key-secret]',
   },
 })
-
 ```
 
-1. **Access Token (Bearer Token)**
+2. **Access Token (Bearer Token)**
 If you have a JWT access token, you can provide it directly:
 
 ```tsx
@@ -55,7 +52,6 @@ const admin = new UnbodyAdmin({
     accessToken: 'Bearer [your-access-token]',
   },
 })
-
 ```
 
 ## Usage
@@ -64,7 +60,7 @@ const admin = new UnbodyAdmin({
 
 Creating a project in Unbody requires configuring its settings and saving the project instance. You can use the provided helper classes to define the project settings easily.
 
-Here’s an example of how to create a new project with a specific configuration:
+Here's an example of how to create a new project with a specific configuration:
 
 ```tsx
 import { ProjectSettings, TextVectorizer } from 'unbody/admin'
@@ -84,14 +80,13 @@ const project = admin.projects.ref({
 await project.save()
 
 console.log(`Created "${project.name}"; id: ${project.id}`)
-
 ```
 
-For more details on configuring project settings, see the [Project Settings Guide](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21)
+For more details on configuring project settings, see the [Project Settings Guide](#project-settings-guide)
 
 ### Creating a Source
 
-To create a source within a project, you first need to reference the project. Here’s an example:
+To create a source within a project, you first need to reference the project. Here's an example:
 
 ```tsx
 // Fetch the project instance
@@ -112,14 +107,13 @@ const source = project.sources.ref({
 
 // Save the source
 await source.save()
-
 ```
 
-Ensure the `SourceTypes` corresponds to a valid type supported by the API. For a list of available source types, see the [Source Types Reference](Link to be added later)
+Ensure the `SourceTypes` corresponds to a valid type supported by the API. For a list of available source types, see the [Source Types Reference](#source-type-possible-values)
 
 ### Creating a Project API Key
 
-You can create an API key for a specific project to enable secure access to its resources. Here’s an example:
+You can create an API key for a specific project to enable secure access to its resources. Here's an example:
 
 ```tsx
 const apiKey = await project.apiKeys
@@ -129,14 +123,13 @@ const apiKey = await project.apiKeys
   .save()
 
 console.log(apiKey.id, apiKey.key)
-
 ```
 
 The `apiKey.key` should be stored securely, as it will not be retrievable after creation. If the key is lost, it must be deleted, and a new one should be created.
 
 ### Listing Resources
 
-You can list resources such as projects or sources using the provided API methods. Here’s how to retrieve a list of projects or sources:
+You can list resources such as projects or sources using the provided API methods. Here's how to retrieve a list of projects or sources:
 
 ```tsx
 // List projects
@@ -145,7 +138,6 @@ const { projects, pagination } = await admin.projects.list({})
 // List sources for a specific project
 const project = admin.projects.ref({ id: ['project id'] })
 const { sources, pagination } = await project.sources.list({})
-
 ```
 
 ### Optional Properties
@@ -158,7 +150,7 @@ Both methods accept the following optional properties:
   - `field`: `string` - The field to sort by.
   - `order`: `"asc" | "desc"` - Sorting order.
 - **`filter`**: `Object` - Filtering criteria specific to the resource type.
-See the [Filterable Properties for Projects](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) and [Filterable Properties for Sources](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21).
+See the [Filterable Properties for Projects](#project-filterable-fields) and [Filterable Properties for Sources](#source-filterable-fields).
 
 ### Returned Values
 
@@ -179,29 +171,28 @@ Each method returns:
 
   ```tsx
   await admin.projects.ref({ ...params }).save()
-
-    ```
+  ```
 
   - **Method**: `POST`
   - **Path**: `/projects`
+
 - **List Projects**
 
   ```tsx
   const { projects } = await admin.projects.list({ ...params })
-
-    ```
+  ```
 
   - **Method**: `GET`
   - **Path**: `/projects`
-  - **Filterable Fields**: [Reference](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21)
+  - **Filterable Fields**: [Filterable Fields](#project-filterable-fields)
   - **Pagination Parameters**: `limit`, `offset`, `sort`
+
 - **Delete Project**
 
   ```tsx
   await admin.projects.delete(projectRef) // or
   await admin.projects.delete({ id: '[project-id]' })
-
-    ```
+  ```
 
   - **Method**: `DELETE`
   - **Path**: `/projects/{projectId}`
@@ -212,17 +203,16 @@ Each method returns:
 
   ```tsx
   await projectRef.apiKeys.ref({ ...params }).save()
-
-    ```
+  ```
 
   - **Method**: `POST`
   - **Path**: `/projects/{projectId}/api-keys`
+
 - **Delete API Key**
 
   ```tsx
   await projectRef.apiKeys.delete({ id: '[api-key-id]' })
-
-    ```
+  ```
 
   - **Method**: `DELETE`
   - **Path**: `/projects/{projectId}/api-keys/{apiKeyId}`
@@ -233,27 +223,26 @@ Each method returns:
 
   ```tsx
   await project.webhooks.ref({ ...params }).save()
-
-    ```
+  ```
 
   - **Method**: `POST`
   - **Path**: `/projects/{projectId}/webhooks`
+
 - **List Webhooks**
 
   ```tsx
   const { webhooks } = await project.webhooks.list({ ...params })
-
-    ```
+  ```
 
   - **Method**: `GET`
   - **Path**: `/projects/{projectId}/webhooks`
-  - **Filterable Fields**: [Reference](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21)
+  - **Filterable Fields**: [Filterable Fields](#webhook-filterable-fields)
+
 - **Delete Webhook**
 
   ```tsx
   await project.webhooks.delete({ id: '[webhook-id]' })
-
-    ```
+  ```
 
   - **Method**: `DELETE`
   - **Path**: `/projects/{projectId}/webhooks/{webhookId}`
@@ -271,57 +260,56 @@ Each method returns:
       type: SourceTypes.PushApi,
     })
     .save()
-
-    ```
+  ```
 
   - **Method**: `POST`
   - **Path**: `/projects/{projectId}/sources`
+
 - **List Sources**
 
   ```tsx
   const { sources } = await project.sources.list({ ...params })
-
-    ```
+  ```
 
   - **Method**: `GET`
   - **Path**: `/projects/{projectId}/sources`
-  - **Filterable Fields**: [Reference](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21)
+  - **Filterable Fields**: [Filterable Fields](#source-filterable-fields)
+
 - **Delete Source**
 
   ```tsx
   await project.sources.delete({ id: '[source-id]' })
-
-    ```
+  ```
 
   - **Method**: `DELETE`
   - **Path**: `/projects/{projectId}/sources/{sourceId}`
+
 - **Update Source**
 
   ```tsx
   await project.sources.update(sourceRef) // or
   await project.sources.update({ id: '[source-id]' })
-
-    ```
+  ```
 
   - **Method**: `PATCH`
   - **Path**: `/projects/{projectId}/sources/{sourceId}`
+
 - **Initialize Source**
 
   ```tsx
   await project.sources.initialize(sourceRef) // or
   await project.sources.initialize({ id: '[source-id]' })
-
-    ```
+  ```
 
   - **Method**: `POST`
   - **Path**: `/projects/{projectId}/sources/{sourceId}/indexing/initialize`
+
 - **Rebuild Source**
 
   ```tsx
   await project.sources.rebuild(sourceRef) // or
   await project.sources.rebuild({ id: '[source-id]' })
-
-    ```
+  ```
 
   - **Method**: `POST`
   - **Path**: `/projects/{projectId}/sources/{sourceId}/indexing/rebuild`
@@ -332,33 +320,32 @@ Each method returns:
 
   ```tsx
   await admin.adminKeys.ref({ ...params }).save()
-
-    ```
+  ```
 
   - **Method**: `POST`
   - **Path**: `/api-keys`
+
 - **Delete Admin Key**
 
   ```tsx
   await admin.adminKeys.delete({ id: '[admin-key-id]' })
-
-    ```
+  ```
 
   - **Method**: `DELETE`
   - **Path**: `/api-keys/{apiKeyId}`
 
-### Filterable Fields
+## Filterable Fields
 
 ### Project Filterable Fields
 
 | Field | Type | Filter Operators |
 | --- | --- | --- |
-| `name` | string | [String Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| [`state`](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) | enum | [Enum Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| `pausedAt` | Date | [Date Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| `restoredAt` | Date | [Date Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| `createdAt` | Date | [Date Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| `updatedAt` | Date | [Date Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
+| `name` | string | [String Filter Operators](#string-and-enum-filter-operators) |
+| `state` | enum | [Enum Filter Operators](#string-and-enum-filter-operators) |
+| `pausedAt` | Date | [Date Filter Operators](#date-filter-operators) |
+| `restoredAt` | Date | [Date Filter Operators](#date-filter-operators) |
+| `createdAt` | Date | [Date Filter Operators](#date-filter-operators) |
+| `updatedAt` | Date | [Date Filter Operators](#date-filter-operators) |
 
 ### Project State Possible Values
 
@@ -366,7 +353,6 @@ To use these states in your code, import the `ProjectStates` enum:
 
 ```tsx
 import { ProjectStates } from 'unbody/admin'
-
 ```
 
 These are the possible states a project can be in, along with their corresponding TypeScript enumeration values:
@@ -384,14 +370,14 @@ These are the possible states a project can be in, along with their correspondin
 
 | Field | Type | Filter Operators |
 | --- | --- | --- |
-| `name` | string | [String Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| `initialized` | boolean | [Boolean Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| [`state`](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) | enum | [Enum Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| [`type`](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) | enum | [Enum Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| `pausedAt` | Date | [Date Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| `restoredAt` | Date | [Date Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| `createdAt` | Date | [Date Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
-| `updatedAt` | Date | [Date Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
+| `name` | string | [String Filter Operators](#string-and-enum-filter-operators) |
+| `initialized` | boolean | [Boolean Filter Operators](#boolean-filter-operators) |
+| `state` | enum | [Enum Filter Operators](#string-and-enum-filter-operators) |
+| `type` | enum | [Enum Filter Operators](#string-and-enum-filter-operators) |
+| `pausedAt` | Date | [Date Filter Operators](#date-filter-operators) |
+| `restoredAt` | Date | [Date Filter Operators](#date-filter-operators) |
+| `createdAt` | Date | [Date Filter Operators](#date-filter-operators) |
+| `updatedAt` | Date | [Date Filter Operators](#date-filter-operators) |
 
 ### Source State Possible Values
 
@@ -399,7 +385,6 @@ To use these states in your code, import the `SourceStates` enum:
 
 ```tsx
 import { SourceStates } from 'unbody/admin'
-
 ```
 
 These are the possible states a source can be in, along with their corresponding TypeScript enumeration values:
@@ -418,7 +403,6 @@ To use these types in your code, import the `SourceTypes` enum:
 
 ```tsx
 import { SourceTypes } from 'unbody/admin'
-
 ```
 
 These are the possible source types, along with their corresponding TypeScript enumeration values:
@@ -436,9 +420,9 @@ These are the possible source types, along with their corresponding TypeScript e
 
 | Field | Type | Filter Operators |
 | --- | --- | --- |
-| `createdAt` | Date | [Date Filter Operators](https://www.notion.so/Admin-API-1590b5596dd88008abc6c178d258eaef?pvs=21) |
+| `createdAt` | Date | [Date Filter Operators](#date-filter-operators) |
 
-### Filter Operators
+## Filter Operators
 
 ### String and Enum Filter Operators
 
