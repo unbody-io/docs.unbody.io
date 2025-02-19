@@ -45,25 +45,17 @@ const HeadComponent: FC = () => {
         rel="stylesheet"
       />
       <link
-        rel="apple-touch-icon"
-        href={`${router.basePath}/apple-touch-icon.png`}
-        key="apple"
+        rel="icon"
+        type="image/png"
+        href="/favicon-light.png"
+        media="(prefers-color-scheme: light)"
       />
       <link
         rel="icon"
         type="image/png"
-        sizes="32x32"
-        href={`${router.basePath}/favicon-32x32.png`}
-        key="icon32"
+        href="/favicon-dark.png"
+        media="(prefers-color-scheme: dark)"
       />
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="16x16"
-        href={`${router.basePath}/favicon-16x16.png`}
-        key="icon16"
-      />
-      <link rel="icon" href={`${router.basePath}/favicon.ico`} key="favicon" />
       <link rel="manifest" href="/site.webmanifest" />
       <meta name="msapplication-TileColor" content="#000" />
       <meta name="apple-mobile-web-app-title" content="Unbody" />
