@@ -1,0 +1,88 @@
+import { Tab, Tabs } from "@nextui-org/react";
+
+# Build An AI Assistant
+
+<Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
+    <Tab title={"SDK (.ts)"}>
+    ```bash
+    npm i unbody
+    ```
+    ```typescript
+    import { Unbody } from 'unbody';
+
+    const unbody = new Unbody({
+      projectId: 'your-project-id',
+      apiKey: 'your-api-key'
+    });
+    
+    // Create assistant
+    const assistant = await unbody.assistant.create({
+      name: 'Community Helper',
+      description: 'Helps answer community questions',
+      options: {
+        personality: 'helpful and friendly',
+        contextStrategy: 'semantic'
+      }
+    });
+
+    // Chat with context
+    const response = await unbody.assistant
+      .chat(assistant.id)
+      .withMessage('What were the main topics discussed last week?')
+      .withContext({
+        timeframe: '7d',
+        relevanceThreshold: 0.8
+      })
+      .exec();
+
+    // Stream responses
+    const stream = await unbody.assistant
+      .chat(assistant.id)
+      .withMessage('Summarize recent discussions')
+      .stream()
+      .exec();
+
+    for await (const chunk of stream) {
+      process.stdout.write(chunk.content);
+    }
+    ```
+    </Tab>
+    <Tab title={"GraphQL"}>
+        ```graphql
+        mutation {
+          CreateAssistant(
+            input: {
+              name: "Community Helper"
+              description: "Helps answer community questions"
+              options: {
+                personality: "helpful and friendly"
+                contextStrategy: "semantic"
+              }
+            }
+          ) {
+            id
+            name
+          }
+        }
+
+        mutation {
+          Chat(
+            assistantId: "assistant-id"
+            message: "What were the main topics discussed last week?"
+            context: {
+              timeframe: "7d"
+              relevanceThreshold: 0.8
+            }
+          ) {
+            content
+            sources {
+              title
+              relevance
+            }
+          }
+        }
+        ```
+    </Tab>
+</Tabs>
+
+[← Back to Start](/first-projects/ai-assistant/1-setup) 

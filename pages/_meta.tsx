@@ -1,12 +1,17 @@
 const meta = {
   index: "Introduction",
-  architecture: "Architecture",
   "-- getting-started": {
     title: "Getting Started",
     type: "separator",
   },
-  "first-project": "First Project",
+  "first-projects": "First Projects",
   starters: "Starters",
+  "-- core-ideas": {
+    title: "Core Ideas",
+    type: "separator",
+  },
+  concepts: "Concepts",
+  architecture: "Architecture",
   "-- recipes": {
     title: "Recipes",
     type: "separator",

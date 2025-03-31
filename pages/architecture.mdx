@@ -1,131 +1,105 @@
-# Unbody's Blueprint
+---
+title: Architecture
+description: Understanding the architecture of Unbody
+---
+# Unbody Architecture
 
-Unbody is designed to enable the next generation of software—products that **think**, **speak**, and **act autonomously**. This vision is realized through three core principles:
+If software is becoming more like humans—able to **think**, **speak**, and **act**—then the backend that powers it needs to work like a brain.
+That’s why Unbody is built on **four functional layers** that mirror how intelligent systems (or humans) operate:
 
-- #### Knowledge
-    Unbody builds applications on enriched knowledge rather than static data, transforming raw inputs into dynamic, actionable insights.
+- **Perception** *(Knowledge Fabrication)*: how it sees and understands the world
+- **Memory** *(Storage and Persistent Memory)*: what it knows and remembers
+- **Reasoning** *(AI & Autonomy)*: how it thinks, decides, and plans
+- **Action** *(APIs & Middleware Control Plane)*: how it interacts with others and takes initiative
 
-- #### Modularity and Openness
-    Every layer is modular and open-source, ensuring flexibility, scalability, and seamless integration for developers to adapt and extend.
+Each layer in the Unbody stack corresponds to a set of modular components that work together to turn raw data into structured knowledge, reason over that knowledge, and expose it to the outside world via powerful APIs.
 
-- #### Adaptive Agency
-    Unbody empowers software to act autonomously, making decisions, adapting to user needs, and evolving through advanced function calling and contextual awareness.
-
-
-## Backend Layer: Transforming Raw Data into Knowledge
-
-The Backend Layer is the foundation of Unbody, where raw data is processed and transformed into actionable insights. This layer is built on two guiding principles:
-
-1. **Agnostic to Data Location:** Data can come from anywhere—Google Docs, Discord, local files, or databases.
-2. **Agnostic to Data Format:** Data can exist in many forms—text, images, videos, or structured files like PDFs.
-
-These principles shape how Unbody's backend ingests, processes, and enriches data.
-
-### Data Ingestion
-
-Being agnostic to data location means supporting integrations with disparate sources of data that developers interact with daily:
-
-- **Prebuilt Integrations:** Unbody offers connectors for platforms like [Google Drive](/providers/google-drive), [GitHub](/providers/github), and [Discord](/providers/discord). For example, your Google Drive may hold important reports, while Discord stores informal but critical team communications. All of these can be ingested into Unbody.
-- **[Push API](/data-ingestion/push-api):** For more specialized cases, developers can push custom data programmatically by defining schemas that match their unique requirements.
-
-### Data Processing
-
-Handling diverse formats requires tailored solutions for each data type. Data processing ensures that raw data becomes usable and consistent:
-
-- **File Parsers:** Each file type is handled with a dedicated parser. For instance, PDF parsing can extract embedded metadata, text, and images.
-- **Cleaning:** Real-world data is messy. Cleaning removes duplicates, irrelevant content, and inconsistencies, ensuring higher quality downstream.
-- **Chunking:** Large files are divided into smaller, logical segments. By default, Unbody chunks data into its **fundamental content blocks** (text, image, video, audio). For more complex cases, developers can define advanced chunking strategies using custom enhancement pipelines.
-
-### Data Enrichment
-
-Enrichment is the core mechanism of the backend layer, powered by Generative Feedback Loops that iteratively transform raw data into actionable knowledge. Each step in this process involves taking input data, applying specific operations like OCR or retrieval, and producing enriched outputs. These steps operate within modular **[Enhancer Pipelines](/project-configurations/enhancers)**, which handle tasks such as text extraction from images or generating structured metadata.
-
-For advanced use cases, developers can define custom pipelines tailored to their needs. [Learn more about enhancers here.](/project-configurations/enhancers)
-
-### Data Vectorization
-
-Vectorization converts enriched data into embeddings, enabling semantic tasks like [search](/content-api/search/semantic-search) and clustering:
-
-- **Prebuilt Models:** Includes transformer-based encoders such as OpenAI embeddings.
-- **Custom Models:** Developers can plug in fine-tuned encoders tailored for specific applications, such as biomedical research or legal text analysis.
-
-### Database and CDN
-
-Unbody uses **[Weaviate](https://weaviate.io)** for vector storage and querying, making it possible to perform semantic queries efficiently. A CDN ensures that enriched data is accessible globally with minimal latency.
+Unbody is built primarily in **Node.js**, with a clean modular structure and plugin-friendly design. Each component can be extended, replaced, or deployed independently.
 
 ---
 
-## ## API Layer: Bridging Applications and Knowledge
+## General Workflow
 
-The API Layer serves as the bridge between Unbody’s enriched backend and developer applications, providing precise control over how data is queried, transformed, and utilized. This layer is designed to empower developers to interact with complex, enriched data seamlessly.
+At a high level, the flow of data in Unbody looks like this:
 
-### Content API
+1. **Knowledge Fabrication** or Indexing— the process of transforming and processing raw content into enriched, structured knowledge:
 
-The **Content API** is the primary interface for interacting with enriched and AI-ready data. Built on **Weaviate**, it provides developers with:
+   - [**Data Ingestion**](./modules/data-ingestion.md):
+   - [**File Processing**](./modules/parsers.md)
+   - [**Enhancement**](./modules/enhancers.md)
+   - [**Vectorization**](./modules/vectorizers.md)
 
-- **GraphQL Interface:** Perform operations such as filtering, grouping, ranking, and similarity searches on enriched data.
-- **JavaScript SDK:** Simplifies API integration for web applications by abstracting complex GraphQL queries.
+2. **Using the Knowledge Base** — once data is indexed, interact with it through [Unbody's Content API](./apis/content-api.md) and build intelligent features on top.
 
-The Content API enables:
-
-- **Traditional Database Functions:** Apply filtering with [where](/content-api/filters) clauses, grouping data by metadata, and [sort](/content-api/sorting) results for structured queries.
-- **Semantic Queries:** Perform advanced searches using vector similarity or contextual relevance for AI-native workflows.
-- **Generative Capabilities:** Generate text, metadata, or augmented content, enabling tasks like [question answering](#question-answering), summarization, and more.
-
-By combining traditional database operations with semantic and generative features, the Content API serves as a flexible tool for building intelligent applications that fully utilize enriched knowledge.
-
-### Admin API
-
-The Admin API allows developers to manage schemas, enrichment pipelines, and ingestion workflows programmatically. It is ideal for automating operations as part of CI/CD pipelines.
-
-### Push API
-
-Developers can push data into Unbody programmatically using the Push API. This is especially useful for custom data formats or domain-specific ingestion needs.
-
-### Image and Audio/Video APIs
-
-- **Image API:** Transformations such as face cropping, object detection, and metadata tagging are supported.
-- **Audio/Video API:** Mux-powered integrations provide transcription, speaker identification, and streaming capabilities.
+Unbody also offers standalone [**Generative APIs**](./modules/text-generation.md), including text, JSON, and image generation. These can be used independently or applied within the content API flow (e.g. for RAG or summarization).
 
 ---
 
-## Agents Layer: Orchestrating AI Workflows
+## 🌳 Perception *(Knowledge Fabrication)*
 
-The **Agents Layer** enables complex workflows by chaining backend tasks, maintaining context, and adapting dynamically to new inputs.
+Where raw content becomes structured, enriched knowledge.
 
-### Capabilities
+Includes:
 
-- **Function Calling:** Agents dynamically execute API calls to perform retrieval, enrichment, or generative tasks.
-- **Multi-Step Pipelines:** Automate workflows, such as querying data, applying enrichment, and delivering a result.
-- **Stateful Context:** Agents maintain embeddings as part of their state, enabling contextual responses.
-
-### Example Applications
-
-- **ETL Pipelines:** Automate extraction, transformation, and loading of data into enriched knowledge repositories.
-- **Adaptive Q&A Systems:** Combine retrieval with generative AI to provide intelligent, context-aware answers.
-- **Semantic Recommendations:** Rank and group documents based on vector proximity to deliver personalized suggestions.
+- [**Data Ingestion**](./modules/data-ingestion.md)
+- [**Parsers**](./modules/parsers.md)
+- [**Enhancers**](./modules/enhancers.md)
+- [**Vectorizers**](./modules/vectorizers.md)
+- [**Indexing**](./modules/indexing.md)
 
 ---
 
-## Frontend Layer: AI-Enhanced Interfaces
+## 📂 Memory *(Persistent Storage & Vector Memory)*
 
-The Frontend Layer provides tools and components for developers to integrate Unbody’s capabilities into their applications:
+Stores all enriched data for future retrieval and reasoning.
 
-- **React Components:** Prebuilt elements like semantic search bars and recommendation interfaces.
-- **Dynamic Players:** Audio and video players that embed enriched metadata for improved interactivity.
+Includes:
 
----
-
-## Utility Layer: Supporting Developer Workflows
-
-The Utility Layer provides tools to simplify development and enhance system functionality:
-
-- **Natural Language Query Parsing:** Converts unstructured user queries into structured GraphQL operations.
-- **Ranking and Re-Ranking:** Dynamically adjust search results based on relevance models or user preferences.
+- [**Vector Stores**](./modules/vector-stores.md): Weaviate, Pinecone, Qdrant, etc.
+- [**File Storage**](./modules/file-storage.md): S3, GCS, local file systems
+- [**Metadata DB**](./modules/metadata-db.md)
+- [**Media CDN**](./modules/media-serving.md)
 
 ---
 
-### Conclusion
+## 🧠 Reasoning *(AI Modules & Autonomy)*
 
-Unbody's architecture represents a principle-driven approach to building AI-native applications. By grounding every design decision in principles like modularity, knowledge flow, and responsive agency, Unbody creates a system that transforms raw data into actionable intelligence. Each layer is designed to be both self-contained and interconnected, forming a cohesive platform for developers to build the future of AI-powered systems.
+Adds intelligence through generation, decision-making, and context-aware behavior.
 
+- [**Text Generation**](./modules/text-generation.md)
+- [**JSON Generation**](./modules/json-generation.md)
+- [**Image Generation**](./modules/image-generation.md)
+- [**Function Calling**](./modules/function-calling.md)
+
+Generative modules can be used independently or embedded in [Content API](./apis/content-api.md) queries to create agentic flows like RAG.
+
+---
+
+## 🌐 Action *(APIs & Middleware Control Plane)*
+
+Interfaces to interact with your knowledge base and trigger workflows.
+
+- [**Content API**](./apis/content-api.md)
+- [**Push API**](./apis/push-api.md)
+- [**Admin API**](./apis/admin-api.md)
+- [**MCP**](./modules/mcp.md)[ (Middleware Control Plane)](./modules/mcp.md)
+
+---
+
+## Projects & Configuration
+
+Every instance of Unbody is called a **Project**. A project defines a schema, vectorizer, and set of data sources to build your knowledge base.
+
+- Each project can have one or more [**Data Sources**](./concepts/data-sources.md), connected via [**Data Source Providers**](./modules/data-ingestion.md#providers).
+- Projects are created using a [**configuration schema**](./concepts/project-configuration.md) that defines the pipeline and indexing behavior.
+
+⚠️ **Limitation**: Project settings cannot currently be edited after creation (e.g. schema or vectorizer). This is a known limitation and a fix is in progress.
+
+---
+
+## Deployment Models
+
+Unbody can be deployed in two modes:
+
+- **Unbody Cloud**: Fully managed, with built-in storage, scaling, CDN, and zero-setup APIs
+- **Unbody OSS**: Self-hosted and open-source, with modular plugin support and full control
