@@ -193,12 +193,12 @@ When you're working with Hybrid Search, the way keyword and vector search result
     <Tab title={"GraphQL"}>
         ```graphql copy
         query {
-  Get {
-    GoogleDoc(hybrid: { query: "ai", fusionType: relativeScoreFusion }) {
-      ...fields
-    }
-  }
-}
+            Get {
+                GoogleDoc(hybrid: { query: "ai", fusionType: relativeScoreFusion }) {
+                ...fields
+                }
+            }
+        }
 
         ```
     </Tab>
@@ -281,7 +281,7 @@ Have you got your own vector? Great! You can provide it directly to the Hybrid S
 
 ### Add a Conditional Filter: Refine Your Search
 
-You can add conditional filters to your hybrid search queries. These filters will refine the results without impacting the ranking. For example, if you want to search for documents about "Electric Cars" but only if their title contains "Vehicles", you can write the query as shown below.
+You can add conditional filters to your hybrid search queries. These [filters](/content-api/filters) will refine the results without impacting the ranking. For example, if you want to search for documents about "Electric Cars" but only if their title contains "Vehicles", you can write the query as shown below.
 
 **Example: Search for documents with title containing `Vehicles`**
 
