@@ -156,12 +156,12 @@ For example, let's' consider you’re searching for articles related to web deve
         ```javascript copy
         await unbody.get
                     .textDocument
-                    .nearText({
-                        concepts: [...concepts representing “web development”...],
-                        moveTo: {
-                            concepts: ["frontend", "backend"],
-                            force: 0.5
-                        }
+                    .search
+                    .about("web development", {
+                      moveTo: {
+                          concepts: ["frontend", "backend"],
+                          force: 0.5
+                      }
                     })
                     .exec()
         ```
@@ -171,8 +171,8 @@ For example, let's' consider you’re searching for articles related to web deve
         query{
           Get{
             TextDocument(
+              concepts: ["web development"],
               nearText: {
-                concepts: [...concepts representing “web development”...],
                 moveTo: {
                   concepts: ["frontend", "backend"],
                   force: 0.5
@@ -180,40 +180,6 @@ For example, let's' consider you’re searching for articles related to web deve
               }
             ){
               ...fields
-            }
-          }
-        }
-        ```
-    </Tab>
-</Tabs>
-
-### Utilizing Custom Vectors
-
-If you have access to custom words or document vectors, **`nearVector`** allows you to integrate them directly into your search queries.
-
-**Example: Search near a Vector**
-<Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"SDK (.ts)"}>
-        ```javascript copy
-        unbody.get
-              .textDocument
-              .nearVector({
-                  vector: [...your custom word vector...]
-              })
-              .exec()
-        ```
-    </Tab>
-    <Tab title={"GraphQl"}>
-        ```graphql copy
-        query {
-          Get {
-            TextDocument(
-              nearVector: {
-                vector: [...your custom word vector...]
-              }
-            ){
-              title
-              text
             }
           }
         }
