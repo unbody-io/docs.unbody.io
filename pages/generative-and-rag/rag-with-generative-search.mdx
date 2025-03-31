@@ -6,93 +6,175 @@ import { Tabs } from "nextra/components"
 Unbody gives you various ways to perform RAG - from generating insights from single documents to analyzing multiple sources at once.
 
 ## Generate from every single document
-When you need AI-generated insights from a specific document, use [`.generate.fromOne()`](/content-api/generative#from-one). For example, create quick summaries from PDF files with direct references to the content.
+When you need to generate a result for each object based on a single prompt, use the [`.generate.fromOne()`](/content-api/generative#from-one) method. For example, you can create summaries from your textDocuments by referencing any document property using `{propertyName}` syntax. 
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
-     data: { payload }
+     data: { generate }
    } = await unbody.get
                    .textDocument
-                   .where({ mimeType: "application/pdf" })
-                   .generate.fromOne("Summarize this: {text}")
+                   .generate.fromOne("Summarize this in max 100 words: {text}")
                    .select("title", "originalName")
                    .exec();
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
-   {
-     Get {
-       TextDocument(
-         where: {
-           operator: Equal, 
-           path: "mimeType", 
-           valueText: "application/pdf"
-         }
-       ) {
-         _additional {
-           generate(
-             singleResult: {
-               prompt: "Summarize this: {text}"
-             }
-           ) {
-             error
-             singleResult
-             metadata {
-               finishReason
-               usage {
-                 inputTokens
-                 outputTokens
-                 totalTokens
-               }
-             }
-           }
-         }
-         title
-         originalName
-       }
-     }
-   }
+   ```graphql copy
+   query {
+      Get {
+        TextDocument {
+          _additional {
+            generate(
+              singleResult: { prompt: "Summarize this in max 100 words: {text}" }
+            ) {
+              error
+              singleResult
+              metadata {
+                finishReason
+                usage {
+                  inputTokens
+                  outputTokens
+                  totalTokens
+                }
+              }
+            }
+          }
+          title
+          originalName
+        }
+      }
+  }
+
    ```
  </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
-  {
-    "_additional": {
-      "generate": {
-        "error": null,
-        "metadata": {
-          "finishReason": "",
-          "usage": {
-            "inputTokens": 5353,
-            "outputTokens": 355,
-            "totalTokens": 5708
-          }
+    {
+        "_additional": {
+            "generate": {
+                "error": null,
+                "metadata": {
+                    "finishReason": "stop",
+                    "usage": {
+                        "inputTokens": 588,
+                        "outputTokens": 121,
+                        "totalTokens": 709
+                    }
+                },
+                "singleResult": "Urban transportation is evolving as electric vehicles (EVs) become a promising solution to pollution, congestion, and sustainability issues. Recent advancements in battery technology and vehicle design have propelled EVs into various forms, offering diverse consumer options. In urban settings, EVs improve air quality, reduce operating costs, and decrease oil dependency. Challenges like limited charging infrastructure and high upfront costs persist, but efforts to expand networks and enhance battery tech continue. Cities like Oslo, Amsterdam, and Beijing exemplify successful EV adoption. EVs promise a future of cleaner transportation, necessitating supportive policies and infrastructure for widespread urban implementation."
+            }
         },
-        "singleResult": "This research paper, published in the International Journal of Innovative Technology and Exploring Engineering, explores the relationship between machine learning and deep learning, two branches of artificial intelligence that are integral to data science..."
-      }
+        "originalName": "The Rise of Electric Vehicles in Urban Environments.docx",
+        "title": "The Rise of Electric Vehicles in Urban Environments"
     },
-    "originalName": "Machine-Learning-and-Deep-Learning.pdf",
-    "title": "International Journal of Innovative Technology and Exploring Engineering (IJITEE)"
-  }
+    {
+        "_additional": {
+            "generate": {
+                "error": null,
+                "metadata": {
+                    "finishReason": "stop",
+                    "usage": {
+                        "inputTokens": 3026,
+                        "outputTokens": 123,
+                        "totalTokens": 3149
+                    }
+                },
+                "singleResult": "Developing AI apps that understand human-like data interactions is challenging, particularly for non-AI developers. The rise of AI tools like ChatGPT has heightened expectations for personalized and interactive apps. Key challenges include personalizing AI to handle unique, diverse, and scattered data types, and integrating complex AI tools. Unbody addresses these by offering a seamless, all-in-one solution through a four-layer AI pipeline. This involves data aggregation, AI enhancement, interaction via APIs, and application realization, all designed to simplify AI development. Unbody aims to bridge the gap in tech capabilities, making AI app development accessible and enjoyable."
+            }
+        },
+        "originalName": "unbody-intro.md",
+        "title": "Unbody: all AI buzz in one endpoint, one line of code"
+    },
+    {
+        "_additional": {
+            "generate": {
+                "error": null,
+                "metadata": {
+                    "finishReason": "stop",
+                    "usage": {
+                        "inputTokens": 735,
+                        "outputTokens": 128,
+                        "totalTokens": 863
+                    }
+                },
+                "singleResult": "Quentin Tarantino, a distinctive and influential filmmaker, is renowned for his sharp dialogue, non-linear storytelling, and eclectic soundtracks. His cinematic journey began with \"Reservoir Dogs\" and continued with masterpieces like \"Pulp Fiction,\" \"Kill Bill,\" and \"Inglourious Basterds.\" These films have left a lasting impact on cinema with their unique blend of humor, violence, and genre homage. Despite controversies surrounding his depiction of violence and use of racial slurs, Tarantino is celebrated for his originality. As he nears retirement, his commitment to film preservation and storytelling ensures his enduring influence on the cinematic landscape."
+            }
+        },
+        "originalName": "Quentin Tarantino_ Master of Cinematic Artistry.docx",
+        "title": ""
+    },
+    {
+        "_additional": {
+            "generate": {
+                "error": null,
+                "metadata": {
+                    "finishReason": "stop",
+                    "usage": {
+                        "inputTokens": 568,
+                        "outputTokens": 128,
+                        "totalTokens": 696
+                    }
+                },
+                "singleResult": "The widespread adoption of electric vehicles (EVs) in urban areas faces challenges such as insufficient charging infrastructure, range anxiety, and high upfront costs. To overcome these obstacles, expanding charging infrastructure through government and private investment, incorporating fast-charging technology, and introducing wireless charging systems are crucial. Additionally, government incentives and subsidies can offset EVs' higher initial costs. Public education campaigns can dispel misconceptions about EVs and highlight their benefits. Collaborative efforts among governments, automakers, and stakeholders, supported by policy incentives, are vital. Addressing these issues can transform urban transportation, offering cleaner air, lower emissions, and improved energy security."
+            }
+        },
+        "originalName": "Overcoming Challenges in the Adoption of Electric Vehicles_ A Roadmap for Urban Transformation.docx",
+        "title": "Overcoming Challenges in the Adoption of Electric Vehicles: A Roadmap for Urban Transformation"
+    },
+    {
+        "_additional": {
+            "generate": {
+                "error": null,
+                "metadata": {
+                    "finishReason": "stop",
+                    "usage": {
+                        "inputTokens": 1683,
+                        "outputTokens": 128,
+                        "totalTokens": 1811
+                    }
+                },
+                "singleResult": "The Unbody client for TypeScript/JavaScript allows data interaction through installation with `npm i @unbody-io/ts-client`. You instantiate it with your API and project keys. It includes features to parse JSON responses and retrieve data from sources like Google Docs. Various retrieval methods include direct fetches, queries with conditions, property-based inquiries, text/vector proximity checks, grouping, and pagination using sort, limit, and offset. Data fields and additional fields can be specified for retrieval. The client warns about potential data exposure when used on the client-side and offers advanced debugging with `getGraphQuery` and `getJsonQuery`."
+            }
+        },
+        "originalName": "typescript-client.md",
+        "title": "Installation"
+    },
+    {
+        "_additional": {
+            "generate": {
+                "error": null,
+                "metadata": {
+                    "finishReason": "stop",
+                    "usage": {
+                        "inputTokens": 991,
+                        "outputTokens": 127,
+                        "totalTokens": 1118
+                    }
+                },
+                "singleResult": "Quentin Tarantino and Diego Maradona, though from different fields, are both celebrated as mavericks known for their talent, innovation, and controversy. Tarantino's cinematic journey began in a video rental store, leading to his signature style that blends genres and defies conventions. Maradona's football brilliance was evident from his early days in Buenos Aires, transforming the game with his artistry and skill. Both figures have faced scandals; Tarantino for provocative themes in films, Maradona for off-field antics including drug issues. Their cultural impacts are profound, and their charismatic, authentic personalities have left lasting legacies in cinema and football."
+            }
+        },
+        "originalName": "Quentin Tarantino and Diego Maradona_ A Tale of Two Mavericks.docx",
+        "title": "Quentin Tarantino and Diego Maradona: A Tale of Two Mavericks"
+    }
 ]
 ```
 </Collapse>
 
 ## Generate from every single document with options
-Fine-tune your generated content by adding parameters to `.generate.fromOne()`. Adjust creativity levels, response length, and other settings to get exactly the output you need. [Learn more about options](/content-api/generative#options).
+You might want to adjust the maxTokens, creativity level, or use a specific model for your generated content. Use generative search [options](/content-api/generative#arguments) to fine-tune these parameters. 
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
-     data: { payload }
+     data: { generate }
    } = await unbody.get
                    .textDocument
                    .where({ mimeType: "text/markdown" })
@@ -112,70 +194,107 @@ Fine-tune your generated content by adding parameters to `.generate.fromOne()`. 
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
-   {
-     Get {
-       TextDocument(
-         where: {
-           operator: Equal, 
-           path: "mimeType", 
-           valueText: "text/markdown"
-         }
-       ) {
-         _additional {
-           generate(
-             singleResult: {
-               prompt: "Create a short report for these: {text}", 
-               options: {
-                 model: "gpt-4", 
-                 topP: 0.7, 
-                 maxTokens: 1000, 
-                 temperature: 0.7, 
-                 presencePenalty: 0, 
-                 frequencyPenalty: 0
-               }
-             }
-           ) {
-             error
-             singleResult
-             metadata {
-               finishReason
-               usage {
-                 inputTokens
-                 outputTokens
-                 totalTokens
-               }
-             }
-           }
-         }
-         originalName
-       }
-     }
+   ```graphql copy
+   query {
+      Get {
+        TextDocument(
+          where: { operator: Equal, path: "mimeType", valueText: "text/markdown" }
+        ) {
+          _additional {
+            generate(
+              singleResult: {
+                prompt: "Create a short report for these: {text}"
+                options: {
+                  model: "gpt-4"
+                  topP: 0.7
+                  maxTokens: 1000
+                  temperature: 0.7
+                  presencePenalty: 0
+                  frequencyPenalty: 0
+                }
+              }
+            ) {
+              error
+              singleResult
+              metadata {
+                finishReason
+                usage {
+                  inputTokens
+                  outputTokens
+                  totalTokens
+                }
+              }
+            }
+          }
+          originalName
+        }
+      }
    }
    ```
  </Tabs.Tab>
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
-        "_additional": {
-            "generate": {
-                "error": null,
-                "metadata": {
-                    "finishReason": "stop",
-                    "usage": {
-                        "inputTokens": 1668,
-                        "outputTokens": 287,
-                        "totalTokens": 1955
-                    }
-                },
-                "singleResult": "Report:\n\nUnbody's official client for Typescript/Javascript is a powerful tool..."
-            }
+        "from": {
+            "_additional": {
+                "generate": {
+                    "error": null,
+                    "metadata": {
+                        "finishReason": "stop",
+                        "usage": {
+                            "inputTokens": 1668,
+                            "outputTokens": 274,
+                            "totalTokens": 1942
+                        }
+                    },
+                    "singleResult": "Report:\n\nUnbody has officially launched a TypeScript/JavaScript client. This client allows developers to interact with the Unbody platform using TypeScript or JavaScript. \n\nTo install the client, users can use npm with the command 'npm i @unbody-io/ts-client'. The client can then be instantiated in the application using the import statement and the Unbody constructor, with the API key and project key as parameters.\n\nThe client also supports Transformers, which allows users to parse JSON strings in the response as per their requirements. \n\nUsers can use the 'get' method to retrieve data from any source available in the Unbody panel. This includes 'get' without any query, 'where' for simple and advanced queries, 'ask' for simple usage and property selection, 'near text' for simple usage and distance specification, 'near vector' for simple usage and distance specification, 'group' for simple usage and type specification, 'group by' for simple usage and group specification, and 'select' for field retrieval.\n\nThe client also supports pagination with 'sort', 'limit', and 'offset' methods, and additional field retrieval with the 'additional' method. \n\nFor debugging purposes, users can use the 'getGraphQuery' and 'getJsonQuery' methods. \n\nNote: Using this client on the client-side of an application can lead to data crawling."
+                }
+            },
+            "originalName": "typescript-client.md"
         },
-        "originalName": "typescript-client.md"
+        "result": "Report:\n\nUnbody has officially launched a TypeScript/JavaScript client. This client allows developers to interact with the Unbody platform using TypeScript or JavaScript. \n\nTo install the client, users can use npm with the command 'npm i @unbody-io/ts-client'. The client can then be instantiated in the application using the import statement and the Unbody constructor, with the API key and project key as parameters.\n\nThe client also supports Transformers, which allows users to parse JSON strings in the response as per their requirements. \n\nUsers can use the 'get' method to retrieve data from any source available in the Unbody panel. This includes 'get' without any query, 'where' for simple and advanced queries, 'ask' for simple usage and property selection, 'near text' for simple usage and distance specification, 'near vector' for simple usage and distance specification, 'group' for simple usage and type specification, 'group by' for simple usage and group specification, and 'select' for field retrieval.\n\nThe client also supports pagination with 'sort', 'limit', and 'offset' methods, and additional field retrieval with the 'additional' method. \n\nFor debugging purposes, users can use the 'getGraphQuery' and 'getJsonQuery' methods. \n\nNote: Using this client on the client-side of an application can lead to data crawling.",
+        "error": null,
+        "metadata": {
+            "finishReason": "stop",
+            "usage": {
+                "inputTokens": 1668,
+                "outputTokens": 274,
+                "totalTokens": 1942
+            }
+        }
+    },
+    {
+        "from": {
+            "_additional": {
+                "generate": {
+                    "error": null,
+                    "metadata": {
+                        "finishReason": "stop",
+                        "usage": {
+                            "inputTokens": 3094,
+                            "outputTokens": 239,
+                            "totalTokens": 3333
+                        }
+                    },
+                    "singleResult": "The report highlights the increasing demand for AI apps that understand user data like humans. However, developing these apps is a complex process due to challenges such as personalization, understanding diverse data storage and formats, and the intricate web of AI tools and technologies. \n\nThe report introduces Unbody, a solution designed to simplify the AI development process. Unbody serves as an invisible AI layer that aggregates, syncs, and transforms data into advanced AI functionalities. It integrates with various platforms, handles a wide range of data formats, and provides advanced functionalities like Large Language Models (LLMs) and Retrieval Augmented Generation (RAG). \n\nThe report also elaborates on Unbody's four-layer process: Data Aggregation and Integration, AI data processing and enhancement, Delivery and interaction, and Application realization & use-cases. These layers work together to transform raw data into AI-enhanced data that can be used in a myriad of innovative ways. \n\nFinally, the report encourages developers to dive into AI development, bridging the gap between tech capabilities and practical applications. It also invites readers to join the Unbody community and offers a freemium plan for users to try out Unbody for free."
+                }
+            },
+            "originalName": "unbody-intro.md"
+        },
+        "result": "The report highlights the increasing demand for AI apps that understand user data like humans. However, developing these apps is a complex process due to challenges such as personalization, understanding diverse data storage and formats, and the intricate web of AI tools and technologies. \n\nThe report introduces Unbody, a solution designed to simplify the AI development process. Unbody serves as an invisible AI layer that aggregates, syncs, and transforms data into advanced AI functionalities. It integrates with various platforms, handles a wide range of data formats, and provides advanced functionalities like Large Language Models (LLMs) and Retrieval Augmented Generation (RAG). \n\nThe report also elaborates on Unbody's four-layer process: Data Aggregation and Integration, AI data processing and enhancement, Delivery and interaction, and Application realization & use-cases. These layers work together to transform raw data into AI-enhanced data that can be used in a myriad of innovative ways. \n\nFinally, the report encourages developers to dive into AI development, bridging the gap between tech capabilities and practical applications. It also invites readers to join the Unbody community and offers a freemium plan for users to try out Unbody for free.",
+        "error": null,
+        "metadata": {
+            "finishReason": "stop",
+            "usage": {
+                "inputTokens": 3094,
+                "outputTokens": 239,
+                "totalTokens": 3333
+            }
+        }
     }
 ]
 ```
@@ -183,13 +302,13 @@ Fine-tune your generated content by adding parameters to `.generate.fromOne()`. 
 
 
 ## Generate from multiple documents
-Have information spread across several documents? You can combine specific fields from multiple sources to create a unified summary or analysis by using [`.generate.fromMany()`](/content-api/generative#from-many).
+When you need to generate from multiple documents together and get a grouped result, use the `.generate.fromMany()` method. This lets you combine specific fields from all your sources to create a single generative result.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
-     data: { payload }
+     data: { generate }
    } = await unbody.get
                    .textDocument
                    .generate.fromMany("Create a 100 words summary:", ["text", "title"])
@@ -198,79 +317,121 @@ Have information spread across several documents? You can combine specific field
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
-   {
-     Get {
-       TextDocument {
-         _additional {
-           generate(
-             groupedResult: {
-               task: "Create a 100 words summary:", 
-               properties: ["text", "title"]
-             }
-           ) {
-             error
-             groupedResult
-             metadata {
-               finishReason
-               usage {
-                 inputTokens
-                 outputTokens
-                 totalTokens
-               }
-             }
-           }
-         }
-         title
-         originalName
-       }
-     }
-   }
+   ```graphql copy
+   query {
+      Get {
+        TextDocument {
+          _additional {
+            generate(
+              groupedResult: {
+                task: "Create a 100 words summary:"
+                properties: ["text", "title"]
+              }
+            ) {
+              error
+              groupedResult
+              metadata {
+                finishReason
+                usage {
+                  inputTokens
+                  outputTokens
+                  totalTokens
+                }
+              }
+            }
+          }
+          title
+          originalName
+        }
+      }
+  }
+
    ```
  </Tabs.Tab>
 </Tabs>
 
 
 <Collapse title="Response">
-```typescript
-
-[
-  {
-    "_additional": {
-      "generate": {
-        "error": null,
-        "groupedResult": "Here is a summary of the provided text:\n\nThe text includes a variety of topics...",
-        "metadata": {
-          "finishReason": "",
-          "usage": {
-            "inputTokens": 14293,
-            "outputTokens": 322,
-            "totalTokens": 14615
-          }
+```typescript copy
+{
+    "from": [
+        {
+            "_additional": {
+                "generate": {
+                    "error": null,
+                    "groupedResult": "Urban transportation is transforming as cities face pollution, congestion, and sustainability challenges. Electric vehicles (EVs) are emerging as a key solution to reduce carbon emissions and improve urban air quality. Despite the promise, EV adoption faces hurdles like limited charging infrastructure, range anxiety, and high costs compared to conventional vehicles. Governments and stakeholders are expanding charging networks and offering incentives to overcome these barriers. Cities like Oslo and Amsterdam are leading in EV adoption through supportive policies. With continued innovation and investments, EVs could revolutionize urban mobility, offering cleaner and more efficient cities for future generations.",
+                    "metadata": {
+                        "finishReason": "stop",
+                        "usage": {
+                            "inputTokens": 13210,
+                            "outputTokens": 115,
+                            "totalTokens": 13325
+                        }
+                    }
+                }
+            },
+            "originalName": "The Rise of Electric Vehicles in Urban Environments.docx",
+            "title": "The Rise of Electric Vehicles in Urban Environments"
+        },
+        {
+            "_additional": null,
+            "originalName": "unbody-intro.md",
+            "title": "Unbody: all AI buzz in one endpoint, one line of code"
+        },
+        {
+            "_additional": null,
+            "originalName": "Quentin Tarantino_ Master of Cinematic Artistry.docx",
+            "title": ""
+        },
+        {
+            "_additional": null,
+            "originalName": "Overcoming Challenges in the Adoption of Electric Vehicles_ A Roadmap for Urban Transformation.docx",
+            "title": "Overcoming Challenges in the Adoption of Electric Vehicles: A Roadmap for Urban Transformation"
+        },
+        {
+            "_additional": null,
+            "originalName": "typescript-client.md",
+            "title": "Installation"
+        },
+        {
+            "_additional": null,
+            "originalName": "Machine-Learning-and-Deep-Learning.pdf",
+            "title": "International Journal of Innovative Technology and Exploring Engineering (IJITEE)"
+        },
+        {
+            "_additional": null,
+            "originalName": "Quentin Tarantino and Diego Maradona_ A Tale of Two Mavericks.docx",
+            "title": "Quentin Tarantino and Diego Maradona: A Tale of Two Mavericks"
         }
-      }
-    },
-    "originalName": "Overcoming Challenges in the Adoption of Electric Vehicles_ A Roadmap for Urban Transformation.docx",
-    "title": "Overcoming Challenges in the Adoption of Electric Vehicles: A Roadmap for Urban Transformation"
-  }
-]
+    ],
+    "result": "Urban transportation is transforming as cities face pollution, congestion, and sustainability challenges. Electric vehicles (EVs) are emerging as a key solution to reduce carbon emissions and improve urban air quality. Despite the promise, EV adoption faces hurdles like limited charging infrastructure, range anxiety, and high costs compared to conventional vehicles. Governments and stakeholders are expanding charging networks and offering incentives to overcome these barriers. Cities like Oslo and Amsterdam are leading in EV adoption through supportive policies. With continued innovation and investments, EVs could revolutionize urban mobility, offering cleaner and more efficient cities for future generations.",
+    "error": null,
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 13210,
+            "outputTokens": 115,
+            "totalTokens": 13325
+        }
+    }
+}
 ```
 </Collapse>
 
 ## Generate from multiple documents with options
-When you need both multi-document analysis and precise output control, use advanced multi-document generation with [options](/content-api/generative#options). This combines document properties while letting you fine-tune the AI's response.
+Sometimes you want more control over your multi-document generation. Using fromMany with [options](/content-api/generative#arguments) lets you better control the output. 
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
-     data: { payload }
+     data: { generate }
    } = await unbody.get
                    .textDocument
                    .where({ mimeType: "text/markdown" })
                    .generate.fromMany({
                      task: "Write a short report based on these topics:",
-                     properties: ["title", "text", "tags"],
+                     properties: ["title", "text", "toc", "authors"],
                      options: {
                        model: "gpt-4",
                        topP: 0.7,
@@ -285,74 +446,76 @@ When you need both multi-document analysis and precise output control, use advan
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
-   {
-     Get {
-       TextDocument(
-         where: {
-           operator: Equal, 
-           path: "mimeType", 
-           valueText: "text/markdown"
-         }
-       ) {
-         _additional {
-           generate(
-             groupedResult: {
-               task: "Write a short report based on these topics:", 
-               properties: ["title", "text", "tags"], 
-               options: {
-                 model: "gpt-4", 
-                 topP: 0.7, 
-                 maxTokens: 1000, 
-                 temperature: 0.7, 
-                 presencePenalty: 0, 
-                 frequencyPenalty: 0
-               }
-             }
-           ) {
-             error
-             groupedResult
-             metadata {
-               finishReason
-               usage {
-                 inputTokens
-                 outputTokens
-                 totalTokens
-               }
-             }
-           }
-         }
-         originalName
-         title
-       }
-     }
+   ```graphql copy
+   query {
+      Get {
+        TextDocument(
+          where: { operator: Equal, path: "mimeType", valueText: "text/markdown" }
+        ) {
+          _additional {
+            generate(
+              groupedResult: {
+                task: "Write a short report based on these topics:"
+                properties: ["title", "text", "toc", "authors"]
+                options: {
+                  model: "gpt-4"
+                  topP: 0.7
+                  maxTokens: 1000
+                  temperature: 0.7
+                  presencePenalty: 0
+                  frequencyPenalty: 0
+                }
+              }
+            ) {
+              error
+              groupedResult
+              metadata {
+                finishReason
+                usage {
+                  inputTokens
+                  outputTokens
+                  totalTokens
+                }
+              }
+            }
+          }
+          originalName
+          title
+        }
+      }
    }
+
    ```
  </Tabs.Tab>
 </Tabs>
 
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
         "_additional": {
             "generate": {
                 "error": null,
-                "groupedResult": "The report provides information on two main topics...",
+                "groupedResult": "The first report discusses the installation and usage of the official Unbody client for typescript/javascript. The Unbody client can be installed with npm and instantiated with an API key and project key. The report provides code examples for different methods such as 'get', 'where', 'ask', 'near text', 'near vector', 'group', 'group by', 'sort', 'limit', 'offset', and 'select'. These methods can be used to parse JSON strings, get data from any source in the Unbody panel, and more. However, it is noted that using this on the client-side of an application can lead to data crawling.\n\nThe second report, authored by Amir Houieh, discusses the challenges of AI app development and how Unbody aims to address them. The challenges include personalisation, data diversity and storage, and the complex nature of AI tools and technologies. Unbody simplifies AI app development by aggregating, syncing, and transforming data into advanced AI functionalities through a single GraphQL endpoint. The report further explains the four layers of the Unbody solution: data aggregation and integration, AI data processing and enhancement, delivery and interaction, and application realization & use-cases. It concludes by inviting developers to join the Unbody adventure and try out its freemium plan.",
                 "metadata": {
                     "finishReason": "stop",
                     "usage": {
-                        "inputTokens": 5355,
-                        "outputTokens": 316,
-                        "totalTokens": 5671
+                        "inputTokens": 6827,
+                        "outputTokens": 261,
+                        "totalTokens": 7088
                     }
                 }
             }
         },
         "originalName": "typescript-client.md",
         "title": "Installation"
+    },
+    {
+        "_additional": null,
+        "originalName": "unbody-intro.md",
+        "title": "Unbody: all AI buzz in one endpoint, one line of code"
     }
 ]
 ```

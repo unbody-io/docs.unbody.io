@@ -1,4 +1,4 @@
-import { Tabs, Callout } from "nextra/components";
+import { Callout, Tabs } from "nextra/components";
 
 # Audio API
 
@@ -17,7 +17,7 @@ Unbody leverages [Mux](https://mux.com/) to provide audio hosting and streaming 
 Before you begin, make sure you have the following:
 
 - An active Unbody account.
-- Access to the Unbody GraphQL endpoint.
+- Access to the Unbody GraphQL endpoint or SDK.
 
 ### Fetch Your Audio
 
@@ -38,7 +38,7 @@ const { assetId, hlsUrl } = audioFiles[0];
 </Tabs.Tab>
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     AudioFile {
@@ -59,7 +59,7 @@ Here's an example of how you can use Mux React Player to stream your audio:
 <Tabs items={['Mux React Player']}>
 <Tabs.Tab>
 
-```js
+```typescript copy
 import MuxAudio from "@mux/mux-audio-react";
 
 const AudioPlayer = ({ title, assetId, playbackId }) => {
@@ -115,7 +115,7 @@ const { entries } = subtitleFiles[0];
 
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     SubtitleFile(
@@ -143,9 +143,9 @@ query {
 
 Here are some examples of how you can leverage the auto-generated captions:
 
-- Perform semantic search to find audio files or specific parts of audios based on your query.
-- Use the `ask` operator to get answers based on the audio transcription.
-- Use the `generate` operator to perform RAG (Retrieval-Augmented Generation) on audio transcription.
+- Perform [`semantic search`](/content-api/search/semantic-search) to find videos or specific parts of videos based on your query.
+- Use the [`ask`](/content-api/q-n-a) operator to get answers based on the video transcription.
+- Use the [`generate`](/content-api/generative) operator to perform RAG (Retrieval-Augmented Generation) on video transcriptions.
 
 Furthermore, if you have the auto-generated fields feature enabled in your project, Unbody utilizes the transcriptions to generate summaries, extract keywords, named entities, and more. These additional fields are added to both the `AudioFile` and `SubtitleFile` objects.
 
@@ -168,7 +168,7 @@ const audioFile = audioFiles[0].files[0];
 </Tabs.Tab>
 <Tabs.Tab>
 
-```graphql
+```graphql copy
 query {
   Get {
     AudioFile {
@@ -191,7 +191,7 @@ query {
 ## User Limits 
 
 <Callout type="info">
-  See pricing details [here](/pricing).
+  See pricing details [here](https://unbody.io/pricing).
 </Callout>
 
 ## Known Issues and Limitations

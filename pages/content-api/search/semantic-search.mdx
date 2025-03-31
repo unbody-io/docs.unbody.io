@@ -1,4 +1,4 @@
-import {Tabs, Tab} from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
 
 # Semantic Search
 
@@ -14,16 +14,16 @@ You can perform semantic searches on virtually any text (`string`) field of any 
     <Tab title={"SDK (.ts)"}>
         ```javascript copy
         unbody.get
-              .<object_name>
+              .<collectionName>
               .search
               .about("query", {...options})
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query{
           Get{
-            <ObjectName>(
+            <collectionName>(
               nearText: {
                 concepts: ["query"],
                 ...options
@@ -52,7 +52,7 @@ You can perform semantic searches on virtually any text (`string`) field of any 
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query{
           Get{
             GoogleDoc(
@@ -80,7 +80,7 @@ You can perform semantic searches on virtually any text (`string`) field of any 
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query{
           Get{
             DiscordMessage(
@@ -109,7 +109,7 @@ You can perform semantic searches on virtually any text (`string`) field of any 
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query{
           Get{
             TextBlock(
@@ -127,20 +127,21 @@ You can perform semantic searches on virtually any text (`string`) field of any 
 
 ## Arguments
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| concepts | string[] |  | Specify what concepts to look into |
-| moveTo | object |  | Move your search closer to another vector described by keywords |
-| moveAwayFrom | object |  | Move your search further away to another vector described by keywords |
-| targets | object |  | Subsearch list |
-| targetVectors | string[] | | Target vectors |
-| distance | float | | The required degree of similarity between an object's characteristics and the provided filter values |
-| certainty | float | | Normalized distance between the result item and the search vector |
+| Name | Type | Description |
+| --- | ---  | --- |
+| concepts* | string \| string[] | The concept(s) to search for |
+| moveTo | object | Boost results towards specified concepts or objects with a force factor |
+| moveAwayFrom | object | Move results away from specified concepts or objects with a force factor |
+| certainty | number | Minimum certainty threshold for results (0 to 1) |
+| distance | number | Distance threshold for similarity matching |
+| autocorrect | boolean | Enable automatic correction of search terms |
 
+{/*
+this section doesn't add up
 ## Semantic Search: Continued
 In this section we're going to explore more sophisticated functionalities to enhance the search capabilities. Let’s dive in, folks!
 
-We have already explained vector space in the previous doc. **`nearVector`** provides direct access to the vector space, allowing for precise navigation and customized search experiences. Here, we’ll explore advanced techniques and use cases to fully leverage this powerful feature.
+We have already explained vector space in the previous doc. **`nearVector`** provides direct access to the vector space, allowing for precise navigation and customized search experiences. Here, we’ll explore advanced techniques and use cases to fully leverage this powerful feature. */}
 
 ## Advanced Usage
 ### Fine-Tuning with moveTo and moveAwayFrom
@@ -165,8 +166,8 @@ For example, let's' consider you’re searching for articles related to web deve
                     .exec()
         ```
     </Tab>
-    <Tab title={"GraphQL formatted"}>
-        ```graphql
+    <Tab title={"GraphQL"}>
+        ```graphql copy
         query{
           Get{
             TextDocument(
@@ -178,8 +179,7 @@ For example, let's' consider you’re searching for articles related to web deve
                 }
               }
             ){
-              title
-              text
+              ...fields
             }
           }
         }
@@ -187,50 +187,15 @@ For example, let's' consider you’re searching for articles related to web deve
     </Tab>
 </Tabs>
 
-## Optimizing Search with Boosting and Filtering
+## Optimizing Search with Filtering
 
-Let us now have a look at how you can enhance your search results by boosting certain properties and applying filters to hone in on the most relevant data.
-
-### Property Boosting
-
-Some of the properties in the data are more relevant than others. You can boost the relevance of specific properties in your data to ensure they have a greater impact on the search results.
-
-**Example: Boosting Titles**
-
-<Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
-    <Tab title={"SDK (.ts)"}>
-        ```javascript copy
-        await unbody.get
-                    .textDocument
-                    .search
-                    .find("web development", ["title"])
-                    .exec()
-        ```
-    </Tab>
-    <Tab title={"GraphQl formatted"}>
-        ```graphql
-        query {
-          Get {
-            TextDocument(
-              bm25: {
-                query: "web development",
-                properties: ["title^2"]
-              }
-            ){
-              title
-              text
-            }
-          }
-        }
-        ```
-    </Tab>
-</Tabs>
+Let us now have a look at how you can enhance your search results by boosting certain properties and applying [filters](/content-api/filters) to hone in on the most relevant data.
 
 ### Conditional Filtering
 
-You can also apply filters to your semantic search queries. It helps to narrow down results based on specific conditions.
+You can also apply [filters](/content-api/filters) to your semantic search queries. It helps to narrow down results based on specific conditions.
 
-**Example: Filtering by Tags**
+**Example: Filtering by mimeType**
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
@@ -238,34 +203,25 @@ You can also apply filters to your semantic search queries. It helps to narrow d
         ```javascript copy
         unbody.get
               .textDocument
-              .where(({Equal}) => ({
-                  tags: Equal("tutorial")
-              }))
+              .where({ mimeType: "text/markdown" })
               .search
               .about("web development")
               .exec()
         ```
     </Tab>
-    <Tab title={"GraphQl formatted"}>
-        ```graphql
-        query{
-          Get{
+    <Tab title={"GraphQl"}>
+        ```graphql copy
+        query {
+          Get {
             TextDocument(
-              bm25: {
-                query: "web development"
-              },
-              where: {
-                path: ["tags"],
-                operator: Equal,
-                valueText: "tutorial"
-              }
-            ){
-              title
-              text
-              tags
+              where: { operator: Equal, path: "mimeType", valueText: "text/markdown" }
+              nearText: { concepts: ["web development"] }
+            ) {
+              ...fields
             }
           }
         }
+
         ```
     </Tab>
 </Tabs>

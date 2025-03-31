@@ -6,24 +6,34 @@ import { Tabs } from "nextra/components"
 Generate natural language content using AI with flexible input methods - from simple prompts to structured message sequences. 
 
 ## Basic Generation
-When you need to generate text content from a simple prompt, use `.generate.text()`. This is useful for creating content like explanations, summaries, or reports. [Learn more about basic text generation](/generative-api/text-gen#example-1---basic-prompt).
+When you need to generate text content from a prompt, use `.generate.text()`. This is useful for creating content like explanations, summaries, or reports. [Learn more about basic text generation](/generative-api/text-gen#example-1---basic-prompt).
 
-```typescript
+```typescript copy
 const {
   data: { payload }
 } = await unbody.generate
-                .text("Explain AI's impact on healthcare");
+                .text(
+                    "Compare Large Language Models (LLMs) with Traditional Rule-Based AI Systems analyzing: \n" +
+                    "- Architecture and technical foundations \n" +
+                    "- Performance metrics and scalability \n" +
+                    "- Use cases and limitations \n" +
+                    "- Implementation and costs \n" +
+                    "- Future trajectories \n\n" +
+                    "Provide specific examples and business adoption implications for each aspect."
+                );
 ```
 
+
 <Collapse title="Response">
-```typescript
+```typescript copy
 {
-    "content": "AI has had a profound impact on healthcare and continues to shape and improve various aspects of the industry. Here are some key ways in which AI is transforming healthcare:\n\n1. **Clinical Decision Support**: AI algorithms can analyze vast amounts of medical data, patient records, and research to provide valuable insights that support clinical decision-making. This helps healthcare professionals in diagnosing diseases more accurately, selecting appropriate treatments, and personalizing patient care plans.\n\n2. **Medical Imaging and Diagnostics**: AI techniques, especially deep learning, have revolutionized medical imaging analysis. AI systems can detect and diagnose various conditions from medical images, including tumors, fractures, and eye diseases. This improves accuracy, speeds up diagnosis, and reduces the workload on radiologists and other medical specialists.\n\n3. **Drug Discovery and Development**: AI accelerates the process of discovering and developing new drugs by identifying potential drug candidates, optimizing molecular structures, and predicting drug efficacy and safety. This can lead to faster drug development, lower costs, and an increased success rate in bringing new medications to market.\n\n4. **Precision Medicine**: AI enables the development of precision medicine, where treatments and interventions are tailored to individual patients based on their genetic makeup, lifestyle, and environmental factors. By analyzing large datasets, AI can identify patterns and correlations that help determine the most effective treatments for specific patient subgroups.\n\n5. **Virtual Health Assistants**: AI-powered virtual assistants and chatbots can provide patients with immediate assistance, answer common health-related queries, and offer personalized recommendations. These assistants can also help monitor patient symptoms, provide follow-up care, and improve patient engagement and adherence to treatment plans.\n\n6. **Healthcare Operations and Administration**: AI improves the efficiency of healthcare operations by automating administrative tasks, streamlining scheduling and billing processes, and optimizing resource allocation. This reduces costs, improves healthcare facility management, and enables healthcare providers to focus more on patient care.\n\n7. **Predictive Analytics**: AI algorithms can analyze historical data to predict patient outcomes, identify patients at risk of developing specific diseases, and anticipate resource needs. This predictive capability allows healthcare providers to intervene early, improve patient monitoring, and allocate resources effectively.\n\n8. **Clinical Research and Data Analysis**: AI facilitates the analysis of large and complex healthcare datasets, helping researchers identify patterns, correlations, and potential causes of diseases. This accelerates clinical research, improves our understanding of various health conditions, and leads to the development of more effective treatments.\n\n9. **Robotics in Surgery and Rehabilitation**: AI-powered robots assist in surgical procedures, improving precision and reducing invasiveness. They can also aid in patient rehabilitation, providing repetitive tasks and personalized therapy regimens.\n\n10. **Mental Health**: AI-based interventions, such as cognitive behavioral therapy chatbots, are being used to support patients with mental health issues. These tools can provide accessible and affordable therapy, helping to address the shortage of mental health professionals.\n\nWhile AI in healthcare offers tremendous benefits, it also comes with challenges and ethical considerations. These include concerns around data privacy, algorithmic bias, potential job displacement, and the need for proper validation and regulation of AI systems in healthcare. Addressing these challenges is crucial to ensure that AI technology improves healthcare outcomes while maintaining patient safety and trust.",
+    "content": "The comparison between Large Language Models (LLMs) and Traditional Rule-Based AI Systems highlights different paradigms within artificial intelligence. Here's an analysis across various dimensions:\n\n### 1. Architecture and Technical Foundations\n\n- **LLMs**: \n  - **Architecture**: LLMs like GPT-4 are based on deep learning, particularly transformer architectures. They leverage massive datasets to learn language patterns, semantics, and context without explicit, human-defined rules.\n  - **Technical Foundations**: They rely on neural networks, attention mechanisms, and unsupervised learning. These models are pretrained on diverse corpora and can be fine-tuned for specific tasks using transfer learning.\n  \n- **Rule-Based AI**:\n  - **Architecture**: Rule-based systems use predefined rules set by human experts. These systems incorporate logic-based frameworks like decision trees or if-then-else statements.\n  - **Technical Foundations**: Rooted in symbolic AI, they utilize explicit knowledge representation and inference engines to perform reasoning.\n\n### 2. Performance Metrics and Scalability\n\n- **LLMs**:\n  - **Performance Metrics**: Measured by their ability to understand, generate, and contextualize language tasks (e.g., BLEU scores, perplexity). They excel in tasks like translation, summarization, and conversation.\n  - **Scalability**: Highly scalable with increased computational resources. Can process massive amounts of data and adapt to a wide range of NLP tasks without significant re-engineering.\n\n- **Rule-Based AI**:\n  - **Performance Metrics**: Evaluated based on precision and recall when applied to specific, narrow domains. Effectiveness diminishes as complexity increases.\n  - **Scalability**: Limited scalability. Expanding their domain requires additional rule creation, which is time-consuming and difficult to manage for large datasets.\n\n### 3. Use Cases and Limitations\n\n- **LLMs**:\n  - **Use Cases**: Widely used in content creation, chatbots, virtual assistants, and text analysis. For example, customer service bots and content recommendation systems.\n  - **Limitations**: Struggle with tasks requiring specific, domain-based knowledge or high precision. May produce biased or incorrect outputs if trained on biased data.\n\n- **Rule-Based AI**:\n  - **Use Cases**: Effective in environments requiring strict compliance and high reliability, such as fraud detection in banking or diagnostic systems in healthcare.\n  - **Limitations**: Inflexible and brittle when encountering unexpected inputs or situations not covered by predefined rules. Requires constant updates and human intervention.\n\n### 4. Implementation and Costs\n\n- **LLMs**:\n  - **Implementation**: Involves significant computational resources and data handling capabilities. Cloud-based services like OpenAI's API can reduce upfront costs.\n  - **Costs**: High initial investment in model training and infrastructure, but once deployed, they can significantly reduce variable costs in processing large volumes of data.\n  \n- **Rule-Based AI**:\n  - **Implementation**: Quicker to deploy in environments with well-defined parameters. Lower computational requirements compared to LLMs.\n  - **Costs**: Lower initial setup costs, but high ongoing costs related to rule maintenance and system updates as environments or requirements evolve.\n\n### 5. Future Trajectories\n\n- **LLMs**:\n  - **Future Trends**: Anticipate integration with multimodal models incorporating audio, video, and sensory data. Expected to drive innovations in human-like interactions and understanding.\n  - **Business Adoption**: Likely to see increased adoption across sectors seeking automation in customer service and content generation.\n\n- **Rule-Based AI**:\n  - **Future Trends**: Will continue to evolve in niche applications where reliability and explainability are paramount. Hybrid systems combining rule-based logic with machine learning may emerge.\n  - **Business Adoption**: Will remain relevant in industries with stringent regulatory requirements or where interpretability of AI decisions is crucial.\n\n**Business Adoption Implications**:\n- **LLMs**: Companies adopting LLMs need to consider ethical implications, potential biases, and data privacy issues. They offer transformative capabilities but require robust oversight and controls.\n- **Rule-Based AI**: These systems are often easier to justify in terms of compliance and regulatory oversight due to their transparency but lack the flexibility and adaptability of LLMs.\n\nIn summary, LLMs and rule-based systems represent different approaches with distinct advantages and limitations. Businesses must evaluate their specific needs, regulatory environments, and technical capabilities when choosing between these systems.",
     "metadata": {
+        "finishReason": "stop",
         "usage": {
-            "inputTokens": 200,
-            "outputTokens": 650,
-            "totalTokens": 850
+            "inputTokens": 62,
+            "outputTokens": 915,
+            "totalTokens": 977
         }
     }
 }
@@ -31,13 +41,14 @@ const {
 </Collapse>
 
 ## Generation with Options
-Sometimes you need more control over the generated content. Use options like temperature and token limits to fine-tune the output style and length. [Learn more about Options](/generative-api/text-gen#options)
+Sometimes you need more control over the generated content. Use [options](/generative-api/text-gen#options) like temperature and token limits to fine-tune the output style and length. 
 
-```typescript
+```typescript copy
 const {
   data: { payload }
 } = await unbody.generate
-                .text("Write a report on climate change", {
+                .text("Create a detailed technical specification for implementing a zero-knowledge proof system in a blockchain voting application", 
+                {
                   model: "gpt-4",
                   topP: 0.7,
                   maxTokens: 1000,
@@ -48,16 +59,16 @@ const {
 ```
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 {
-    "content": "Title: An In-depth Analysis of Climate Change\n\nIntroduction:\n\nClimate change, often referred to as global warming, is a long-term shift in weather conditions identified by changes in temperature, precipitation, winds, and other indicators. This phenomenon has become a major concern globally due to its significant impacts on the environment and human life. The primary cause of climate change is attributed to human activities, particularly the emission of greenhouse gases into the atmosphere. This report provides an in-depth analysis of climate change, its causes, impacts, and potential solutions.\n\nCauses of Climate Change:\n\nThe primary cause of climate change is the increased concentration of greenhouse gases in the Earth's atmosphere due to human activities. These gases include carbon dioxide (CO2), methane (CH4), and nitrous oxide (N2O), among others. The burning of fossil fuels for electricity, heat, and transportation is the largest single source of global greenhouse gas emissions. Deforestation, industrial processes, and some agricultural practices also contribute to the emission of these gases. \n\nImpacts of Climate Change:\n\nClimate change has a wide range of impacts on the environment and human life. These include:\n\n1. Rising Temperatures: Global temperatures have been rising for over a century, with the most rapid increase occurring in the past 30 years. This has resulted in more frequent and severe heatwaves.\n\n2. Melting Polar Ice and Glaciers: The rise in temperature has led to the melting of polar ice caps and glaciers, leading to a rise in sea levels.\n\n3. Changing Weather Patterns: Climate change has resulted in changes in weather patterns, leading to more frequent and intense storms, floods, and droughts.\n\n4. Impact on Biodiversity: Climate change threatens biodiversity by altering habitats and triggering mass extinctions.\n\n5. Human Health Risks: Rising temperatures and changing weather patterns pose significant risks to human health, including heat stress, malnutrition, and an increased incidence of vector-borne diseases.\n\nPotential Solutions to Climate Change:\n\nAddressing climate change requires urgent and comprehensive action at all levels - individual, community, corporate, and governmental. Some potential solutions include:\n\n1. Reducing Greenhouse Gas Emissions: This can be achieved through the use of renewable energy sources, improving energy efficiency, and promoting sustainable agricultural practices.\n\n2. Carbon Sequestration: This involves capturing and storing carbon dioxide to prevent its release into the atmosphere.\n\n3. Reforestation: Planting trees to absorb carbon dioxide can help mitigate climate change.\n\n4. Climate Change Education and Awareness: Raising awareness about the causes and impacts of climate change can encourage more people to take action.\n\n5. International Cooperation: Climate change is a global problem that requires a global solution. International cooperation is essential to address this issue effectively.\n\nConclusion:\n\nClimate change is one of the most pressing issues facing our planet today. It poses significant threats to the environment and human life. However, with collective action and the right strategies, it is possible to mitigate its impacts and ensure a sustainable future for all. It is imperative for all stakeholders, including governments, businesses, and individuals, to take urgent action to address this critical issue.",
+    "content": "Title: Zero-Knowledge Proof System in Blockchain Voting Application\n\n1. Overview:\nThe project aims to implement a Zero-Knowledge Proof (ZKP) system in a blockchain voting application to ensure privacy, security, and transparency in the voting process. The ZKP system will enable voters to prove that their votes are valid without revealing the vote itself, maintaining the confidentiality of the voter's choice.\n\n2. System Requirements:\n\n2.1 Hardware Requirements:\n- Server with minimum 8GB RAM, Quad-core processor\n- Secure and stable internet connection\n\n2.2 Software Requirements:\n- Programming language: Python, Solidity\n- Blockchain platform: Ethereum\n- Zero-knowledge proof framework: zk-SNARKs, or zk-STARKs\n- Database: MySQL\n- Operating System: Linux, Windows\n\n3. Functional Requirements:\n\n3.1 Voter Registration:\n- The system should allow eligible voters to register using their unique identifiers.\n- The system should verify the identity of the voter and add them to the voter registry on the blockchain.\n\n3.2 Voting Process:\n- The system should allow registered voters to cast their votes.\n- The vote should be encrypted and added to the blockchain.\n- The system should use the ZKP system to validate the vote without revealing the vote itself.\n\n3.3 Vote Counting:\n- The system should count the votes on the blockchain.\n- The system should use the ZKP system to validate the vote count without revealing individual votes.\n\n3.4 Result Publication:\n- The system should publish the voting results on the blockchain.\n\n4. Non-Functional Requirements:\n\n4.1 Security:\n- The system should ensure the confidentiality, integrity, and availability of voting data.\n- The system should protect against double voting, vote tampering, and other types of voting fraud.\n\n4.2 Performance:\n- The system should handle a large number of votes without performance degradation.\n- The system should process ZKPs efficiently.\n\n4.3 Usability:\n- The system should be user-friendly and easy to use for voters.\n\n5. System Architecture:\n\n5.1 Blockchain Layer:\n- This layer will handle the creation and management of the voting blockchain.\n\n5.2 Zero-Knowledge Proof Layer:\n- This layer will handle the generation and verification of ZKPs.\n\n5.3 Application Layer:\n- This layer will handle user interactions, including voter registration, voting, and result viewing.\n\n6. Implementation:\n\n6.1 Blockchain Development:\n- Develop smart contracts for voter registration, voting, and vote counting using Solidity.\n\n6.2 Zero-Knowledge Proof Development:\n- Implement ZKP algorithms using zk-SNARKs or zk-STARKs framework.\n\n6.3 Application Development:\n- Develop user interfaces for voter registration, voting, and result viewing.\n\n7. Testing:\n\n7.1 Unit Testing:\n- Test individual components of the system to ensure they work correctly.\n\n7.2 Integration Testing:\n- Test the interaction between different components of the system.\n\n7.3 Security Testing:\n- Test the system's resistance to various security threats.\n\n7.4 Performance Testing:\n- Test the system's performance under high load.\n\n8. Deployment:\n\n8.1 The system should be deployed on a secure server with a stable internet connection.\n\n8.2 The system should be monitored for any potential issues or threats.\n\n8.3 Regular updates and maintenance should be performed to ensure the system's security and performance.",
     "metadata": {
         "finishReason": "stop",
         "usage": {
-            "inputTokens": 14,
-            "outputTokens": 629,
-            "totalTokens": 643
+            "inputTokens": 25,
+            "outputTokens": 685,
+            "totalTokens": 710
         }
     }
 }
@@ -65,42 +76,44 @@ const {
 </Collapse>
 
 ## Multi-Message Generation
-When you need to send role-based messages array as a prompt, use [Message-Based Input](/generative-api/text-gen#example-3---message-based-input). This approach helps when providing system instructions or creating multi-turn conversations with different roles. This works particularly well for creating expert personas or maintaining specific conversation contexts.
+When you need to send role-based messages array as a prompt, use [Message-Based Input](/generative-api/text-gen#example-3---message-based-input). This approach helps when providing system instructions or creating multi-turn conversations with different roles.
 
-```typescript
+```typescript copy
 const {
   data: { payload }
 } = await unbody.generate
-                .text([
-                  {
-                    role: "system",
-                    content: "You are an expert on AI"
-                  },
-                  {
-                    role: "user",
-                    content: "What are the latest AI trends in 2024?"
-                  }
-                ], {
-                  model: "gpt-4",
-                  topP: 0.7,
-                  maxTokens: 1000,
-                  temperature: 0.7,
-                  presencePenalty: 0,
-                  frequencyPenalty: 0
-                });
+                .text(
+                      [
+                        {
+                          role: "system",
+                          content:
+                            "You are a helpful technical writer who explains programming concepts clearly.",
+                        },
+                        {
+                          role: "user",
+                          content:
+                            "Explain how to implement proper error handling in a Node.js REST API. Include basic examples.",
+                        },
+                      ],
+                      {
+                        model: "gpt-4",
+                        maxTokens: 600,
+                        temperature: 0.3,
+                      }
+                     );
 ```
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 {
-    "content": "As an AI model developed by OpenAI, I can provide information only up to my last training cut-off in September 2021. However, based on the trends up to that point, here are some predictions for AI trends that might be prevalent in 2024:\n\n1. **Explainable AI (XAI)**: As AI becomes more integrated into critical systems, the need for transparency and understanding of how these models make decisions is paramount. The development of XAI could be a significant trend, with models providing clear, understandable reasoning for their outputs.\n\n2. **AI Ethics and Regulation**: As AI technology advances, there is an increasing need for ethical guidelines and regulations. These would help to prevent misuse, bias, and other potential issues associated with AI.\n\n3. **AI in Healthcare**: The use of AI in healthcare for diagnosis, treatment recommendations, patient monitoring, and drug discovery could continue to grow.\n\n4. **AI in Cybersecurity**: AI and Machine Learning algorithms could be used more frequently to detect and respond to cyber threats, given their ability to learn and adapt to new strategies used by cybercriminals.\n\n5. **AI and Quantum Computing**: Quantum computing has the potential to significantly increase the processing power available for AI systems, leading to more advanced and capable AI.\n\n6. **AI in Climate Change**: AI could play a crucial role in climate change mitigation strategies, from optimizing energy use to predicting climate patterns.\n\n7. **AI and Edge Computing**: As IoT devices become more prevalent, running AI algorithms on the device (edge computing) rather than in a centralized location could become more common.\n\n8. **AI and 5G/6G Technology**: The advent of 5G and potentially 6G technology can enable more real-time AI applications, given the reduced latency and increased bandwidth.\n\nRemember, these are only predictions based on the trends up to 2021, and the actual trends in 2024 could be different.",
+    "content": "Error handling is a critical part of any application, including a Node.js REST API. It's crucial to have an efficient error handling mechanism to ensure the stability of the application and provide meaningful error messages to the clients. \n\nIn Node.js, there are two types of errors:\n1. Programmer errors: Bugs in the program, can be fixed by changing the code.\n2. Operational errors: Problems with the system or external services, like database connection problem.\n\nHere's a basic approach to implementing error handling:\n\n### 1. Error Handling Middleware:\nExpress, a popular framework for building REST APIs in Node.js, provides a built-in mechanism for error handling - Middleware. \n\nA middleware function with four parameters is treated as an error handling middleware. The first parameter is the error object, followed by the request, response, and next middleware function in the application’s request-response cycle.\n\n```javascript\napp.use(function (err, req, res, next) {\n  console.error(err.stack)\n  res.status(500).send('Something broke!')\n})\n```\n\nIn the above example, if an error is passed to the next() function, then this error handling middleware will catch it and log the error stack trace, and return a 500 response with the message 'Something broke!'.\n\n### 2. Centralized Error Handling:\nIn a large application, it's better to have a centralized error handler that takes care of all the errors in one place. This way, you can avoid repeating error handling logic in your code.\n\n```javascript\nclass ErrorHandler extends Error {\n  constructor(statusCode, message) {\n    super();\n    this.statusCode = statusCode;\n    this.message = message;\n  }\n}\n\nconst handleError = (err, res) => {\n  const { statusCode, message } = err;\n  res.status(statusCode).json({\n    status: \"error\",\n    statusCode,\n    message\n  });\n};\n```\n\nIn this code, we have defined a custom error class `ErrorHandler` which extends the built-in `Error` class. It takes a status code and a message. The `handleError` function is a centralized error handler that sends an error response with the status code and message.\n\n### 3. Catching Asynchronous Errors:\nBy default, Express doesn't handle errors in asynchronous functions. We need to catch these errors manually and pass them to the next() function.\n\n```javascript\napp.get('/example', async (req, res, next) => {\n  try {\n    // Some asynchronous operation\n  } catch (err) {\n    next(err)\n  }\n})\n```\n\nIn this code, we're catching the error from the asynchronous operation and passing it to the next() function. If we don't do this, the error would be unhandled.\n\n### 4. Catching Errors from Promises:\nIf you're working with promises, you should always include a catch block to handle any errors that happen during the execution of the promise.\n\n```javascript\ndoSomething()\n",
     "metadata": {
-        "finishReason": "stop",
+        "finishReason": "length",
         "usage": {
-            "inputTokens": 29,
-            "outputTokens": 392,
-            "totalTokens": 421
+            "inputTokens": 42,
+            "outputTokens": 600,
+            "totalTokens": 642
         }
     }
 }

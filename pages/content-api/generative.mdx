@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
 import { Callout } from "nextra/components";
 
 # Generative Search
@@ -11,16 +11,16 @@ For instance, if your data includes various historical events, users can simply 
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-    ```javascript copy
+    ```typescript copy
     await unbody.get
-                .<object_name>
+                .<collectionName>
                 .generate
                 .fromOne("prompt {propertyName}")
                 .exec()
     ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query {
             Get{
                 <ObjectName> {
@@ -51,7 +51,7 @@ This method generates a result for each object based on a single prompt. You can
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-    ```javascript copy
+    ```typescript copy
     await unbody.get
                 .textDocument
                 .generate
@@ -60,7 +60,7 @@ This method generates a result for each object based on a single prompt. You can
 ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query {
             Get {
                 TextDocument {
@@ -89,7 +89,7 @@ This method generates a result by applying a single prompt to a group of objects
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .textDocument
                     .generate
@@ -99,7 +99,7 @@ This method generates a result by applying a single prompt to a group of objects
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query {
             Get {
                 TextDocument{
@@ -126,7 +126,7 @@ This method generates a result by applying a single prompt to a group of objects
 ### Arguments
 | Name               | Type     | Default | Description                                                                                                                                                     |
 | --- | --- | --- | --- |
-| `model`            | `string` | | Defaults to the model configured during project setup. This option is only available on paid subscription plans. See the [supported models.](../project-configurations/generative-modules#supported-models) |
+| `model`            | `string` | | Defaults to the model configured during project setup. This option is only available on [paid subscription plans](https://unbody.io/pricing). |
 | `maxTokens`        | `number` | | Maximum number of tokens in the output (usually constrained by the model).                                                                                      |
 | `temperature`      | `number` | | Adjusts creativity in output (0 to 1). Higher values make output more random.                                                                                   |
 | `presencePenalty`  | `number` | | Penalizes new tokens based on their presence in the input (range: -2.0 to 2.0).                                                                                 |
@@ -189,7 +189,7 @@ This allows you to provide images as part of the context for generating a result
 **Example: Using images**
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-```javascript copy
+```typescript copy
 await unbody.get
             .imageBlock
             .limit(2)
@@ -238,7 +238,7 @@ query {
 
 ### Using `vars`
 
-The `vars` option allows you to transform query results into JSON-serializable data, which can then be referenced in the messages' content. This feature enables dynamic data injection into the conversation using the formatter(Currently, the only supported formatter is [jq](https://jqlang.github.io/jq/)).
+The `vars` option allows you to transform query results into JSON-serializable data, which can then be referenced in the messages content. This feature enables dynamic data injection into the conversation using the formatter(Currently, the only supported formatter is [jq](https://jqlang.github.io/jq/)).
 
 Each `var` has the following properties:
 
@@ -286,101 +286,88 @@ When using cross-references (relations) in `vars` or within message content, you
 **Example: Using Cross-References**
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-```javascript copy
-await unbody.get
-            .videoFile
-            .select('subtitles.SubtitleFile.entries.SubtitleEntry.__typename')
-            .limit(1)
-            .generate.fromOne({
-                options: {
-                    vars: [
-                    {
-                        name: 'subtitles',
-                        formatter: 'jq',
-                        expression: `(.subtitles//[]) | map({ entries })`,
-                    },
-                    {
-                        name: 'context',
-                        formatter: 'jq',
-                        expression: `{
-                        originalName,
-                        transcription: $subtitles[0].entries
-                        }`,
-                    },
-                    ],
-                },
-                messages: [
-                    {
-                        content: `Summarize the video's transcription:
-                        \`\`\`json
-                        {context}
-                        \`\`\`
-                    `,
-                    }
-                ],
-            })
-            .exec()
-```
+        ```typescript copy
+        await unbody.get
+                   .videoFile
+                   .select('subtitles.SubtitleFile.entries.SubtitleEntry.__typename')
+                   .limit(1)
+                   .generate.fromOne({
+                       options: {
+                           vars: [
+                               {
+                                   name: 'subtitles',
+                                   formatter: 'jq',
+                                   expression: '(.subtitles//[]) | map({ entries })',
+                               },
+                               {
+                                   name: 'context',
+                                   formatter: 'jq',
+                                   expression: '{originalName, transcription: $subtitles[0].entries}',
+                               },
+                           ],
+                       },
+                       messages: [
+                           {
+                               content: 'Summarize the video\'s transcription:\n```json\n{context}\n```',
+                           }
+                       ],
+                   })
+                   .exec()
+        ```
     </Tab>
-    <Tab title={"GraphQl"}>
-```graphql copy
-query {
-  Get{
-    VideoFile(limit: 1){
-      _additional{
-        generate(singleResult: {
-          options: {
-            model: "gpt-4o-mini"
-            vars:[
-              {
-                formatter:"jq",
-                name: "subtitles",
-                expression: """
-                  (.subtitles//[])|map({
-                    entries
-                  })  
-                """
-              },
-              {
-                formatter: "jq",
-                name: "context",
-                expression: """
-                  {
-                    originalName,
-                    transcription: $subtitles[0].entries
+    <Tab title={"GraphQL"}>
+        ```graphql copy
+        query {
+          Get {
+            VideoFile(limit: 1) {
+              _additional {
+                generate(
+                  singleResult: {
+                    messages: [
+                      {
+                        content: "Summarize the video's transcription:\n```json\n{context}\n```"
+                      }
+                    ],
+                    options: {
+                      vars: [
+                        {
+                          name: "subtitles",
+                          formatter: "jq",
+                          expression: "(.subtitles//[]) | map({ entries })"
+                        },
+                        {
+                          name: "context",
+                          formatter: "jq",
+                          expression: "{originalName, transcription: $subtitles[0].entries}"
+                        }
+                      ]
+                    }
                   }
-                """
+                ) {
+                  error
+                  singleResult
+                  metadata {
+                    finishReason
+                    usage {
+                      inputTokens
+                      outputTokens
+                      totalTokens
+                    }
+                  }
+                }
               }
-            ]
-          }
-          messages: [
-            {
-              content: """
-              Summarize the video's transcription: 
-              {context}
-              """
-            }
-          ]
-        }) {
-          error
-          groupedResult
-          singleResult
-        }
-      }
-      originalName
-      
-      subtitles{
-        ... on SubtitleFile{
-          entries{
-            ... on SubtitleEntry{
-              __typename # in order to use the entries in the context
+              subtitles {
+                ... on SubtitleFile {
+                  entries {
+                    ... on SubtitleEntry {
+                      __typename
+                    }
+                  }
+                }
+              }
             }
           }
         }
-      }
-    }
-  }
-}
-```
+        ```
     </Tab>
 </Tabs>

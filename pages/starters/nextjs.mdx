@@ -48,7 +48,7 @@ Before integrating Unbody's features, ensure you have created an account on Unbo
 
 ### Initial Setup
 Let's start by creating a new instance of the `Unbody` class, passing your API key and project ID as parameters. This instance will be used to interact with Unbody's AI functionalities.
-```typescript
+```typescript copy
 import { Unbody } from "unbody";
 
 export const unbody = new Unbody({
@@ -108,7 +108,7 @@ Our API route (`/api/search.ts`) handles the search logic. This route:
 1. **Receives Query and Provider**: Extracts the search term and provider from the POST request. The "provider" refers to the source of your data, such as Google Docs or Discord messages.
 2. **Utilizes Unbody SDK**: Depending on the selected provider, different functions from Unbody's SDK are invoked to perform the search. This modular approach allows you to tailor the search parameters and sensitivity settings for each type of content.
 
-```typescript
+```typescript copy
 //...
 export default async function handler(
     req: NextApiRequest,
@@ -123,7 +123,7 @@ export default async function handler(
 - **Google Docs**: Searches extract both the title and text of documents, initiating the search based on the user's query. Unbody's semantic search capabilities ensure that documents related to the query's intent, like "film directors," are retrieved even if "Quentin Tarantino" isn't mentioned explicitly.
 - **Discord Messages**: Adjusts for the casual and diverse nature of messaging content, considering only the content of messages with a sensitivity setting to allow for narrower interpretations.
 - **Text Blocks**: Involves more nuanced filtering to focus the search on relevant content, specifically configured to retrieve HTML content and exclude less relevant tags.
-```typescript
+```typescript copy
 //...
 // inside the handler function
     switch (provider) {
@@ -180,7 +180,7 @@ This functionality is managed by a specific API route in your Next.js applicatio
 
 Each provider type is processed using a tailored approach, ensuring the generative process is accurately tuned to the characteristics of the source content:
 
-```typescript
+```typescript copy
 //...
 // inside the handler function
     switch (provider) {
@@ -252,7 +252,7 @@ Each provider type is processed using a tailored approach, ensuring the generati
 ### Generative Output Formatting
 The generative process meticulously formats the output to ensure the response is web-ready:
 
-```typescript
+```typescript copy
 const enhancedPrompt = [
     `You are given a set of documents about: "${context}".`,
     instructedPromptEnabled ? `You need to respond to the user's prompt using only the information in the documents.` : "",

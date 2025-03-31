@@ -1,0 +1,138 @@
+import Collapse from '@/components/Collapse'
+
+# Build FAQ Generator From PDF Document
+
+When building a knowledge base or documentation system, automatically extracting FAQs from PDF documents can significantly improve content accessibility and searchability. This recipe shows how to:
+- Extract structured Q&A pairs from PDF documents
+- Store FAQs in a searchable format
+- Maintain type safety for FAQ data
+
+```typescript copy
+import { BooleanField, NumberField, StringField, Unbody, ITextDocument } from "unbody";
+import {
+  AutoSummary,
+  AutoVision,
+  CustomSchema,
+  Enhancement,
+  Generative,
+  PdfParser,
+  ProjectSettings,
+  TextVectorizer,
+  UnbodyAdmin,
+} from "unbody/admin";
+
+// Create admin instance with credentials
+const admin = new UnbodyAdmin({
+    auth: {
+        username: "93156549-...", // ID
+        password: "ak_7660b....", // Secret
+    },
+});
+
+// 1. Initialize pipeline for PDF document processing
+const faqPipeline = new Enhancement.Pipeline(
+  "generate_faqs",      
+  "TextDocument",       
+  {
+    if: (ctx) => ctx.record.mimeType === "application/pdf", 
+  }
+);
+
+// 2. Create FAQ generation step with structured output
+const generateFAQs = new Enhancement.Step(
+  "extract_faqs",    
+  new Enhancement.Action.StructuredGenerator({
+    model: "openai-gpt-4o",
+    prompt: (ctx) => `
+      Generate a list of FAQs based on this document:
+      Title: ${ctx.record.title || "Untitled"}
+      Content: ${ctx.record.text}
+      
+      Extract key questions and their answers from the content.
+    `,
+    schema: (ctx, { z }) =>
+      z.object({
+        faqs: z.array(
+          z.object({
+            question: z.string(),
+            answer: z.string(),
+          })
+        ).describe("List of FAQs extracted from the document"),
+      }),
+  }),
+  {
+    output: {
+      faqs: (ctx) => JSON.stringify(ctx.result.json.faqs),
+    },
+  }
+);
+
+// 3. Add generation step to pipeline
+faqPipeline.add(generateFAQs);
+
+// 4. Configure a project with the enhancement pipeline and Custom schema for storing the results
+const enhancement = new Enhancement();
+enhancement.add(faqPipeline);
+
+const projectSettings = new ProjectSettings();
+projectSettings
+  .set(new TextVectorizer(TextVectorizer.OpenAI.TextEmbedding3Small))
+  .set(new Generative(Generative.OpenAI.GPT4o))
+  .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
+  .set(new AutoVision(AutoVision.OpenAI.GPT4o))
+  .set(new PdfParser(PdfParser.NlmSherpa.Default))
+  .set(enhancement)
+  .set(
+    new CustomSchema().extend(
+      new CustomSchema.Collection("TextDocument").add(
+        new CustomSchema.Field.Text(
+          "faqs",
+          "FAQs generated from the document"
+        )
+      )
+    )
+  );
+
+const project = admin.projects.ref({
+  name: "PDF FAQ Extraction Project",
+  settings: projectSettings,
+});
+
+await project.save();
+
+// Create unbody instance
+const unbody = new Unbody({
+    apiKey: "pk_.....", // Project Api Key
+    projectId: "22e0b...", // Project Id
+});
+
+// 5. Query documents with type safety
+interface ExtendedTextDocument extends ITextDocument {
+  faqs: StringField;
+}
+
+const { data: { payload } } = await unbody.get
+  .collection<ExtendedTextDocument>("TextDocument")
+  .where({
+    mimeType: "application/pdf"
+  })
+  .select("title", "originalName", "faqs")
+  .exec();
+```
+
+<Collapse title="Response">
+```json
+[
+  {
+    "title": "Product Manual",
+    "originalName": "manual.pdf",
+    "faqs": "[{\"question\":\"How do I install the software?\",\"answer\":\"Download the installer...\"},{\"question\":\"What are the system requirements?\",\"answer\":\"Minimum 8GB RAM...\"}]"
+  }
+]
+```
+</Collapse>
+
+## Related Resources
+- [Enhancement Pipeline Documentation](/project-configurations/enhancers)
+- [Custom Schema Guide](/project-configurations/custom-schemas)
+- [PDF Parser Configuration](/project-configurations/pdf-parser)

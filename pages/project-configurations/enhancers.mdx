@@ -27,12 +27,15 @@ Built-in enhancers are categorized by data type, offering seamless functionality
 
 ### Using Built-in Enhancers
 
-To enable enhancers:
+To enable enhancers while creating a new `Project`:
 
-1. Navigate to the **Dashboard** and enable them under the **Enhancers** section.
-2. Alternatively, configure them using the **Admin API**.
+1. Navigate to [**Unbody Dashboard**](https://app.unbody.io/).
+2. Click on **New Project**.
+3. Select the Advanced tab and enable them under the **Enhancements** section.
 
-```jsx
+Or, Alternatively, configure them using the [**Admin API**](/admin-api).
+
+```typescript copy
 import { UnbodyAdmin, ProjectSettings, AutoSummary, AutoKeywords } from 'unbody/admin'
 
 // Initialize the Admin API
@@ -171,7 +174,7 @@ pipeline.add(step)
 Actions are the core operations within a step. Unbody supports various built-in actions, each tailored for specific tasks. All actions share:
 
 - **Initialization Parameters**: Define what the action does.
-- **Dynamic Behavior**: Use `ctx` to adjust actions based on runtime context.
+- **Dynamic Behavior**: Use `ctx` to adjust actions based on runtime context. Learn more about [Pipeline Ctx](/admin-api#pipeline-context-ctx).
 
 ---
 
@@ -218,7 +221,7 @@ Generates structured JSON output based on a schema.
 | --- | --- | --- |
 | **model** | `string` | Model to use (e.g., `openai-gpt-4`). |
 | **prompt** | `Function(ctx):string` | Dynamic prompt for the model. |
-| **schema** | `Function(ctx):Schema` | Schema for structured output (uses Zod). |
+| **schema** | `Function(ctx):Schema` | Schema for structured output (uses [Zod](https://zod.dev/)). |
 
 **Example**:
 
@@ -244,6 +247,8 @@ new Enhancement.Action.StructuredGenerator({
 3. **Testing**:
     - Test pipelines on a small dataset before deployment.
 
----
+Learn more in our [Admin Api Enhancement Configuration Guide](/admin-api#enhancement-configuration).    
 
-With this structure, every detail is covered comprehensively. Let me know if more areas need elaboration!
+{/* ---
+
+With this structure, every detail is covered comprehensively. Let me know if more areas need elaboration! */}

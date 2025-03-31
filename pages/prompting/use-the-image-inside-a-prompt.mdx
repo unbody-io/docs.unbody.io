@@ -6,9 +6,10 @@ import { Tabs } from "nextra/components"
 Generate content by providing images as input through messages. The system can analyze and describe images using advanced AI models.
 
 ## Basic Image Generation
-Use images as input to generate descriptions or analyze visual content by providing image URLs.
+When you need to analyze or generate from images, use message arrays with image inputs. 
 
-```typescript
+
+```typescript copy
     const {
       data: { payload },
     } = await unbody.generate
@@ -35,7 +36,7 @@ Use images as input to generate descriptions or analyze visual content by provid
     ```
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 {
     "content": "This image depicts a futuristic electric car being charged at a charging station. The scene is set at night with a vibrant, neon-lit color palette, predominantly featuring blues and oranges. The car is sleek and modern, with illuminated tail lights and a visible energy flow highlighted in blue to indicate charging. The background suggests a serene, remote location with trees silhouetted against the night sky. The image has a dynamic and slightly mysterious atmosphere, enhanced by the ambient lighting and the subtle presence of rain.",
@@ -51,4 +52,4 @@ Use images as input to generate descriptions or analyze visual content by provid
 ```
 </Collapse>
 
-Learn more in our [Message-Based Input with Schema Guide](generative-api/json-gen#message-based-input-with-schema).
+Learn more in our [Generative Search Using Image as Input Guide](/content-api/generative#using-images-as-input).

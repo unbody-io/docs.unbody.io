@@ -5,16 +5,17 @@ import { Tabs } from "nextra/components"
 
 Transform and inject dynamic data into your prompts using variables. Variables allow you to process query results before using them in message content.
 
-## Basic Variable Generation
+## Generate from video subtitles using vars
+{/* TODO: need to change this text later */}
 Demonstrates using variables to process video subtitles. The code uses two [JQ-formatted](https://jqlang.github.io/jq/) vars:
-- 'subtitles': Extracts video subtitle entries
-- 'context': Creates a structure combining filename and transcription
+- `subtitles`: Extracts video subtitle entries
+- `context`: Creates a structure combining filename and transcription
 
 The processed data is then injected into a message prompt using `context` syntax, generating a summary of the video transcription. Results include generation metadata and usage statistics.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
   <Tabs.Tab>
-    ```typescript
+    ```typescript copy
     const {
       data: { payload },
     } = await unbody.get.videoFile
@@ -52,7 +53,7 @@ The processed data is then injected into a message prompt using `context` syntax
     ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```graphql
+    ```graphql copy
     {
       Get {
         VideoFile(limit: 1) {
@@ -109,7 +110,7 @@ The processed data is then injected into a message prompt using `context` syntax
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {

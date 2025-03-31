@@ -3,40 +3,45 @@ import { Tabs } from "nextra/components"
 
 # JSON Generation
 
-Generate structured JSON content based on prompts, messages, or schemas. Useful for creating API responses, structured records, or documents.
+Generate structured JSON content based on prompts, messages, or [custom schemas](/project-configurations/custom-schemas). Useful for creating API responses, structured records, or documents.
 
 ## Basic JSON Generation
 When you need to generate structured data with specific fields, use schema-based generation. This ensures the output follows your required format with proper data types. [Learn more about basic JSON generation](/generative-api/json-gen#example-1---prompt-with-plain-schema).
 
-```typescript
+```typescript copy
 const {
   data: { payload }
 } = await unbody.generate
-                .json("Provide user details:", {
+                .json("Generate a product catalog entry for an e-commerce site:", {
                   schema: {
                     type: "object",
                     properties: {
-                      name: { type: "string" },
-                      age: { type: "number" },
-                      address: { type: "string" }
+                      productName: { type: "string" },
+                      price: { type: "number" },
+                      category: { type: "string" },
+                      inStock: { type: "boolean" },
+                      description: { type: "string" }
                     }
                   }
                 });
 ```
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 {
     "content": {
-        "name": "Jane Doe",
-        "age": 28
+        "productName": "Wireless Noise-Cancelling Headphones",
+        "price": 199.99,
+        "category": "Electronics",
+        "inStock": true,
+        "description": "Immerse yourself in the ultimate audio experience, free from distractions, with our top-of-the-line Wireless Noise-Cancelling Headphones. Designed for those who value superior sound quality, comfort, and seamless connectivity, this stunning accessory offers the perfect blend of functionality and style. Whether you're on a long flight or at a bustling cafe, our adaptive noise-cancelling technology ensures tranquility, while the premium cushioned ear cups provide all-day comfort. Enjoy wireless freedom and full range sound with up to 30 hours of playtime on a single charge. • **Advanced Noise-Cancelling:** Blocks out ambient noise for undisturbed listening. • **Long Battery Life:** Up to 30 hours of playtime so you can enjoy music, calls, and podcasts without interruption. • **Comfortable Design:** Soft, breathable ear cushions and an adjustable headband provide long-lasting comfort. • **Seamless Connectivity:** Easy Bluetooth pairing with all your devices, complete with a stable connection. • **Built-in Microphone:** Answer calls and control music with voice assistant support for hands-free convenience. Elevate your audio experience and embrace the silence with our Wireless Noise-Cancelling Headphones. Perfect for frequent travelers, passionate audiophiles, and anyone seeking to escape into sound. Shop now and hear the difference."
     },
     "metadata": {
         "usage": {
-            "inputTokens": 61,
-            "outputTokens": 11,
-            "totalTokens": 72
+            "inputTokens": 76,
+            "outputTokens": 293,
+            "totalTokens": 369
         }
     }
 }
@@ -47,33 +52,40 @@ const {
 ## Generation with Zod Schema
 When you need type-safe JSON generation, use [Zod](https://zod.dev/) schemas to define your output structure. This approach provides full TypeScript integration and runtime validation.
 
-```typescript
+```typescript copy
 import { z } from "zod";
 
 const {
   data: { payload }
 } = await unbody.generate
-                .json("Provide user details:", {
+                .json("Generate a product catalog entry for an e-commerce site:", {
                   schema: z.object({
-                    name: z.string(),
-                    age: z.number()
+                    productName: z.string(),
+                    price: z.number(),
+                    category: z.string(),
+                    inStock: z.boolean(),
+                    description: z.string()
                   })
                 });
 ```
 
+
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 {
     "content": {
-        "name": "Jane Doe",
-        "age": 28
+        "productName": "EcoTherm Travel Mug",
+        "price": 24.99,
+        "category": "Home & Kitchen",
+        "inStock": true,
+        "description": "Elevate your morning routine with the EcoTherm Travel Mug, the perfect companion for eco-conscious coffee lovers on the go. Crafted with double-walled stainless steel, this travel mug keeps beverages hot or cold for up to 12 hours, so you can savor every sip.\n\n### Product Features:\n- **Durable Design:** Made from high-quality, BPA-free stainless steel, ensuring longevity and resistance to rust and wear.\n- **Temperature Retention:** Double-wall vacuum insulation keeps drinks hot or cold, perfect for any season.\n- **Eco-Friendly:** Reusable design reduces waste and the necessity for single-use cups, contributing positively to the environment.\n- **Leak-Proof Lid:** Features a secure leak-proof lid with an easy-to-use sliding closure, making it spill-proof and safe to use during travel.\n- **Capacity:** Holds up to 16 oz, ideal for coffee, tea, or your favorite chilled beverages.\n- **Portable & Lightweight:** Its sleek design fits most car cup holders, and the lightweight build makes it easy to carry everywhere.\n\n### Ideal For:\n- Commuters who need their caffeine fix on the go.\n- Students in need of a reliable coffee container for study sessions.\n- Outdoor enthusiasts seeking a trustworthy travel mug for their adventures.\n- Eco-conscious individuals committed to reducing their environmental footprint.\n\nEmbrace a greener lifestyle with the EcoTherm Travel Mug - where style meets sustainability. Grab yours now and cherish the perks of a seasoned brew wherever life takes you."
     },
     "metadata": {
         "usage": {
-            "inputTokens": 61,
-            "outputTokens": 11,
-            "totalTokens": 72
+            "inputTokens": 76,
+            "outputTokens": 344,
+            "totalTokens": 420
         }
     }
 }
@@ -83,46 +95,71 @@ const {
 ## Multi-Message Generation
 When you need to generate structured data through conversation, use [Message-Based Input with Schema](/generative-api/json-gen#example-3---message-based-input-with-schema). This helps when you need to provide context or specific instructions before generating the final structured output.
 
-```typescript
+```typescript copy
 import { z } from "zod";
 
 const {
     data: { payload },
 }  = await unbody.generate
-    .json(
-        [
-            {
-                role: "user",
-                content: "What is the structure of a business entity?",
-            },
-            { 
-                role: "system", 
-                content: "Explain in detail with examples." 
-            },
-        ],
-        {
-            schema: z.object({
-                companyName: z.string(),
-                employees: z.number(),
-                headquarters: z.string(),
-            }),
-        }
-    );
+                 .json(
+                    [
+                        {
+                            role: "system",
+                            content: "You are a technical documentation specialist. Create API endpoint specifications."
+                        },
+                        { 
+                            role: "user", 
+                            content: "Generate documentation for a user registration endpoint." 
+                        },
+                    ],
+                    {
+                        schema: z.object({
+                            endpoint: z.string(),
+                            method: z.string(),
+                            parameters: z.array(z.object({
+                                name: z.string(),
+                                type: z.string(),
+                                required: z.boolean()
+                            })),
+                            responseCode: z.number(),
+                            authentication: z.boolean()
+                        }),
+                    }
+                 );
 ```
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 {
     "content": {
-        "companyName": "Meta Corp",
-        "employees": 8500,
-        "headquarters": "California"
+        "endpoint": "/api/v1/register",
+        "method": "POST",
+        "parameters": [
+            {
+                "name": "username",
+                "type": "string"
+            },
+            {
+                "name": "email",
+                "type": "string"
+            },
+            {
+                "name": "password",
+                "type": "string"
+            },
+            {
+                "name": "confirm_password",
+                "type": "string"
+            }
+        ],
+        "responseCode": 201,
+        "authentication": false
     },
     "metadata": {
         "usage": {
-            "inputTokens": 85,
-            "outputTokens": 18,
-            "totalTokens": 103
+            "inputTokens": 106,
+            "outputTokens": 60,
+            "totalTokens": 166
         }
     }
 }

@@ -8,9 +8,9 @@ Find similar content across text, images, and records based on their characteris
 ## Text Similarity
 When you want to find related documents based on their concepts, use text similarity search. For example, if you have a document about AI technology, use `similar.text()` to find other documents discussing related concepts like machine learning.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -22,7 +22,7 @@ When you want to find related documents based on their concepts, use text simila
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    {
      Get {
        TextDocument(
@@ -60,7 +60,7 @@ When you want to find related documents based on their concepts, use text simila
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -84,9 +84,9 @@ When you want to find related documents based on their concepts, use text simila
 ## Advanced Text Similarity
 Sometimes you need to steer your search results toward specific themes while maintaining similarity. Use advanced text similarity with concept steering to fine-tune your results based on particular topics.
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -104,7 +104,7 @@ Sometimes you need to steer your search results toward specific themes while mai
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    {
      Get {
        TextDocument(
@@ -135,7 +135,7 @@ Sometimes you need to steer your search results toward specific themes while mai
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -173,9 +173,9 @@ Sometimes you need to steer your search results toward specific themes while mai
 ## Image Similarity
 When you need to find visually similar images regardless of their metadata, use `similar.image()` method. This helps you discover images with matching colors, objects, or compositions. [Learn more about Visual Similarity](/content-api/search/visual-similarity).
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -189,7 +189,7 @@ When you need to find visually similar images regardless of their metadata, use 
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    query {
      Get {
        ImageBlock(
@@ -213,7 +213,7 @@ When you need to find visually similar images regardless of their metadata, use 
 </Tabs>
 
 <Collapse title="Response">
-```typescript
+```typescript copy
 
 [
     {
@@ -263,9 +263,9 @@ When you need to find visually similar images regardless of their metadata, use 
 ## Record Similarity
 When you have a document you like and want to find similar ones, use `.similar.record()` method. [Learn more about Record Similarity](/content-api/search/record-similarity).
 
-<Tabs items={['Unbody SDK', 'GraphQL']}>
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
-   ```typescript
+   ```typescript copy
    const {
      data: { payload }
    } = await unbody.get
@@ -279,7 +279,7 @@ When you have a document you like and want to find similar ones, use `.similar.r
    ```
  </Tabs.Tab>
  <Tabs.Tab>
-   ```graphql
+   ```graphql copy
    query {
      Get {
        TextDocument(
@@ -303,4 +303,50 @@ When you have a document you like and want to find similar ones, use `.similar.r
    ```
  </Tabs.Tab>
 </Tabs>
+
+<Collapse title="Response">
+```typescript copy
+
+[
+    {
+        "_additional": {
+            "certainty": 1.0000006556510925,
+            "distance": -0.0000013113022
+        },
+        "authors": [
+            {
+                "name": "Amir Houieh",
+                "link": "https://www.linkedin.com/in/amirhouieh/",
+                "image": "amir.png"
+            }
+        ],
+        "autoSummary": "Unbody democratizes AI app development by simplifying data personalization and integration for non-AI developers. Featuring a modular AI pipeline with four layers, it aggregates, processes, and delivers data for building interactive, AI-driven applications.",
+        "originalName": "unbody-intro.md",
+        "title": "Unbody: all AI buzz in one endpoint, one line of code"
+    },
+    {
+        "_additional": {
+            "certainty": 0.803291380405426,
+            "distance": 0.39341724
+        },
+        "authors": [],
+        "autoSummary": "The official Unbody client for TypeScript/JavaScript allows flexible data retrieval and transformations. Install using `npm i @unbody-io/ts-client`. Instantiate with `Unbody` by setting API and project keys. Use methods like `.get`, `.ask`, `.nearText`, and `.group` to query data. Configure queries with parameters for filtering, pagination, and sorting.",
+        "originalName": "typescript-client.md",
+        "title": "Installation"
+    },
+    {
+        "_additional": {
+            "certainty": 0.7571523785591125,
+            "distance": 0.48569524
+        },
+        "authors": "IJITEE;Scopus Journal;UGC Journal",
+        "autoSummary": "Artificial Intelligence empowers engineering by facilitating analyses through machine learning and deep learning. This paper explores their applications, benefits, and challenges across sectors, highlighting deep learning's prowess with extensive data via layered architectures compared to shallow learning.",
+        "originalName": "Machine-Learning-and-Deep-Learning.pdf",
+        "title": "International Journal of Innovative Technology and Exploring Engineering (IJITEE)"
+    }
+]
+
+```
+</Collapse>
+
 

@@ -1,11 +1,11 @@
-import {Tabs, Tab} from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
 
 # Visual Similarity
 This method can be particularly useful when you want to find images that have a similar aesthetic, color scheme, or subject matter. It works by comparing the visual characteristics of the images and determining how similar they are.
 
 ## Syntax
 
-Visual similarity search can be performed on any 'imageBlock'. Here's how:
+Visual similarity search can be performed on any `imageBlock`. Here's how:
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title="SDK (.ts)">
@@ -18,7 +18,7 @@ Visual similarity search can be performed on any 'imageBlock'. Here's how:
         ```
     </Tab>
     <Tab title="GraphQL">
-        ```graphql
+        ```graphql copy
         query{
           Get{
             ImageBlock(
@@ -51,7 +51,7 @@ Visual similarity search can be performed on any 'imageBlock'. Here's how:
         ```
     </Tab>
     <Tab title="GraphQL">
-        ```graphql
+        ```graphql copy
         query{
           Get{
             ImageBlock(
@@ -70,8 +70,8 @@ Visual similarity search can be performed on any 'imageBlock'. Here's how:
 
 ### Arguments
 
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| image | string |  | Image url or base64 |
-| certainty | float |  | Normalized Distance between the result item and the search vector. Normalized to be between 0 (identical vectors) and 1 (perfect opposite). |
-| distance | float |  | The required degree of similarity between an image's visual characteristics and the provided filter values |
+| Name | Type | Description |
+| --- | --- | --- |
+| id* | string | The ID of the reference image to find similar images |
+| certainty | number | Normalized similarity threshold between 0 (identical) and 1 (completely different) |
+| distance | number | Distance threshold for similarity matching |

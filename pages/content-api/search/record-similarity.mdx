@@ -1,4 +1,4 @@
-import {Tab, Tabs} from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
 
 # Record Similarity
 Record similarity is a way to see how alike objects are. You can use this to find objects that look like a specific one. For instance, if you have many Google Docs, you can use this to find docs that are like Doc A. In the past, you had to look at things like keywords or topics to find similar items. But with similarity search in Unbody, this isn't necessary. You can compare the whole document.
@@ -10,22 +10,22 @@ Similarity search can be performed on any object. Here's how:
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
-                    .<object_name>
+                    .<collectionName>
                     .similar
-                    .record(objectId, {...options})
+                    .record(recordId, {...options})
                     .exec();
         ```
     </Tab>
     <Tab title={"GraphQL"}>
 
-        ```graphql
+        ```graphql copy
         query {
             Get {
-                <ObjectName>(
+                <collectionName>(
                     nearObject: {
-                    id: "objectId",
+                    id: "recordId",
                         ...options
                     }
                 ){
@@ -46,22 +46,22 @@ Find Google Docs that are similar to a specific Google Doc.
 
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .googleDoc
                     .similar
-                    .record('specificDocId')
+                    .record('recordId')
                     .exec()
         ```
     </Tab>
     <Tab title={"GraphQL"}>
 
-        ```graphql
+        ```graphql copy
         query {
             Get {
                 GoogleDoc(
                     nearObject: {
-                        id: "specificDocId"
+                        id: "recordId"
                     }
                 ){
                     ...fields
@@ -76,22 +76,22 @@ Find Google Docs that are similar to a specific Google Doc.
 ### Example 2 - Discord messages
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .discordMessage
                     .similar
-                    .record("specificMessageId")
+                    .record("recordId")
                     .exec()
 
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query {
             Get {
                 DiscordMessage(
                     nearObject: {
-                        id: "specificMessageId"
+                        id: "recordId"
                     }
                 ){
                     ...fields
@@ -105,21 +105,21 @@ Find Google Docs that are similar to a specific Google Doc.
 ### Example 3 - Any text block
 <Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
     <Tab title={"SDK (.ts)"}>
-        ```javascript copy
+        ```typescript copy
         await unbody.get
                     .textBlock
                     .similar
-                    .record("specificTextBlockId")
+                    .record("recordId")
                     .exec();
         ```
     </Tab>
     <Tab title={"GraphQL"}>
-        ```graphql
+        ```graphql copy
         query {
             Get {
                 TextBlock(
                     nearObject: {
-                        id: "specificTextBlockId"
+                        id: "recordId"
                     }
                 ){
                     ...fields
@@ -131,9 +131,9 @@ Find Google Docs that are similar to a specific Google Doc.
 </Tabs>
 
 ## Arguments
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| id | string |  | The ID of the object you want to find similar items to. |
-| certainty | float |  | Normalized Distance between the result item and the search vector. Normalized to be between 0 (identical vectors) and 1 (perfect opposite). |
-| distance | float |  | The required degree of similarity between an object's characteristics and the provided filter values |
-|  beacon | string |  | Concept identifier in the beacon format |
+
+| Name | Type | Description |
+| --- | --- | --- |
+| id* | string | The ID of the object to find similar items to |
+| certainty | number | Normalized similarity threshold between 0 (identical) and 1 (completely different) |
+| distance | number | Distance threshold for similarity matching |
