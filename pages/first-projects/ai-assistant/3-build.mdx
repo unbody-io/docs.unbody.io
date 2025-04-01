@@ -20,10 +20,10 @@ We want to build an AI assiatnt that uses our Discord messages in a prticular ch
     let history = [];
     const chat = async (userInput) => {
         try {
-            const { data: { generate } } = await unbody.get.googleDoc
+            const { data: { generate } } = await unbody.get.discordMessage
                 .search.about(userInput)
                 .limit(2)
-                .select("title", "autoSummary")
+                .select("content")
                 .generate
                 .fromMany(
                     `You are an AI assistant for discord. generate proper response for user input based on retrieved messages. 
@@ -34,7 +34,7 @@ We want to build an AI assiatnt that uses our Discord messages in a prticular ch
                      History:
                      ${history.map(({ query, content }) => `${query} - ${content}`).join("\n")}
                     `,
-                    ["title", "text", "autoSummary]
+                    ["content"]
                 )
                 .exec();
 
