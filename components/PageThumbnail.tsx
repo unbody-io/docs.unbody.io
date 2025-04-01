@@ -1,8 +1,7 @@
 import { cloneElement, isValidElement, useState } from "react"
-import { FileText, Icon, LucideProps } from 'lucide-react'
+import { FileText, LucideProps } from 'lucide-react'
 
 interface ThumbnailCardProps {
-  // icon: LucideIcon
   title: string
   description?: string
   link?: string
@@ -15,7 +14,6 @@ export const PageThumbnail: React.FC<ThumbnailCardProps> = ({
   description,
   link
 }) => {
-
   const [isHovered, setIsHovered] = useState(false);
 
   const hasDescription = description !== undefined && description !== null && description !== ''
@@ -43,10 +41,10 @@ export const PageThumbnail: React.FC<ThumbnailCardProps> = ({
     </a>
   )
 }
+
 export const InlineThumbnail: React.FC<ThumbnailCardProps> = ({
   icon,
   title,
-  description,
   link
 }) => {
   const finalIcon = isValidElement(icon)

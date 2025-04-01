@@ -1,4 +1,4 @@
-import { PageCard } from "../../../components/PageCard";
+import { InlineThumbnail } from '../../../components/PageThumbnail';
 import { PageItems } from "../../../components/PageItems";
 
 # Query Methods Overview
@@ -8,24 +8,20 @@ Unbody provides several methods for querying and manipulating data. Each method 
 ## Available Methods
 
 <PageItems>
-  <PageCard
+  <InlineThumbnail
     title="Get"
-    description="Retrieve data from collections"
     link="/content-api/query-methods/get"
   />
-  <PageCard
+  <InlineThumbnail
     title="Ask"
-    description="Ask questions about your data"
     link="/content-api/query-methods/ask"
   />
-  <PageCard
+  <InlineThumbnail
     title="Aggregate"
-    description="Perform aggregations on your data"
     link="/content-api/query-methods/aggregate"
   />
-  <PageCard
+  <InlineThumbnail
     title="Group"
-    description="Group data by fields"
     link="/content-api/query-methods/group"
   />
 </PageItems>
@@ -69,4 +65,4 @@ const { data } = await unbody.get
 
 ## Next Steps
 
-Click on any method above to learn more about its specific capabilities and usage. 
+Click on any method above to learn more about its specific capabilities and usage.
