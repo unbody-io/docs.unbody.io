@@ -18,21 +18,12 @@ import { Tab, Tabs } from "@nextui-org/react";
     // Search by text description
     const { data } = await unbody.image
       .search.about('sunset over mountains')
-      .select('url', 'description', 'tags')
+      .select('url', 'autoCaption', 'autoOCR')
       .limit(5)
       .generate.fromMany(
         'What are the common themes in these images?',
-        ['description', 'tags']
+        ['autoCaption', 'autoOCR']
       )
-      .exec();
-
-    // Search by reference image
-    const similarImages = await unbody.image
-      .search.near({
-        image: 'path/to/reference.jpg'
-      })
-      .select('url', 'similarity')
-      .limit(3)
       .exec();
     ```
     </Tab>
@@ -52,7 +43,7 @@ import { Tab, Tabs } from "@nextui-org/react";
               _additional {
                 generate(groupedResult: {
                   task: "What are the common themes in these images?",
-                  properties: ["description", "tags"]
+                  properties: ["autoCaption", "autoOCR"]
                 }) {
                   groupedResult
                 }
