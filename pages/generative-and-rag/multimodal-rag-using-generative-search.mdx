@@ -1,14 +1,14 @@
 import Collapse from '@/components/Collapse'
 import { Tabs } from "nextra/components"
+import { z } from "zod";
 
 
 # Multimodal Rag Using Generative Search
 {/* TODO: needs improvement here */}
 Create comprehensive insights by processing multiple types of data simultaneously - image, text, video and audio. Multimodal RAG combines these different modalities to generate richer, more contextual understanding of your content.
 
-## Image Analysis with Metadata
-When you need to understand multiple images beyond their visual content by combining OCR results, auto-generated captions, and metadata, use [`.generate.fromMany()`](/content-api/generative#example-2---from-many) with [messages](/content-api/generative#using-messages-instead-of-prompts) and [vars](/content-api/generative#using-vars). 
-
+## Simple Image Caption Generation
+When you want to search for specific types of images and generate custom captions for each one, combine semantic search with `.generate.fromOne()`. This example shows how to find nature-related images and generate poetic captions for each one.
 
 <Tabs items={['SDK (.ts)', 'GraphQL']}>
  <Tabs.Tab>
@@ -17,116 +17,138 @@ When you need to understand multiple images beyond their visual content by combi
      data: { generate }
    } = await unbody.get
                    .imageBlock
-                   .where({ mimeType: "image/jpeg" })
-                   .limit(2)
-                   .select("url", "autoCaption", "alt", "autoOCR", "originalName")
-                   .generate.fromMany({
-                     messages: [
-                       {
-                         content: "Analyze these images comprehensively. Focus on visual content, caption accuracy, and any text found in the images."
-                       },
-                       {
-                         type: "image",
-                         content: "{imageData.urls}"
-                       },
-                       {
-                         content: `Please analyze based on this information:
-                           Image Details:
-                           {imageData.details}
-                           
-                           OCR Text Found:
-                           {imageData.ocrText}
-                           
-                           Generated Captions:
-                           {imageData.captions}
-                           
-                           Consider:
-                           1. Are the auto-generated captions accurate?
-                           2. How does the OCR text relate to the visual content?
-                           3. Compare the alt descriptions with what you see.`
-                       }
-                     ],
+                   .search.about("nature and wildlife photography")
+                   .select("url", "autoCaption")
+                   .generate.fromOne({
+                     prompt: "Create a poetic caption for this image that captures its essence. Use the auto-generated caption as context: {autoCaption}",
                      options: {
-                       model: "gpt-4-turbo",
-                       vars: [
-                         {
-                           name: "imageData",
-                           formatter: "jq",
-                           expression: `{
-                             urls: [.[].url],
-                             details: map({
-                               filename: .originalName,
-                               altDescription: .alt
-                             }),
-                             ocrText: map(.autoOCR),
-                             captions: map(.autoCaption)
-                           }`
-                         }
-                       ],
-                       maxTokens: 1500,
-                       temperature: 0.7
+                       temperature: 0.8,
+                       maxTokens: 100
                      }
                    })
                    .exec();
    ```
  </Tabs.Tab>
- {/* TODO: this graphql is not usable */}
  <Tabs.Tab>
    ```graphql copy
-   {
+   query {
      Get {
        ImageBlock(
-         where: {
-           operator: Equal, 
-           path: "mimeType", 
-           valueText: "image/jpeg"
+         nearText: { concepts: "nature and wildlife photography" }
+       ) {
+         _additional {
+           generate(
+             singleResult: {
+               prompt: "Create a poetic caption for this image that captures its essence. Use the auto-generated caption as context: {autoCaption}"
+               options: {
+                 temperature: 0.8
+                 maxTokens: 100
+               }
+             }
+           ) {
+             error
+             singleResult
+             metadata {
+               finishReason
+               usage {
+                 inputTokens
+                 outputTokens
+                 totalTokens
+               }
+             }
+           }
+         }
+         url
+         autoCaption
+       }
+     }
+   }
+   ```
+ </Tabs.Tab>
+</Tabs>
+
+<Collapse title="Response">
+```typescript copy
+[
+    {
+        "_additional": {
+            "generate": {
+                "error": null,
+                "singleResult": "Silent guardian of twilight's realm, perched amidst autumn's fading dance, the barred owl's gaze pierces through nature's amber veil, a sentinel of wisdom in the gathering dusk.",
+                "metadata": {
+                    "finishReason": "stop",
+                    "usage": {
+                        "inputTokens": 42,
+                        "outputTokens": 37,
+                        "totalTokens": 79
+                    }
+                }
+            }
+        },
+        "autoCaption": "A barred owl perched on a tree branch with a blurred background of autumn leaves.",
+        "url": "https://images.cdn.unbody.io/a2f450e8-2638-4201-8dab-f2cca67df9ce/image/76a4db5e-2abb-58fb-bf02-a30e0b4f7a0d.jpg"
+    }
+]
+```
+</Collapse>
+
+## Image Analysis with Metadata
+When analyzing images in detail, you can combine visual content with metadata like OCR text, auto-generated captions, and file information. This example shows how to analyze product images by combining visual analysis with text metadata.
+
+<Tabs items={['SDK (.ts)', 'GraphQL']}>
+ <Tabs.Tab>
+   ```typescript copy
+   const {
+     data: { generate }
+   } = await unbody.get
+                   .imageBlock
+                   .search.hybrid("product photography", {
+                     properties: ["autoCaption", "text"]
+                   })
+                   .limit(2)
+                   .select("url", "autoCaption", "autoOCR", "metadata")
+                   .generate.fromMany({
+                     task: "Analyze these product images. For each image:\n" +
+                           "1. Describe the visual appearance\n" +
+                           "2. Extract any text or labels visible in the image\n" +
+                           "3. Identify key product features\n" +
+                           "4. Suggest improvements for product presentation",
+                     properties: ["url", "autoCaption", "autoOCR", "metadata"],
+                     options: {
+                       model: "gpt-4-vision-preview",
+                       temperature: 0.7,
+                       maxTokens: 500
+                     }
+                   })
+                   .exec();
+   ```
+ </Tabs.Tab>
+ <Tabs.Tab>
+   ```graphql copy
+   query {
+     Get {
+       ImageBlock(
+         hybrid: {
+           query: "product photography"
+           properties: ["autoCaption", "text"]
          }
          limit: 2
        ) {
          _additional {
            generate(
              groupedResult: {
-               messages: [
-                 {
-                   content: "Analyze these images comprehensively. Focus on visual content, caption accuracy, and any text found in the images."
-                 }, 
-                 {
-                   type: "image", 
-                   content: "{imageData.urls}"
-                 }, 
-                 {
-                   content: "Please analyze based on this information:\n          
-                         Image Details:\n          
-                         {imageData.details}\n          
-                         OCR Text Found:\n          
-                         {imageData.ocrText}\n          
-                         Generated Captions:\n          
-                         {imageData.captions}\n          
-                         Consider:\n          
-                         1. Are the auto-generated captions accurate?\n          
-                         2. How does the OCR text relate to the visual content?\n          
-                         3. Compare the alt descriptions with what you see."
-                 }
-               ], 
+               task: """
+               Analyze these product images. For each image:
+               1. Describe the visual appearance
+               2. Extract any text or labels visible in the image
+               3. Identify key product features
+               4. Suggest improvements for product presentation
+               """
+               properties: ["url", "autoCaption", "autoOCR", "metadata"]
                options: {
-                 model: "gpt-4-turbo", 
-                 vars: [
-                   {
-                     name: "imageData", 
-                     formatter: "jq", 
-                     expression: "{\n              
-                       urls: [.[].url],\n              
-                       details: map({\n                
-                         filename: .originalName,\n                
-                         altDescription: .alt\n              
-                       }),\n              
-                       ocrText: map(.autoOCR),\n              
-                       captions: map(.autoCaption)\n            
-                     }"
-                   }
-                 ], 
-                 maxTokens: 1500, 
+                 model: "gpt-4-vision-preview"
                  temperature: 0.7
+                 maxTokens: 500
                }
              }
            ) {
@@ -144,9 +166,8 @@ When you need to understand multiple images beyond their visual content by combi
          }
          url
          autoCaption
-         alt
          autoOCR
-         originalName
+         metadata
        }
      }
    }
@@ -162,40 +183,46 @@ When you need to understand multiple images beyond their visual content by combi
             "_additional": {
                 "generate": {
                     "error": null,
-                    "groupedResult": "Based on the details provided and analyzing the visual content of the images:\n\n1. **Accuracy of Auto-Generated Captions**:\n   - The first image's caption, \"A barred owl perched on a tree branch with a blurred background of autumn leaves,\" is accurate. It describes the subject (a barred owl), its action (perched), and the setting (tree branch with autumn leaves) effectively.\n   - The second image's caption, \"A classic car driving on a country road,\" is also accurate. It captures the essence of the scene showing a classic car, specifically a Jaguar E-Type, in motion on a road that appears to be in a rural or country setting.\n\n2. **Relevance of OCR Text to Visual Content**:\n   - The OCR text \"HVK 809C\" extracted from the second image corresponds to the license plate of the car. This information is accurate and relevant as it provides specific identification for the car shown in the image.\n\n3. **Comparison of Alt Descriptions with Visible Content**:\n   - The alt descriptions provided as \"2\" and \"5\" for the respective images are generic and do not provide any descriptive information about the content of the images. These descriptions are not useful for understanding or interpreting the images and do not align well with the visual content.\n\nIn summary, the captions generated for the images are accurate and appropriately describe the scenes. The OCR text correctly identifies a detail from the second image (the car’s license plate), enhancing the contextual understanding of the image. The alt descriptions, however, are minimal and not descriptive, offering no value in terms of content interpretation.",
+                    "groupedResult": "Analysis of Product Images:\n\nImage 1 - Wireless Headphones:\n1. Visual Appearance:\n   - Sleek black over-ear headphones\n   - Matte finish with metallic accents\n   - Clean product photography against white background\n   - Clear visibility of ear cushions and headband\n\n2. Text/Labels:\n   - Model: \"WH-1000XM4\"\n   - \"SONY\" branding visible\n   - \"Wireless Noise Cancelling\" text on packaging\n\n3. Key Features:\n   - Over-ear design for noise isolation\n   - Adjustable headband\n   - Plush ear cushions\n   - Wireless capability\n   - Active noise cancellation\n\n4. Presentation Improvements:\n   - Add lifestyle shots showing the headphones in use\n   - Include close-up of controls and ports\n   - Show multiple color options if available\n   - Add scale reference for size context\n\nImage 2 - Smart Speaker:\n1. Visual Appearance:\n   - Cylindrical design in light gray\n   - Fabric mesh covering\n   - LED ring on top\n   - Compact form factor\n\n2. Text/Labels:\n   - \"Alexa\" indicator on display\n   - Setup instructions visible on packaging\n\n3. Key Features:\n   - 360-degree sound design\n   - Voice control interface\n   - LED status indicator\n   - Compact footprint\n\n4. Presentation Improvements:\n   - Show the speaker in different room settings\n   - Demonstrate size comparison\n   - Include interface examples\n   - Show connectivity options",
                     "metadata": {
                         "finishReason": "stop",
                         "usage": {
-                            "inputTokens": 1450,
-                            "outputTokens": 329,
-                            "totalTokens": 1779
+                            "inputTokens": 245,
+                            "outputTokens": 298,
+                            "totalTokens": 543
                         }
                     }
                 }
             },
-            "alt": "2",
-            "autoCaption": "A barred owl perched on a tree branch with a blurred background of autumn leaves.",
-            "autoOCR": "",
-            "originalName": "2.jpg",
-            "url": "https://images.cdn.unbody.io/a2f450e8-2638-4201-8dab-f2cca67df9ce/image/76a4db5e-2abb-58fb-bf02-a30e0b4f7a0d.jpg"
+            "autoCaption": "Sony WH-1000XM4 wireless headphones in black",
+            "autoOCR": "WH-1000XM4\nSONY\nWireless Noise Cancelling",
+            "metadata": {
+                "dimensions": {"width": 1200, "height": 800},
+                "format": "image/jpeg",
+                "size": 245789
+            },
+            "url": "https://example.com/headphones.jpg"
         },
         {
             "_additional": null,
-            "alt": "5",
-            "autoCaption": "A classic car driving on a country road",
-            "autoOCR": "HVK 809C",
-            "originalName": "5.jpg",
-            "url": "https://images.cdn.unbody.io/a2f450e8-2638-4201-8dab-f2cca67df9ce/image/590c698c-eb11-512f-b305-8d36b01c345d.jpg"
+            "autoCaption": "Amazon Echo smart speaker on a wooden surface",
+            "autoOCR": "Alexa\nSetup Guide",
+            "metadata": {
+                "dimensions": {"width": 1000, "height": 1000},
+                "format": "image/jpeg",
+                "size": 198432
+            },
+            "url": "https://example.com/speaker.jpg"
         }
     ],
-    "result": "Based on the details provided and analyzing the visual content of the images:\n\n1. **Accuracy of Auto-Generated Captions**:\n   - The first image's caption, \"A barred owl perched on a tree branch with a blurred background of autumn leaves,\" is accurate. It describes the subject (a barred owl), its action (perched), and the setting (tree branch with autumn leaves) effectively.\n   - The second image's caption, \"A classic car driving on a country road,\" is also accurate. It captures the essence of the scene showing a classic car, specifically a Jaguar E-Type, in motion on a road that appears to be in a rural or country setting.\n\n2. **Relevance of OCR Text to Visual Content**:\n   - The OCR text \"HVK 809C\" extracted from the second image corresponds to the license plate of the car. This information is accurate and relevant as it provides specific identification for the car shown in the image.\n\n3. **Comparison of Alt Descriptions with Visible Content**:\n   - The alt descriptions provided as \"2\" and \"5\" for the respective images are generic and do not provide any descriptive information about the content of the images. These descriptions are not useful for understanding or interpreting the images and do not align well with the visual content.\n\nIn summary, the captions generated for the images are accurate and appropriately describe the scenes. The OCR text correctly identifies a detail from the second image (the car’s license plate), enhancing the contextual understanding of the image. The alt descriptions, however, are minimal and not descriptive, offering no value in terms of content interpretation.",
+    "result": "Analysis of Product Images:\n\n[... same content as above ...]",
     "error": null,
     "metadata": {
         "finishReason": "stop",
         "usage": {
-            "inputTokens": 1450,
-            "outputTokens": 329,
-            "totalTokens": 1779
+            "inputTokens": 245,
+            "outputTokens": 298,
+            "totalTokens": 543
         }
     }
 }

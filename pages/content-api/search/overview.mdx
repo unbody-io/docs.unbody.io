@@ -1,0 +1,82 @@
+import { PageItems } from '../../../components/PageItems';
+import { PageThumbnail } from '../../../components/PageThumbnail';
+
+# Search Overview
+
+Unbody provides several search methods to help you find relevant content in your data. Each method serves a different purpose and can be used alone or in combination with others.
+
+## Available Methods
+
+<PageItems>
+  <PageThumbnail
+    title="Semantic Search"
+    description="Search based on meaning rather than exact matches"
+    link="/content-api/search/semantic-search"
+  />
+  <PageThumbnail
+    title="Keyword Search"
+    description="Search using exact keyword matches"
+    link="/content-api/search/keyword-search"
+  />
+  <PageThumbnail
+    title="Hybrid Search"
+    description="Combine semantic and keyword search"
+    link="/content-api/search/hybrid-search"
+  />
+  <PageThumbnail
+    title="Visual Similarity"
+    description="Find visually similar images"
+    link="/content-api/search/visual-similarity"
+  />
+  <PageThumbnail
+    title="Record Similarity"
+    description="Find similar records"
+    link="/content-api/search/record-similarity"
+  />
+</PageItems>
+
+## Basic Usage
+
+All search methods follow a similar pattern:
+
+```typescript copy
+// Using the SDK
+const { data } = await unbody.get
+  .collection("TextDocument")
+  .search.about("my search query")
+  .exec();
+
+// Using GraphQL
+const query = `
+  query {
+    Get {
+      TextDocument(
+        nearText: {
+          concepts: ["my search query"]
+        }
+      ) {
+        title
+        content
+      }
+    }
+  }
+`;
+```
+
+## Combining Search Methods
+
+You can combine different search methods with filters, sorting, and pagination:
+
+```typescript copy
+const { data } = await unbody.get
+  .collection("TextDocument")
+  .search.about("my search query")
+  .where({ category: "blog" })
+  .sort("createdAt", "desc")
+  .limit(10)
+  .exec();
+```
+
+## Next Steps
+
+Click on any search method above to learn more about its specific capabilities and usage.

@@ -1,0 +1,61 @@
+import { Tab, Tabs } from "@nextui-org/react";
+
+
+# 3. Build A RAG for Google Docs
+
+<Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
+    <Tab title={"SDK (.ts)"}>
+    ```bash
+    npm i unbody
+    ```
+    ```typescript
+    import { Unbody } from 'unbody';
+
+    const unbody = new Unbody({
+      projectId: 'your-project-id', // dashboard > project settings 
+      apiKey: 'your-api-key' // dashboard > project settings > developer settings
+    });
+    
+    const { data } = await unbody.googleDoc
+      .search.about('A cool topic')
+      .select('title', 'text', 'autoSummary)
+      .limit(3)
+      .generate.fromMany(
+        'Explain why these docs are related.',
+        ['title', 'autoSummary']
+      )
+      .exec();
+    ```
+    </Tab>
+    <Tab title={"GraphQL"}>
+        ```graphql
+        query{
+          Get{
+            GoogleDoc(
+              nearText: {
+                concepts: "A cool topic"
+              }
+              limit: 3
+            ){
+              title
+              text
+              autoSummary
+              _additional{
+                generate(groupedResult:{
+                  task: "Exp",
+                  properties: ["title", "autoSummary"]
+                }){
+                  groupedResult
+                }
+              }
+              
+            }
+          }
+        }
+
+        ```
+    </Tab>
+</Tabs>
+
+
+[← Back to Start](/first-projects/rag/1-setup)

@@ -1,0 +1,67 @@
+import { Tab, Tabs } from "@nextui-org/react";
+
+# Build A Visual Search Engine
+
+<Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
+    <Tab title={"SDK (.ts)"}>
+    ```bash
+    npm i unbody
+    ```
+    ```typescript
+    import { Unbody } from 'unbody';
+
+    const unbody = new Unbody({
+      projectId: 'your-project-id',
+      apiKey: 'your-api-key'
+    });
+    
+    // Search by text description
+    const { data } = await unbody.image
+      .search.about('sunset over mountains')
+      .select('url', 'description', 'tags')
+      .limit(5)
+      .generate.fromMany(
+        'What are the common themes in these images?',
+        ['description', 'tags']
+      )
+      .exec();
+
+    // Search by reference image
+    const similarImages = await unbody.image
+      .search.near({
+        image: 'path/to/reference.jpg'
+      })
+      .select('url', 'similarity')
+      .limit(3)
+      .exec();
+    ```
+    </Tab>
+    <Tab title={"GraphQL"}>
+        ```graphql
+        query {
+          Get {
+            Image(
+              nearText: {
+                concepts: "sunset over mountains"
+              }
+              limit: 5
+            ) {
+              url
+              description
+              tags
+              _additional {
+                generate(groupedResult: {
+                  task: "What are the common themes in these images?",
+                  properties: ["description", "tags"]
+                }) {
+                  groupedResult
+                }
+              }
+            }
+          }
+        }
+        ```
+    </Tab>
+</Tabs>
+
+[← Back to Start](/first-projects/visual-search/1-setup) 

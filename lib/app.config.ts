@@ -1,7 +1,6 @@
 export const SITE_NAME = "Unbody";
-export const SITE_TITLE = "The only API you need to build AI-Native Apps";
-export const SITE_DESCRIPTION =
-  "AI is just a tech, the value is in data. Applying AI to your data is complex and expensive. Unbody simplifies entire AI development pipeline with a single API, the only API you need to build AI-Native Apps.";
+export const SITE_TITLE = "The AI-native backend";
+export const SITE_DESCRIPTION ="An open-source, modular backend for building AI-native software that understands, reasons, and acts on knowledge — instead of just data.";
 export const SITE_URL = "https://unbody.io";
 
 export const SITE_KEYWORDS = [
@@ -17,6 +16,11 @@ export const SITE_KEYWORDS = [
   "AI for everyone",
   "No AI expertise required",
   "one-line integration",
+  "RAG",
+  "vector search",
+  "knowledge graph",
+  "reasoning",
+  "actionable insights",
   "simplify AI deployment",
   "Custom AI engine development",
   "seamless data integration platform",

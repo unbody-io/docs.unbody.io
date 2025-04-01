@@ -1,22 +1,66 @@
+import { PageItems } from '../../../components/PageItems';
+import { PageThumbnail } from '../../../components/PageThumbnail';
+
 # ImageBlock
 
+The `ImageBlock` type represents an image. It includes the image's metadata and any extracted information.
+
+## Schema
+
 | Field | Type | Description |
-| :---------------- | :------: | :---- |
-| alt | string | The alternative text of the image. |
-| blob | Blob | A base64 encoded string of the image. |
-| createdAt | Date | The date the image file was created. |
-| ext | string | The extension of the file. |
-| height | number | The height of the original image file in pixels. |
-| mimeType | string | The MIME type of the file. |
-| modifiedAt | Date | The date the image file was last modified. |
-| order | number | The order of the image block in a document. |
-| originalName | string | The original name of the file. |
-| path | Array\<string\> | The path to the file in the source. |
-| pathString | string | The path to the file in the source as a string. |
-| remoteId | string | The unique identifier in the source. |
-| size | number | The size of the file in bytes. |
-| sourceId | string | The source identifier. |
-| title | string | The title of the image. |
-| url | string | Direct access URL. |
-| width | number | The width of the original image file in pixels. |
-| document | Array\<GoogleDoc \| GoogleCalendarEvent \| TextDocument \| DiscordMessage\> | The document this image block belongs to. |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier |
+| `createdAt` | `datetime` | Creation timestamp |
+| `updatedAt` | `datetime` | Last update timestamp |
+| `sourceId` | `string` | ID of the data source |
+| `remoteId` | `string` | ID in original system |
+| `url` | `string` | Image URL |
+| `path` | `string[]` | File path |
+| `pathString` | `string` | Path as string |
+| `mimeType` | `string` | MIME type |
+| `originalName` | `string` | Original filename |
+| `size` | `number` | File size in bytes |
+| `width` | `number` | Image width |
+| `height` | `number` | Image height |
+| `caption` | `string` | Image caption |
+| `alt` | `string` | Alt text |
+| `properties` | `object` | Additional properties |
+| `tags` | `string[]` | Image tags |
+
+## Related Types
+
+<PageItems>
+  <PageThumbnail
+    title="TextBlock"
+    description="Text extracted from the image"
+    link="/content-api/data-types/textblock"
+  />
+</PageItems>
+
+## Example Usage
+
+```typescript copy
+// Get all images
+const { data } = await unbody.get
+  .imageBlock
+  .select("url", "width", "height")
+  .exec();
+
+// Search images
+const { data } = await unbody.get
+  .imageBlock
+  .search.about("my search query")
+  .exec();
+
+// Filter images
+const { data } = await unbody.get
+  .imageBlock
+  .where({ mimeType: "image/jpeg" })
+  .exec();
+```
+
+## Next Steps
+
+- Learn about [searching images](/content-api/search)
+- Explore [filtering options](/content-api/filters)
+- See [sorting capabilities](/content-api/sorting)

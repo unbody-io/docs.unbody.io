@@ -5,8 +5,8 @@ import { Tabs } from "nextra/components"
 
 Generate insights by analyzing text and images together. Multimodal capabilities allow combining different types of data - like diagrams with text descriptions or images with metadata - to create comprehensive understanding.
 
-## Using Multimodal RAG to Analyze Technical Architecture Diagrams
-When you want to analyze images using both image and text prompts and generate expert insights, use [`.generate.text()`](/generative-api/text-gen) with [Message-Based Input](/generative-api/text-gen#example-3---message-based-input). For example, you can examine technical diagrams for system architectures, data flows, and bottlenecks by combining system instructions, image input, and specific prompts.
+## Using Multimodal RAG to Analyze Product Images
+When you want to analyze product images and generate detailed product descriptions, use [`.generate.text()`](/generative-api/text-gen) with [Message-Based Input](/generative-api/text-gen#example-3---message-based-input). This is perfect for e-commerce applications where you need to generate rich product descriptions from images.
 
 ```typescript copy
 const {
@@ -15,17 +15,119 @@ const {
                 .text([
                   {
                     role: "system",
-                    content: "You are an expert at analyzing technical diagrams."
+                    content: "You are an expert at analyzing product images and creating detailed, SEO-friendly product descriptions. Focus on key features, benefits, and use cases."
                   },
                   {
                     type: "image",
                     content: {
-                      url: "https://www.aporia.com/wp-content/uploads/2024/02/image-4.png"
+                      url: "https://example.com/product-image.jpg"
                     }
                   },
                   {
                     role: "user",
-                    content: "Analyze this LLM architecture diagram, focusing on data flow and bottlenecks."
+                    content: "Analyze this product image and create a detailed product description that highlights its key features, benefits, and ideal use cases. Include technical specifications and target audience."
+                  }
+                ], {
+                  model: "gpt-4-turbo",
+                  temperature: 0.7,
+                  maxTokens: 1000
+                });
+```
+
+<Collapse title="Response">
+```typescript copy
+{
+    "content": "The image shows a modern wireless noise-cancelling headphone set with a sleek, minimalist design. Here's a detailed analysis:
+
+Key Features:
+- Premium matte black finish with brushed metal accents
+- Ergonomic over-ear design with memory foam padding
+- Built-in touch controls on the right earcup
+- Active noise cancellation with ambient sound mode
+- 30-hour battery life with quick charging capability
+
+Technical Specifications:
+- Bluetooth 5.0 with multipoint connectivity
+- 40mm dynamic drivers with titanium-coated diaphragms
+- Frequency response: 20Hz - 20kHz
+- Weight: 250g
+- Foldable design with included carrying case
+
+Benefits:
+1. Superior Sound Quality: The titanium-coated drivers deliver crystal-clear audio with deep bass and crisp highs
+2. Comfort First: Memory foam padding and lightweight design ensure extended listening sessions without fatigue
+3. Smart Features: Touch controls and voice assistant integration make it easy to manage calls and music
+4. Versatile Use: Perfect for both professional and personal use, from office work to travel
+
+Ideal Use Cases:
+- Business professionals for conference calls and focused work
+- Frequent travelers for long flights and commutes
+- Audiophiles seeking premium wireless audio
+- Remote workers needing clear communication
+
+Target Audience:
+- Professional users aged 25-45
+- Tech-savvy consumers who value premium audio
+- Frequent travelers seeking comfort and convenience
+- Remote workers needing reliable communication tools",
+    "metadata": {
+        "finishReason": "stop",
+        "usage": {
+            "inputTokens": 450,
+            "outputTokens": 380,
+            "totalTokens": 830
+        }
+    }
+}
+```
+</Collapse>
+
+## Using Multimodal RAG to Analyze Technical Documentation
+When you need to analyze technical documentation that includes diagrams, code snippets, and text, use a combination of search queries and [`.generate.text()`](/generative-api/text-gen) to create comprehensive technical summaries.
+
+```typescript copy
+const queries = [
+  unbody.get.textDocument.search
+                         .find("system architecture")
+                         .select("title", "text", "autoSummary"),
+
+  unbody.get.imageBlock.search
+                       .find("system architecture diagram")
+                       .select("url", "autoCaption"),
+
+  unbody.get.codeBlock.search
+                      .find("system architecture implementation")
+                      .select("code", "language", "description")
+];
+
+// Execute all queries in parallel
+const { data } = await unbody.exec(...queries);
+
+const [docs, diagrams, codeSnippets] = data;
+
+// Generate a technical summary using all the reference material
+const {
+  data: { payload: technicalSummary }
+} = await unbody.generate
+                .text([
+                  {
+                    role: "system",
+                    content: "You are a technical documentation expert. Create clear, concise summaries of technical architectures and implementations."
+                  },
+                  {
+                    role: "user",
+                    content: `Analyze this technical documentation and create a comprehensive summary:
+
+                    Documentation: ${JSON.stringify(docs)}
+                    Architecture Diagrams: ${JSON.stringify(diagrams)}
+                    Code Examples: ${JSON.stringify(codeSnippets)}
+
+                    Please provide:
+                    1. System Overview
+                    2. Key Components and Their Interactions
+                    3. Technical Implementation Details
+                    4. Best Practices and Considerations
+                    5. Potential Improvements or Optimizations`
                   }
                 ], {
                   model: "gpt-4-turbo",
@@ -36,15 +138,78 @@ const {
 
 <Collapse title="Response">
 ```typescript copy
-
 {
-    "content": "This diagram outlines the architecture and data flow for a language model (LLM) system. It includes several components that manage the flow of data, optimize queries, and ensure output quality. I'll break down the data flow process and point out potential bottlenecks:\n\n### Data Flow Analysis\n1. **End User Interaction**:\n   - The process starts with the end user sending a query through a user interface (UI). This is part of the telemetry service which likely also tracks user interaction data for analytics and system improvement.\n\n2. **Query Processing**:\n   - The query is then sent to the embedding model where a copy of the query is embedded into a vector format. This embedding model is critical as it transforms the query into a format that can be understood and processed by the vector database.\n\n3. **Vector Database**:\n   - The embedded query is used to retrieve similar findings from a vector database based on contextual relevance. This database must be highly optimized for fast retrieval to avoid delays in response time.\n\n4. **Initial Prompt Formation**:\n   - Filtered context snippets from the vector database are injected into an initial prompt setup. This step involves combining the user's query with relevant data fetched from the database.\n\n5. **Prompt Optimization**:\n   - The initial prompt is then optimized using a prompt optimization tool. This tool refines the prompt to improve the interaction with the LLM.\n\n6. **LLM Processing**:\n   - The optimized prompt is sent to the LLM through an API hosted on an LLM host. The LLM processes the prompt and produces an output.\n\n7. **Content Filtering**:\n   - Before the output is sent to the user, it passes through a content classifier or filter that scans for harmful or offensive content, ensuring the output is appropriate.\n\n8. **Output Delivery**:\n   - The final, filtered output is then sent back to the user via the UI.\n\n### Potential Bottlenecks\n1. **Embedding Model**:\n   - The embedding model must process the query into vectors efficiently. If the model is slow or the embedding process is complex, it could delay the entire query processing cycle.\n\n2. **Vector Database Retrieval**:\n   - The speed at which the vector database retrieves contextually relevant data is crucial. If the database is large or not well-indexed, it could slow down the retrieval process, creating a bottleneck.\n\n3. **Prompt Optimization Tool**:\n   - The efficiency of the prompt optimization tool is vital. If the optimization process is computationally intensive, it might delay the delivery of the prompt to the LLM, affecting overall response time.\n\n4. **Content Classifier**:\n   - The content classifier must quickly scan and filter the output without significantly delaying the delivery to the user. If the classifier is not well-tuned or if it requires heavy computational resources, it can become a bottleneck.\n\n5. **LLM Cache**:\n   - The diagram shows that outputs might be stored or retrieved from an LLM cache. The effectiveness and speed of this cache are crucial, especially for repeated queries or similar prompt scenarios. A slow or inefficient cache system could hinder performance.\n\n### Conclusion\nOverall, the architecture is designed to optimize the query processing and ensure quality outputs in an LLM system. However, attention must be paid to potential bottlenecks, especially in embedding, data retrieval, prompt optimization, and content filtering to maintain a smooth and efficient user experience.",
+    "content": "Technical Architecture Analysis: Microservices-Based E-commerce Platform
+
+System Overview:
+The platform implements a modern microservices architecture designed for scalability and maintainability. The system is built using containerized services deployed on Kubernetes, with a clear separation of concerns between different microservices.
+
+Key Components:
+1. API Gateway Service
+   - Handles incoming requests and authentication
+   - Implements rate limiting and request validation
+   - Routes requests to appropriate microservices
+
+2. Product Service
+   - Manages product catalog and inventory
+   - Implements caching for frequently accessed data
+   - Handles product search and filtering
+
+3. Order Service
+   - Processes orders and payment transactions
+   - Maintains order history and status
+   - Integrates with payment providers
+
+4. User Service
+   - Manages user authentication and profiles
+   - Handles user preferences and settings
+   - Implements role-based access control
+
+Technical Implementation:
+- Containerization: Docker containers for each service
+- Orchestration: Kubernetes for container management
+- Service Discovery: Consul for service registration
+- Message Queue: RabbitMQ for inter-service communication
+- Database: PostgreSQL for persistent storage
+- Caching: Redis for performance optimization
+
+Best Practices Implemented:
+1. Circuit Breaker Pattern
+   - Prevents cascading failures
+   - Implements fallback mechanisms
+   - Monitors service health
+
+2. Event-Driven Architecture
+   - Asynchronous processing
+   - Loose coupling between services
+   - Better scalability
+
+3. API Versioning
+   - Maintains backward compatibility
+   - Supports gradual updates
+   - Clear deprecation strategy
+
+Potential Improvements:
+1. Performance Optimization
+   - Implement GraphQL for flexible queries
+   - Add CDN for static content
+   - Optimize database queries
+
+2. Monitoring and Observability
+   - Add distributed tracing
+   - Implement metrics collection
+   - Set up alerting system
+
+3. Security Enhancements
+   - Implement API key rotation
+   - Add request signing
+   - Enhance rate limiting",
     "metadata": {
         "finishReason": "stop",
         "usage": {
-            "inputTokens": 1406,
-            "outputTokens": 694,
-            "totalTokens": 2100
+            "inputTokens": 800,
+            "outputTokens": 650,
+            "totalTokens": 1450
         }
     }
 }
@@ -119,7 +284,7 @@ const {
 ```typescript copy
 
 {
-    "content": "**INT. DUSKY, LOW-LIT DINER - NIGHT**\n\nThe camera pans across a diner filled with the aroma of coffee and the low murmur of a late-night crowd. A jukebox in the corner belts out a classic 70s rock tune.\n\nAt a booth, VINCE, a rugged, sharp-dressed man in his 40s, sits across from ELLA, a seemingly innocent-looking woman with a retro style, her eyes hiding more than they reveal. They both sip coffee, a chess board between them.\n\n**VINCE**  \n(*chuckling*)  \nYou really think Zeppelin’s \"Kashmir\" beats Floyd’s \"Echoes\"? C’mon, Ella, it’s like comparing a fine scotch to a damn good bourbon.\n\n**ELLA**  \n(*smirking, moving her bishop*)  \nIt’s all about the journey, Vince. Page and Plant take you on an expedition. “Echoes” just... floats you in space.\n\nVince reaches over, moving his knight. The clink of the chess pieces punctuates their words.\n\n**VINCE**  \nSpace? That’s exactly it. It's ethereal. You need to elevate your taste.\n\nElla gives a small, mysterious smile and pushes her pawn forward.\n\n**ELLA**  \nSpeaking of tastes, how'd you find yourself in this mess? We’re not exactly playing chess for fun, are we, Vince?\n\nThe clink grows sharper, the tension subtly building.\n\n**VINCE**  \n(*leaning in*)  \nWe all got debts, darling. You, out of all people, should know. Heard you’ve been running with the Valentino crew since Joey took a dive.\n\n**ELLA**  \n(*leaning back, unfazed*)  \nJoey had a loose tongue. And running’s a stretch. I prefer... gliding through the chaos.\n\nShe captures Vince’s knight, her fingers delicately precise. Vince's eyes narrow slightly, but he chuckles.\n\n**VINCE**  \nGlide, run, or dance, we all end up in the same hole, Ella. What’s your end game here?\n\n**ELLA**  \nTo not end up like Joey.\n\nThere’s a beat of silence as they both take a sip of coffee, the music from the jukebox switching to something moodier.\n\n**VINCE**  \nYou ever think about that last scene in *Thelma & Louise*? Sometimes going off the cliff is the only way to keep flying.\n\n**ELLA**  \n(*softly*)  \nOr you ensure you’re not the one driving.\n\nAbruptly, Ella stands, her movement fluid. Vince watches, puzzled. She slides out a small envelope and tosses it on the table.\n\n**ELLA**  \nCheckmate.\n\nVince opens the envelope, finding a lone chess piece — a queen.\n\n**VINCE**  \nWhat’s this?\n\n**ELLA**  \nYour ticket out—or your plunge off the cliff. You disappear tonight. New identity, new life.\n\nVince looks up, but Ella is already heading towards the door, her figure a shadow against the diner’s retro lights.\n\n**VINCE**  \nAnd what about you, Ella?\n\nShe stops at the door, half-turning, a cryptic smile playing on her lips.\n\n**ELLA**  \nI’m not the one driving, remember?\n\nShe exits. Vince sits there, the queen piece in hand, a mix of confusion and realization dawning on him as the screen fades to black.\n\n**CUT TO BLACK.**",
+    "content": "**INT. DUSKY, LOW-LIT DINER - NIGHT**\n\nThe camera pans across a diner filled with the aroma of coffee and the low murmur of a late-night crowd. A jukebox in the corner belts out a classic 70s rock tune.\n\nAt a booth, VINCE, a rugged, sharp-dressed man in his 40s, sits across from ELLA, a seemingly innocent-looking woman with a retro style, her eyes hiding more than they reveal. They both sip coffee, a chess board between them.\n\n**VINCE**  \n(*chuckling*)  \nYou really think Zeppelin's \"Kashmir\" beats Floyd's \"Echoes\"? C'mon, Ella, it's like comparing a fine scotch to a damn good bourbon.\n\n**ELLA**  \n(*smirking, moving her bishop*)  \nIt's all about the journey, Vince. Page and Plant take you on an expedition. \"Echoes\" just... floats you in space.\n\nVince reaches over, moving his knight. The clink of the chess pieces punctuates their words.\n\n**VINCE**  \nSpace? That's exactly it. It's ethereal. You need to elevate your taste.\n\nElla gives a small, mysterious smile and pushes her pawn forward.\n\n**ELLA**  \nSpeaking of tastes, how'd you find yourself in this mess? We're not exactly playing chess for fun, are we, Vince?\n\nThe clink grows sharper, the tension subtly building.\n\n**VINCE**  \n(*leaning in*)  \nWe all got debts, darling. You, out of all people, should know. Heard you've been running with the Valentino crew since Joey took a dive.\n\n**ELLA**  \n(*leaning back, unfazed*)  \nJoey had a loose tongue. And running's a stretch. I prefer... gliding through the chaos.\n\nShe captures Vince's knight, her fingers delicately precise. Vince's eyes narrow slightly, but he chuckles.\n\n**VINCE**  \nGlide, run, or dance, we all end up in the same hole, Ella. What's your end game here?\n\n**ELLA**  \nTo not end up like Joey.\n\nThere's a beat of silence as they both take a sip of coffee, the music from the jukebox switching to something moodier.\n\n**VINCE**  \nYou ever think about that last scene in *Thelma & Louise*? Sometimes going off the cliff is the only way to keep flying.\n\n**ELLA**  \n(*softly*)  \nOr you ensure you're not the one driving.\n\nAbruptly, Ella stands, her movement fluid. Vince watches, puzzled. She slides out a small envelope and tosses it on the table.\n\n**ELLA**  \nCheckmate.\n\nVince opens the envelope, finding a lone chess piece — a queen.\n\n**VINCE**  \nWhat's this?\n\n**ELLA**  \nYour ticket out—or your plunge off the cliff. You disappear tonight. New identity, new life.\n\nVince looks up, but Ella is already heading towards the door, her figure a shadow against the diner's retro lights.\n\n**VINCE**  \nAnd what about you, Ella?\n\nShe stops at the door, half-turning, a cryptic smile playing on her lips.\n\n**ELLA**  \nI'm not the one driving, remember?\n\nShe exits. Vince sits there, the queen piece in hand, a mix of confusion and realization dawning on him as the screen fades to black.\n\n**CUT TO BLACK.**",
     "metadata": {
         "finishReason": "stop",
         "usage": {
@@ -132,5 +297,110 @@ const {
 ```
 </Collapse>
 
+## Video Content Analysis
+When analyzing video content, it's often helpful to split the process into two steps: first retrieving relevant content, then generating insights. This approach allows for better control over the analysis process and more focused results.
+
+```typescript copy
+// Step 1: Retrieve relevant video content
+const { data: videoData } = await unbody.get
+  .videoFile
+  .search.about("programming tutorials")
+  .select(
+    "url",
+    "autoSummary",
+    "subtitles.entries.SubtitleEntry"
+  )
+  .exec();
+
+// Step 2: Generate structured insights using Zod schema
+const schema = z.object({
+  title: z.string()
+    .min(10, "Title must be descriptive")
+    .describe("Title of the learning module"),
+  keyPoints: z.array(
+    z.object({
+      timestamp: z.string()
+        .regex(/^\d{2}:\d{2}$/, "Must be in MM:SS format"),
+      topic: z.string(),
+      summary: z.string()
+        .min(30, "Summary must be detailed")
+    })
+  ).min(3, "Must include at least 3 key points"),
+  codeSnippets: z.array(
+    z.object({
+      code: z.string(),
+      explanation: z.string()
+    })
+  ).optional()
+});
+
+const { data: { payload } } = await unbody.generate
+  .json([
+    {
+      role: "system",
+      content: "You are an expert at analyzing programming tutorials and creating structured learning materials. Focus on extracting key concepts, timestamps, and code examples."
+    },
+    {
+      role: "user",
+      content: `Please analyze this programming tutorial and create a structured learning guide.
+                Video URL: ${videoData[0].url}
+                Summary: ${videoData[0].autoSummary}
+                Subtitles: ${JSON.stringify(videoData[0].subtitles)}
+                -
+                Please create a comprehensive guide that includes:
+                1. A clear, descriptive title
+                2. Key points with timestamps and detailed summaries
+                3. Relevant code snippets with explanations
+                4. Focus on practical applications and best practices
+                `
+      }
+    ], {
+      schema,
+      options: {
+        temperature: 0.7,
+        maxTokens: 1000
+      }
+    });
+```
+
+<Collapse title="Response">
+```typescript copy
+{
+  "content": {
+    "title": "Asynchronous Programming in Python: From Basics to Best Practices",
+    "keyPoints": [
+      {
+        "timestamp": "02:15",
+        "topic": "Understanding Async/Await",
+        "summary": "Introduction to async/await syntax in Python, explaining how it differs from traditional synchronous code and when to use it."
+      },
+      {
+        "timestamp": "08:30",
+        "topic": "Coroutines Deep Dive",
+        "summary": "Detailed explanation of coroutines, their lifecycle, and how they enable non-blocking operations in Python applications."
+      },
+      {
+        "timestamp": "15:45",
+        "topic": "Real-world Applications",
+        "summary": "Practical examples of async programming in web scraping, API integration, and database operations with performance comparisons."
+      }
+    ],
+    "codeSnippets": [
+      {
+        "code": "async def fetch_data(url):\n    async with aiohttp.ClientSession() as session:\n        async with session.get(url) as response:\n            return await response.json()",
+        "explanation": "Basic example of an async function that fetches data from an API using aiohttp, demonstrating proper resource management with async context managers."
+      }
+    ]
+  },
+  "metadata": {
+    "usage": {
+      "inputTokens": 450,
+      "outputTokens": 280,
+      "totalTokens": 730
+    }
+  }
+}
+```
+</Collapse>
 
 Learn more in our [Generative API Guide](/generative-api/overview).

@@ -60,11 +60,28 @@ const {
 } = await unbody.generate
                 .json("Generate a product catalog entry for an e-commerce site:", {
                   schema: z.object({
-                    productName: z.string(),
-                    price: z.number(),
-                    category: z.string(),
-                    inStock: z.boolean(),
+                    productName: z.string()
+                      .min(3, "Product name must be at least 3 characters")
+                      .describe("Name of the product"),
+                    price: z.number()
+                      .positive("Price must be positive")
+                      .describe("Current price in USD"),
+                    originalPrice: z.number()
+                      .positive()
+                      .optional()
+                      .describe("Original price before discount"),
+                    category: z.enum(["Electronics", "Home & Kitchen", "Fashion", "Books"])
+                      .describe("Product category"),
+                    inStock: z.boolean()
+                      .default(true)
+                      .describe("Whether the product is in stock"),
                     description: z.string()
+                      .min(50, "Description must be detailed")
+                      .max(1000)
+                      .describe("Detailed product description"),
+                    tags: z.array(z.string())
+                      .optional()
+                      .describe("Product tags for search")
                   })
                 });
 ```
@@ -114,15 +131,33 @@ const {
                     ],
                     {
                         schema: z.object({
-                            endpoint: z.string(),
-                            method: z.string(),
-                            parameters: z.array(z.object({
+                            endpoint: z.string()
+                              .startsWith("/")
+                              .describe("API endpoint path"),
+                            method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"])
+                              .describe("HTTP method"),
+                            parameters: z.array(
+                              z.object({
                                 name: z.string(),
-                                type: z.string(),
-                                required: z.boolean()
-                            })),
-                            responseCode: z.number(),
+                                type: z.enum(["string", "number", "boolean", "object", "array"]),
+                                required: z.boolean().default(true),
+                                description: z.string().optional(),
+                                validation: z.record(z.string()).optional()
+                              })
+                            ).min(1, "At least one parameter is required"),
+                            responseCode: z.number()
+                              .int()
+                              .min(200)
+                              .max(599)
+                              .describe("HTTP response code"),
                             authentication: z.boolean()
+                              .default(false)
+                              .describe("Whether endpoint requires authentication"),
+                            rateLimit: z.object({
+                              requests: z.number().positive(),
+                              period: z.string()
+                            }).optional()
+                              .describe("Rate limiting configuration")
                         }),
                     }
                  );

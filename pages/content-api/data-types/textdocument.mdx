@@ -1,4 +1,11 @@
+import { PageItems } from '../../../components/PageItems';
+import { PageThumbnail } from '../../../components/PageThumbnail';
+
 # TextDocument
+
+The `TextDocument` type represents a text document. It includes the document's content, metadata, and any extracted information.
+
+## Schema
 
 | Field | Type | Description |
 | :---------------- | :------: | :---- |
@@ -25,3 +32,46 @@
 | autoEntities | Array\<string\> | Entities automatically extracted from the document's content. |
 | autoTopics | Array\<string\> | Topics automatically extracted from the document. |
 | blocks | Array\<ImageBlock \| TextBlock\> | The content blocks of the document. |
+
+## Related Types
+
+<PageItems>
+  <PageThumbnail
+    title="TextBlock"
+    description="Individual text blocks within the document"
+    link="/content-api/data-types/textblock"
+  />
+  <PageThumbnail
+    title="ImageBlock"
+    description="Images within the document"
+    link="/content-api/data-types/imageblock"
+  />
+</PageItems>
+
+## Example Usage
+
+```typescript copy
+// Get all text documents
+const { data } = await unbody.get
+  .textDocument
+  .select("title", "text", "url")
+  .exec();
+
+// Search text documents
+const { data } = await unbody.get
+  .textDocument
+  .search.about("my search query")
+  .exec();
+
+// Filter text documents
+const { data } = await unbody.get
+  .textDocument
+  .where({ mimeType: "text/markdown" })
+  .exec();
+```
+
+## Next Steps
+
+- Learn about [searching documents](/content-api/search)
+- Explore [filtering options](/content-api/filters)
+- See [sorting capabilities](/content-api/sorting)

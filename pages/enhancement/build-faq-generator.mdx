@@ -7,27 +7,21 @@ When building a knowledge base or documentation system, automatically extracting
 - Store FAQs in a searchable format
 - Maintain type safety for FAQ data
 
-```typescript copy
-import { BooleanField, NumberField, StringField, Unbody, ITextDocument } from "unbody";
-import {
-  AutoSummary,
-  AutoVision,
-  CustomSchema,
-  Enhancement,
-  Generative,
-  PdfParser,
-  ProjectSettings,
-  TextVectorizer,
-  UnbodyAdmin,
-} from "unbody/admin";
+```typescript filename="admin-client.ts"
+import { UnbodyAdmin } from "unbody/admin";
 
 // Create admin instance with credentials
-const admin = new UnbodyAdmin({
+export const admin = new UnbodyAdmin({
     auth: {
         username: "93156549-...", // ID
         password: "ak_7660b....", // Secret
     },
 });
+```
+
+```typescript filename="enhancer.ts"
+import { Enhancement } from "unbody/admin";
+import { admin } from "./admin-client";
 
 // 1. Initialize pipeline for PDF document processing
 const faqPipeline = new Enhancement.Pipeline(
@@ -62,7 +56,7 @@ const generateFAQs = new Enhancement.Step(
   }),
   {
     output: {
-      faqs: (ctx) => JSON.stringify(ctx.result.json.faqs),
+      xFaqs: (ctx) => JSON.stringify(ctx.result.json.faqs),
     },
   }
 );
@@ -70,9 +64,23 @@ const generateFAQs = new Enhancement.Step(
 // 3. Add generation step to pipeline
 faqPipeline.add(generateFAQs);
 
-// 4. Configure a project with the enhancement pipeline and Custom schema for storing the results
-const enhancement = new Enhancement();
+// 4. Configure a project with the enhancement pipeline
+export const enhancement = new Enhancement();
 enhancement.add(faqPipeline);
+```
+
+```typescript filename="project-settings.ts"
+import {
+  AutoSummary,
+  AutoVision,
+  CustomSchema,
+  Generative,
+  PdfParser,
+  ProjectSettings,
+  TextVectorizer,
+} from "unbody/admin";
+import { admin } from "./admin-client";
+import { enhancement } from "./enhancer";
 
 const projectSettings = new ProjectSettings();
 projectSettings
@@ -81,24 +89,27 @@ projectSettings
   .set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
   .set(new AutoVision(AutoVision.OpenAI.GPT4o))
   .set(new PdfParser(PdfParser.NlmSherpa.Default))
-  .set(enhancement)
-  .set(
-    new CustomSchema().extend(
-      new CustomSchema.Collection("TextDocument").add(
-        new CustomSchema.Field.Text(
-          "faqs",
-          "FAQs generated from the document"
-        )
-      )
-    )
-  );
+  .set(enhancement);
 
-const project = admin.projects.ref({
+// Create project with extended TextDocument schema
+export const project = admin.projects.ref({
   name: "PDF FAQ Extraction Project",
   settings: projectSettings,
 });
 
+project.settings.set(
+  new CustomSchema().extend(
+    new CustomSchema.Collection("TextDocument")
+      .add(new CustomSchema.Field.Text("xFaqs", "FAQs generated from the document"))
+  )
+);
+
 await project.save();
+```
+
+```typescript filename="app.ts"
+import { BooleanField, NumberField, StringField, Unbody, ITextDocument } from "unbody";
+import { project } from "./project-settings";
 
 // Create unbody instance
 const unbody = new Unbody({
@@ -106,9 +117,9 @@ const unbody = new Unbody({
     projectId: "22e0b...", // Project Id
 });
 
-// 5. Query documents with type safety
+// Query documents with type safety
 interface ExtendedTextDocument extends ITextDocument {
-  faqs: StringField;
+  xFaqs: StringField;
 }
 
 const { data: { payload } } = await unbody.get
@@ -116,8 +127,10 @@ const { data: { payload } } = await unbody.get
   .where({
     mimeType: "application/pdf"
   })
-  .select("title", "originalName", "faqs")
+  .select("title", "originalName", "xFaqs")
   .exec();
+
+console.log(payload);
 ```
 
 <Collapse title="Response">
@@ -126,7 +139,7 @@ const { data: { payload } } = await unbody.get
   {
     "title": "Product Manual",
     "originalName": "manual.pdf",
-    "faqs": "[{\"question\":\"How do I install the software?\",\"answer\":\"Download the installer...\"},{\"question\":\"What are the system requirements?\",\"answer\":\"Minimum 8GB RAM...\"}]"
+    "xFaqs": "[{\"question\":\"How do I install the software?\",\"answer\":\"Download the installer...\"},{\"question\":\"What are the system requirements?\",\"answer\":\"Minimum 8GB RAM...\"}]"
   }
 ]
 ```

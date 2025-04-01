@@ -1,33 +1,70 @@
+import { PageThumbnail } from '../../../components/PageThumbnail';
+import { PageItems } from "../../../components/PageItems";
+
 # AudioFile
 
+The `AudioFile` type represents an audio file. It includes the file's metadata and any extracted information.
+
+## Schema
+
 | Field | Type | Description |
-| :---------------- | :------: | :---- |
-| assetId | string | The asset ID of the file on audio platform. |
-| blob | Blob | A base64 encoded string of the file. |
-| duration | number | The duration of the audio file in seconds. |
-| ext | string | The extension of the file. |
-| files | Array\<object\> | The static media files associated with the audio file. |
-| files.width | number | The width of the media file. |
-| files.height | number | The height of the media file. |
-| files.size | number | The size of the media file in bytes. |
-| files.name | string | The name of the media file. |
-| files.ext | string | The extension of the media file. |
-| files.bitrate | number | The bitrate of the media file. |
-| files.url | string | The URL of the media file. |
-| hlsUrl | string | The URL to the HLS stream. |
-| mimeType | string | The MIME type of the file. |
-| order | number | The order of the object in a list. |
-| originalName | string | The original name of the file. |
-| path | Array\<string\> | The path to the file in the source. |
-| pathString | string | The path to the file in the source as a string. |
-| playbackId | string | The playback ID of the file on audio platform. |
-| remoteId | string | The unique identifier in the source. |
-| size | number | The size of the file in bytes. |
-| sourceId | string | The source identifier. |
-| url | string | Direct access URL. |
-| autoSummary | string | A summary automatically generated from the transcript. |
-| autoKeywords | Array\<string\> | Keywords automatically extracted from the transcript. |
-| autoEntities | Array\<string\> | Entities automatically extracted from the transcript. |
-| autoTopics | Array\<string\> | Topics automatically extracted from the transcript. |
-| subtitles | Array\<SubtitleFile\> | The subtitles associated with the audio file. |
-| document | Array\<GoogleDoc \| GoogleCalendarEvent \| DiscordMessage\> | The parent document of the audio file. |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier |
+| `createdAt` | `datetime` | Creation timestamp |
+| `updatedAt` | `datetime` | Last update timestamp |
+| `sourceId` | `string` | ID of the data source |
+| `remoteId` | `string` | ID in original system |
+| `title` | `string` | Audio file title |
+| `url` | `string` | Audio file URL |
+| `path` | `string[]` | File path |
+| `pathString` | `string` | Path as string |
+| `mimeType` | `string` | MIME type |
+| `originalName` | `string` | Original filename |
+| `size` | `number` | File size in bytes |
+| `duration` | `number` | Duration in seconds |
+| `bitrate` | `number` | Bitrate in bits/s |
+| `sampleRate` | `number` | Sample rate in Hz |
+| `channels` | `number` | Number of channels |
+| `codec` | `string` | Audio codec |
+| `format` | `string` | Audio format |
+| `transcription` | `string` | Transcribed text |
+| `properties` | `object` | Additional properties |
+| `tags` | `string[]` | Audio file tags |
+
+## Related Types
+
+<PageItems>
+  <PageThumbnail
+    title="TextBlock"
+    description="Transcribed text blocks"
+    link="/content-api/data-types/textblock"
+  />
+</PageItems>
+
+## Example Usage
+
+```typescript copy
+// Get all audio files
+const { data } = await unbody.get
+  .audioFile
+  .select("title", "url", "duration")
+  .exec();
+
+// Search audio files
+const { data } = await unbody.get
+  .audioFile
+  .search.about("my search query")
+  .exec();
+
+// Filter audio files
+const { data } = await unbody.get
+  .audioFile
+  .where({ format: "mp3" })
+  .exec();
+```
+
+## Next Steps
+
+- Learn about [searching audio files](/content-api/search)
+- Explore [filtering options](/content-api/filters)
+- See [sorting capabilities](/content-api/sorting)

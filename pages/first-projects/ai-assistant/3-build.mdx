@@ -1,0 +1,70 @@
+import { Tab, Tabs } from "@nextui-org/react";
+
+# Build An AI Assistant
+We want to build an AI assiatnt that uses our Discord messages in a prticular channel.
+
+<Tabs size={"sm"} variant={"underlined"} className={"mt-2"}>
+    <Tab title={"SDK (.ts)"}>
+    ```bash
+    npm i unbody
+    ```
+    ```typescript
+    import { Unbody } from 'unbody';
+
+    const unbody = new Unbody({
+      projectId: 'your-project-id', // dashboard > project settings 
+      apiKey: 'your-api-key' // dashboard > project settings > developer settings
+    });
+    
+
+    let history = [];
+    const chat = async (userInput) => {
+        try {
+            const { data: { generate } } = await unbody.get.googleDoc
+                .search.about(userInput)
+                .limit(2)
+                .select("title", "autoSummary")
+                .generate
+                .fromMany(
+                    `You are an AI assistant for discord. generate proper response for user input based on retrieved messages. 
+                    
+                     User input:
+                     ${userInput}
+                    
+                     History:
+                     ${history.map(({ query, content }) => `${query} - ${content}`).join("\n")}
+                    `,
+                    ["title", "text", "autoSummary]
+                )
+                .exec();
+
+            // Update history if generate is successful.
+            if (generate && generate.result) {
+                history.push({
+                    query: userInput,
+                    content: generate.result
+                });
+            }
+
+            return generate ? generate.result : "No result generated";
+            
+        } catch (error) {
+            console.log(error);
+            return "Error during generation";
+        }
+    };
+
+      console.log(await chat("What did I wrote about EVs?"));
+      console.log(history);
+      console.log(await chat("can you elaborate on that?"));
+      console.log(history);
+    ```
+    </Tab>
+    <Tab title={"GraphQL"}>
+        ```graphql
+        
+        ```
+    </Tab>
+</Tabs>
+
+[← Back to Start](/first-projects/ai-assistant/1-setup) 
