@@ -1,26 +1,72 @@
+import { PageCard } from "../../../components/PageCard";
+import { PageItems } from "../../../components/PageItems";
+
 # DiscordMessage
 
+The `DiscordMessage` type represents a message from Discord. It includes the message content, metadata, and any attachments.
+
+## Schema
+
 | Field | Type | Description |
-| :---------------- | :------: | :---- |
-| author | object | The author's metadata. |
-| author.id | string | The author's ID. |
-| author.avatar | string | The author's avatar URL. |
-| author.username | string | The author's username. |
-| author.globalName | string | The author's global name. |
-| authorId | string | The ID of the message author. |
-| channelId | string | The ID of the channel this message belongs to. |
-| content | string | The content of the message. |
-| createdAt | Date | The creation date of the message. |
-| guildId | string | The ID of the server this message belongs to. |
-| mentionEveryone | boolean | Whether the message mentions everyone. |
-| mentions | Array\<object\> | The mentions in the message. |
-| mentions.id | string | The ID of the mentioned user. |
-| mentions.avatar | string | The avatar URL of the mentioned user. |
-| mentions.username | string | The username of the mentioned user. |
-| mentions.globalName | string | The global name of the mentioned user. |
-| modifiedAt | Date | The last modification date of the message. |
-| position | number | The position of the message in the channel. |
-| referencedMessageId | string | The remote ID of the referenced message. |
-| remoteId | string | The unique identifier in the source. |
-| sourceId | string | The source identifier. |
-| attachments | Array\<ImageBlock \| AudioFile \| VideoFile\> | The attachments in the message. |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier |
+| `createdAt` | `datetime` | Creation timestamp |
+| `updatedAt` | `datetime` | Last update timestamp |
+| `sourceId` | `string` | ID of the data source |
+| `remoteId` | `string` | Discord message ID |
+| `content` | `string` | Message content |
+| `channelId` | `string` | Discord channel ID |
+| `channelName` | `string` | Discord channel name |
+| `guildId` | `string` | Discord guild ID |
+| `guildName` | `string` | Discord guild name |
+| `authorId` | `string` | Discord author ID |
+| `authorName` | `string` | Discord author name |
+| `attachments` | `object[]` | Message attachments |
+| `embeds` | `object[]` | Message embeds |
+| `reactions` | `object[]` | Message reactions |
+| `referencedMessage` | `object` | Referenced message (replies) |
+| `threadId` | `string` | Thread ID (if in thread) |
+| `threadName` | `string` | Thread name |
+
+## Related Types
+
+<PageItems>
+  <PageCard
+    title="TextBlock"
+    description="Text content from the message"
+    link="/content-api/data-types/textblock"
+  />
+  <PageCard
+    title="ImageBlock"
+    description="Images from attachments"
+    link="/content-api/data-types/imageblock"
+  />
+</PageItems>
+
+## Example Usage
+
+```typescript copy
+// Get all Discord messages
+const { data } = await unbody.get
+  .discordMessage
+  .select("content", "authorName", "channelName")
+  .exec();
+
+// Search Discord messages
+const { data } = await unbody.get
+  .discordMessage
+  .search.about("my search query")
+  .exec();
+
+// Filter Discord messages
+const { data } = await unbody.get
+  .discordMessage
+  .where({ channelName: "general" })
+  .exec();
+```
+
+## Next Steps
+
+- Learn about [searching messages](/content-api/search)
+- Explore [filtering options](/content-api/filters)
+- See [sorting capabilities](/content-api/sorting)

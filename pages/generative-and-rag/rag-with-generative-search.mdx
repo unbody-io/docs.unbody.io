@@ -15,6 +15,9 @@ When you need to generate a result for each object based on a single prompt, use
      data: { generate }
    } = await unbody.get
                    .textDocument
+                   .search.hybrid("AI in healthcare", {
+                     properties: ["text", "title"]
+                   })
                    .generate.fromOne("Summarize this in max 100 words: {text}")
                    .select("title", "originalName")
                    .exec();
@@ -24,7 +27,12 @@ When you need to generate a result for each object based on a single prompt, use
    ```graphql copy
    query {
       Get {
-        TextDocument {
+        TextDocument(
+          hybrid: {
+            query: "AI in healthcare",
+            properties: ["text", "title"]
+          }
+        ) {
           _additional {
             generate(
               singleResult: { prompt: "Summarize this in max 100 words: {text}" }
@@ -178,6 +186,7 @@ You might want to adjust the maxTokens, creativity level, or use a specific mode
    } = await unbody.get
                    .textDocument
                    .where({ mimeType: "text/markdown" })
+                   .search.find("machine learning")
                    .generate.fromOne({
                      prompt: "Create a short report for these: {text}",
                      options: {
@@ -199,6 +208,9 @@ You might want to adjust the maxTokens, creativity level, or use a specific mode
       Get {
         TextDocument(
           where: { operator: Equal, path: "mimeType", valueText: "text/markdown" }
+          bm25: {
+            query: "machine learning"
+          }
         ) {
           _additional {
             generate(
@@ -311,6 +323,7 @@ When you need to generate from multiple documents together and get a grouped res
      data: { generate }
    } = await unbody.get
                    .textDocument
+                   .search.about("AI applications")
                    .generate.fromMany("Create a 100 words summary:", ["text", "title"])
                    .select("title", "originalName")
                    .exec();
@@ -320,7 +333,9 @@ When you need to generate from multiple documents together and get a grouped res
    ```graphql copy
    query {
       Get {
-        TextDocument {
+        TextDocument(
+          nearText: { concepts: "AI applications" }
+        ) {
           _additional {
             generate(
               groupedResult: {
@@ -451,6 +466,9 @@ Sometimes you want more control over your multi-document generation. Using fromM
       Get {
         TextDocument(
           where: { operator: Equal, path: "mimeType", valueText: "text/markdown" }
+          bm25: {
+            query: "machine learning"
+          }
         ) {
           _additional {
             generate(

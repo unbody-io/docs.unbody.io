@@ -1,0 +1,72 @@
+import { PageCard } from "../../../components/PageCard";
+import { PageItems } from "../../../components/PageItems";
+
+# Query Methods Overview
+
+Unbody provides several methods for querying and manipulating data. Each method serves a specific purpose and can be combined with others for complex operations.
+
+## Available Methods
+
+<PageItems>
+  <PageCard
+    title="Get"
+    description="Retrieve data from collections"
+    link="/content-api/query-methods/get"
+  />
+  <PageCard
+    title="Ask"
+    description="Ask questions about your data"
+    link="/content-api/query-methods/ask"
+  />
+  <PageCard
+    title="Aggregate"
+    description="Perform aggregations on your data"
+    link="/content-api/query-methods/aggregate"
+  />
+  <PageCard
+    title="Group"
+    description="Group data by fields"
+    link="/content-api/query-methods/group"
+  />
+</PageItems>
+
+## Basic Usage
+
+All query methods follow a similar pattern:
+
+```typescript copy
+// Using the SDK
+const { data } = await unbody.get
+  .collection("TextDocument")
+  .select("title", "content")
+  .exec();
+
+// Using GraphQL
+const query = `
+  query {
+    Get {
+      TextDocument {
+        title
+        content
+      }
+    }
+  }
+`;
+```
+
+## Combining Methods
+
+You can combine different query methods with filters, sorting, and pagination:
+
+```typescript copy
+const { data } = await unbody.get
+  .collection("TextDocument")
+  .where({ title: "My Document" })
+  .sort("createdAt", "desc")
+  .limit(10)
+  .exec();
+```
+
+## Next Steps
+
+Click on any method above to learn more about its specific capabilities and usage. 

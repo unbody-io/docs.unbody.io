@@ -16,19 +16,19 @@ const meta = {
     title: "Recipes",
     type: "separator",
   },
-  "importing-custom-data": "Importing Custom Data",
   search: "Search",
   "generative-and-rag": "Generative & Rag",
   prompting: "Prompting",
   "working-with-images": "Working With Images",
   "working-with-videos": "Working With Videos",
   enhancement: "Enhancement",
+  "importing-custom-data": "Importing Custom Data",
+
   "-- development-references": {
     title: "Development Reference",
     type: "separator",
   },
   "data-ingestion": "Data Ingestion",
-
   "project-configurations": "Project Configurations",
   "-- project-configurations-separator": {
     title: "",

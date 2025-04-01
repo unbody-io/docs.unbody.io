@@ -1,81 +1,119 @@
-import { Cards } from 'nextra/components'
+import { Callout } from "nextra/components";
+import { PageThumbnail } from "../../components/PageThumbnail";
+import { PageItems } from "../../components/PageItems";
 
 # Content API Overview
 
-The **Content API** lets you interact with enriched, AI-ready data in Unbody. Built on [**Weaviate**](https://weaviate.io/), it extends core capabilities with additional data types and functionalities, allowing you to build intelligent, semantic applications with ease.
+The Content API is the main interface for interacting with your data. It provides a powerful GraphQL API for querying and manipulating data, with features like semantic search, filtering, sorting, and aggregation.
 
-## What Can You Do with the Content API?
+## Getting Started
 
-- Perform traditional database operations: [filter](/content-api/filters), sort, group, and limit results.
-- Run [semantic searches](/content-api/search/semantic-search) using vector similarity and contextual queries.
-- Execute [generative](/content-api/generative) tasks such as metadata creation, text synthesis, and data augmentation.
-- Work seamlessly through GraphQL or Typescript SDK.
+<PageItems>
+  <PageThumbnail
+    title="Query Methods"
+    description="Learn about different ways to query your data"
+    link="/content-api/query-methods/overview"
+  />
+  <PageThumbnail
+    title="Data Types"
+    description="Understand the different data types available"
+    link="/content-api/data-types/overview"
+  />
+  <PageThumbnail
+    title="Search"
+    description="Explore various search methods"
+    link="/content-api/search"
+  />
+  <PageThumbnail
+    title="Filters"
+    description="Filter your data using various operators"
+    link="/content-api/filters"
+  />
+  <PageThumbnail
+    title="Sorting"
+    description="Sort your data in different ways"
+    link="/content-api/sorting"
+  />
+  <PageThumbnail
+    title="Generative"
+    description="Generate content using AI"
+    link="/content-api/generative"
+  />
+</PageItems>
 
-## What's Covered in This Section?
+## Basic Usage
 
-<Cards>
-    <Cards.Card title={"Search"}
-                href={"/content-api/search"}
-                arrow={true}>
-        <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
-            Learn how to use semantic and traditional search methods.
-        </div>
-    </Cards.Card>
-    <Cards.Card title={"Generative Features"}
-                href={"/content-api/generative"}
-                arrow={true}>
-        <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
-            Perform AI-powered operations such as summarization and augmentation.
-        </div>
-    </Cards.Card>
-    <Cards.Card title={"QnA"}
-                href={"/content-api/q-n-a"}
-                arrow={true}>
-        <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
-            Build intelligent question-answering capabilities.
-        </div>
-    </Cards.Card>
-    <Cards.Card title={"Query Methods"}
-                href={"/content-api/query-methods/get"}
-                arrow={true}>
-        <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
-            Retrieve and aggregate data efficiently.
-        </div>
-    </Cards.Card>
-    <Cards.Card title={"Data Types"}
-                href={"/content-api/data-types/overview"}
-                arrow={true}>
-        <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
-            List of supported data types
-        </div>
-    </Cards.Card>
-    <Cards.Card title={"Filters"}
-                href={"/content-api/filters"}
-                arrow={true}>
-        <div className={"mx-4 text-xs [&>*]:leading-5 opacity-75"}>
-            Apply advanced filtering logic to narrow down results.
-        </div>
-    </Cards.Card>
-    <Cards.Card title={"Pagination"}
-                href={"/content-api/pagination"}
-                arrow={true}>
-        <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
-            Manage large datasets with efficient result handling.
-        </div>
-    </Cards.Card>
-    <Cards.Card title={"Sorting"}
-                href={"/content-api/sorting"}
-                arrow={true}>
-        <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
-            Control the order of your query results.
-        </div>
-    </Cards.Card>
-</Cards>
+<Callout>
+  We assume that you have already read and learn about how to setup unbody project and also learn about the basics how to make request calls to Unbody API. If not please go to [First Project](/first-project) and have make sure you have followed all the steps.
+</Callout>
 
-## How to Start?
+### Querying Data
 
-1. **Choose Your Interaction Method**:
-- Use the **GraphQL Interface** for precise query operations.
-- Use the **Typescript SDK** for streamlined integration into web applications.
-2. **Authenticate**: Follow the [authentication guide](/content-api/authentication) to connect to the API.
-3. **Explore Features**: Dive into specific sections to learn about advanced capabilities and examples.
+The Content API provides a GraphQL interface for querying data. You can use the SDK or make direct GraphQL queries.
+
+```typescript copy
+// Using the SDK
+const { data } = await unbody.get
+  .collection("TextDocument")
+  .select("title", "content")
+  .exec();
+
+// Using GraphQL
+const query = `
+  query {
+    Get {
+      TextDocument {
+        title
+        content
+      }
+    }
+  }
+`;
+```
+
+### Filtering Data
+
+You can filter data using various operators:
+
+```typescript copy
+const { data } = await unbody.get
+  .collection("TextDocument")
+  .where({
+    title: "My Document"
+  })
+  .exec();
+```
+
+### Sorting Data
+
+Sort data using one or more fields:
+
+```typescript copy
+const { data } = await unbody.get
+  .collection("TextDocument")
+  .sort("createdAt", "desc")
+  .exec();
+```
+
+### Pagination
+
+Control the number of results and implement pagination:
+
+```typescript copy
+const { data } = await unbody.get
+  .collection("TextDocument")
+  .limit(10)
+  .offset(0)
+  .exec();
+```
+
+## Next Steps
+
+Explore the different sections to learn more about specific features:
+
+- [Query Methods](/content-api/query-methods/overview)
+- [Data Types](/content-api/data-types/overview)
+- [Search](/content-api/search)
+- [Filters](/content-api/filters)
+- [Sorting](/content-api/sorting)
+- [Generative](/content-api/generative)

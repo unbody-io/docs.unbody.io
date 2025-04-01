@@ -1,12 +1,8 @@
----
-title: Project structure and organization
-nav_title: Project Structure
-description: An overview of the folder and file conventions in Next.js, and how to organize your project.
----
 
 import { Callout, Cards, Steps } from 'nextra/components'
-import { PageThumbnail } from '../components/PageThumbnail'
-import { ScanSearch } from 'lucide-react';
+import { PageItems } from '../components/PageItems'
+import { PageThumbnail, InlineThumbnail } from '../components/PageThumbnail'
+import { ScanSearch, Wand2, Braces, Type, Search, Image, Video, Drill } from 'lucide-react';
 
 # Introduction
 ![Unbody Intro](/intro-vis.jpg)
@@ -18,7 +14,63 @@ Designed to bring us closer to a more human kind of software, Unbody is built ar
 No duct tape AI tooling. No pipelines made of glue. Just one composable system.  
 *Think of it as the Supabase of the AI era.*
 
-**Start building now**
-- <PageThumbnail title="Build your first RAG for GoogleDocs" href=""/>
-- <PageThumbnail title="Build your first Visual Search Engine (Google Drive)" href="" icon={<ScanSearch />} />
-- <PageThumbnail title="Build your first AI Assistant (using Discord data)" href="" />
+### Get started
+- <InlineThumbnail title="From scratch on cloud" link="https://app.unbody.io" icon={<Drill />}/>
+`or`
+- <InlineThumbnail title="Build your first RAG for GoogleDocs" link="/first-projects/rag"/>
+- <InlineThumbnail title="Build your first Visual Search Engine (Google Drive)" link="/first-projects/visual-search" icon={<ScanSearch />} />
+- <InlineThumbnail title="Build your first AI Assistant (using Discord data)" link="/first-projects/ai-assistant" />
+
+--- 
+
+### Learn more
+<PageItems>
+  <PageThumbnail title="Unbody's general workflow" link="/architecture#general-workflow"/>
+  <PageThumbnail title="Core concepts" link="/concepts"/>
+</PageItems>
+
+### Highlighted features
+<PageItems>
+  <PageThumbnail 
+    title="Data enhancers" 
+    link="/project-configurations/enhancers"
+    description="Transform raw data into enriched, actionable knowledge with modular enhancement pipelines"
+    icon={<Wand2 />}
+  />
+  <PageThumbnail 
+    title="JSON generator" 
+    link="/project-configurations/generative-modules"
+    description="Generate structured JSON data using AI models with schema validation"
+    icon={<Braces />}
+  />
+  <PageThumbnail 
+    title="Text generator" 
+    link="/project-configurations/generative-modules"
+    description="Create natural language text using advanced language models"
+    icon={<Type />}
+  />
+  <PageThumbnail 
+    title="Semantic search" 
+    link="/content-api/search/semantic-search"
+    description="Search content based on meaning rather than exact keyword matches"
+    icon={<Search />}
+  />
+  <PageThumbnail 
+    title="Similarity search" 
+    link="/content-api/search/similarity-search"
+    description="Find similar content across text, images and records based on patterns"
+    icon={<ScanSearch />}
+  />
+  <PageThumbnail 
+    title="Image API (ImgIx)" 
+    link="/image-api"
+    description="Process and manipulate images with powerful transformation tools"
+    icon={<Image />}
+  />
+  <PageThumbnail 
+    title="Video API (Mux)" 
+    link="/video-api"
+    description="Handle video content with advanced processing capabilities"
+    icon={<Video />}
+  />
+</PageItems>

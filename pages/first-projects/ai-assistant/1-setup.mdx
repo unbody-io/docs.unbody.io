@@ -1,16 +1,10 @@
-# Project Setup
+# 1. Project Setup
 
 1. Go to [app.unbody.io](https://app.unbody.io) and sign in
 2. Click `Create New Project` in the top right
 3. In advanced menu, configure:
-   - Text Vectorizer: OpenAI - text-embedding-3-large
-   - Conversation Model: GPT-4
-   - Memory Type: Episodic
-   - Context Window: 4096
+   - Vectorizers:
+     - Text: `OpenAI` > `ada-002`
+   - RAG:
+     - Generative Search: `OpenAI` > `GPT-4o-mini`
 4. Click "Create" to finish setup
-
-<Callout type="info">
-Save your Project ID and API Key - you'll need these for development.
-</Callout>
-
-[Next: Connect Discord →](/first-projects/ai-assistant/2-connect) 

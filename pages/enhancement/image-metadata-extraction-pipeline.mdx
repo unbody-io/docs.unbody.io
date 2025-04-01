@@ -4,28 +4,21 @@ import Collapse from '@/components/Collapse'
 
 When working with images in your application, you need to automatically extract and structure metadata like colors, subjects, and resolution.
 
-```typescript copy
-import { BooleanField, NumberField, StringField, Unbody, IImageBlock } from "unbody";
-import {
-  AutoSummary,
-  AutoVision,
-  CustomSchema,
-  Enhancement,
-  Generative,
-  ImageVectorizer, 
-  PdfParser,
-  ProjectSettings,
-  TextVectorizer,
-  UnbodyAdmin,
-} from "unbody/admin";
+```typescript filename="admin-client.ts"
+import { UnbodyAdmin } from "unbody/admin";
 
 // Create admin instance with credentials
-const admin = new UnbodyAdmin({
+export const admin = new UnbodyAdmin({
     auth: {
         username: "93156549-...", // ID
         password: "ak_7660b....", // Secret
     },
 });
+```
+
+```typescript filename="enhancer.ts"
+import { Enhancement } from "unbody/admin";
+import { admin } from "./admin-client";
 
 // 1. Create the enhancement pipeline for image analysis
 const imageEnhancementPipeline = new Enhancement.Pipeline(
@@ -57,9 +50,10 @@ const extractImageInfo = new Enhancement.Step(
   }),
   {
     output: {
-      colors: (ctx) => JSON.stringify(ctx.result.json.colors),
-      subjects: (ctx) => JSON.stringify(ctx.result.json.subjects),
-      resolution: (ctx) => ctx.result.json.resolution,
+      // when extending an native Unbody's collection, any addiotional field should start with an "x"
+      xColors: (ctx) => JSON.stringify(ctx.result.json.colors),
+      xSubjects: (ctx) => JSON.stringify(ctx.result.json.subjects),
+      xResolution: (ctx) => ctx.result.json.resolution,
     },
   }
 );
@@ -67,9 +61,24 @@ const extractImageInfo = new Enhancement.Step(
 // 3. Add extraction step to pipeline
 imageEnhancementPipeline.add(extractImageInfo);
 
-// 4. Configure a project with the enhancement pipeline and other settings
-const enhancement = new Enhancement();
+// 4. Configure a project with the enhancement pipeline
+export const enhancement = new Enhancement();
 enhancement.add(imageEnhancementPipeline);
+```
+
+```typescript filename="project-settings.ts"
+import {
+  AutoSummary,
+  AutoVision,
+  CustomSchema,
+  Generative,
+  ImageVectorizer, 
+  PdfParser,
+  ProjectSettings,
+  TextVectorizer,
+} from "unbody/admin";
+import { admin } from "./admin-client";
+import { enhancement } from "./enhancer";
 
 const projectSettings = new ProjectSettings();
 projectSettings
@@ -81,8 +90,8 @@ projectSettings
   .set(new PdfParser(PdfParser.NlmSherpa.Default))
   .set(enhancement);
 
-// 5. Create project with extended ImageBlock schema
-const project = admin.projects.ref({
+// Create project with extended ImageBlock schema
+export const project = admin.projects.ref({
     name: "Image Analysis Project",
     settings: projectSettings,
 });
@@ -90,25 +99,31 @@ const project = admin.projects.ref({
 project.settings.set(
     new CustomSchema().extend(
     new CustomSchema.Collection("ImageBlock")
-        .add(new CustomSchema.Field.Text("colors", "Main colors detected in the image"))
-        .add(new CustomSchema.Field.Text("subjects", "Main subjects or objects detected"))
-        .add(new CustomSchema.Field.Text("resolution", "Resolution information"))
+        // when extending an native Unbody's collection, any addiotional field should start with an "x"
+        .add(new CustomSchema.Field.Text("xColors", "Main colors detected in the image"))
+        .add(new CustomSchema.Field.Text("xSubjects", "Main subjects or objects detected"))
+        .add(new CustomSchema.Field.Text("xResolution", "Resolution information"))
     )
 );
 
 await project.save();
+```
+
+```typescript filename="app.ts"
+import { BooleanField, NumberField, StringField, Unbody, IImageBlock } from "unbody";
+import { project } from "./project-settings";
 
 // Create unbody sdk instance
 const unbody = new Unbody({
-    apiKey: "pk_.....", // Project Api Key
-    projectId: "22e0b...", // Project ID
+    apiKey: "...", // Project Api Key
+    projectId: "...", // Project ID
 });
 
-// 6. Query enhanced images with type safety
+// Query enhanced images with type safety
 interface ExtendedImageBlock extends IImageBlock {
-  colors: StringField;
-  subjects: StringField;
-  resolution: StringField;
+  xColors: StringField;
+  xSubjects: StringField;
+  xResolution: StringField;
 }
 
 const { data: { payload } } = await unbody.get
@@ -124,9 +139,9 @@ console.log(payload)
 [
     {
         "originalName": "sample.jpg",
-        "colors": "[\"blue\",\"green\",\"black\"]",
-        "resolution": "1440x960",
-        "subjects": "[\"classic car\",\"country road\",\"person\"]"
+        "xColors": "[\"blue\",\"green\",\"black\"]",
+        "xResolution": "1440x960",
+        "xSubjects": "[\"classic car\",\"country road\",\"person\"]"
     }
     // ... more image entries
 ]
