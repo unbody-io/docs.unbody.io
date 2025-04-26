@@ -1,0 +1,70 @@
+---
+sidebarTitle: Audiofile
+title: Audiofile
+__path__: >-
+  [{"title":"content-api","route":"/content-api"},{"title":"data-types","route":"/content-api/data-types"},{"title":"Audiofile","route":"/content-api/data-types/audiofile"}]
+---
+
+# AudioFile
+
+The `AudioFile` type represents an audio file. It includes the file’s metadata and any extracted information.
+
+## Schema
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier |
+| `createdAt` | `datetime` | Creation timestamp |
+| `updatedAt` | `datetime` | Last update timestamp |
+| `sourceId` | `string` | ID of the data source |
+| `remoteId` | `string` | ID in original system |
+| `title` | `string` | Audio file title |
+| `url` | `string` | Audio file URL |
+| `path` | `string[]` | File path |
+| `pathString` | `string` | Path as string |
+| `mimeType` | `string` | MIME type |
+| `originalName` | `string` | Original filename |
+| `size` | `number` | File size in bytes |
+| `duration` | `number` | Duration in seconds |
+| `bitrate` | `number` | Bitrate in bits/s |
+| `sampleRate` | `number` | Sample rate in Hz |
+| `channels` | `number` | Number of channels |
+| `codec` | `string` | Audio codec |
+| `format` | `string` | Audio format |
+| `transcription` | `string` | Transcribed text |
+| `properties` | `object` | Additional properties |
+| `tags` | `string[]` | Audio file tags |
+
+## Related Types
+
+[TextBlockTranscribed text blocks](/content-api/data-types/textblock)
+
+## Example Usage
+
+```
+// Get all audio files
+const { data } = await unbody.get
+  .audioFile
+  .select("title", "url", "duration")
+  .exec();
+ 
+// Search audio files
+const { data } = await unbody.get
+  .audioFile
+  .search.about("my search query")
+  .exec();
+ 
+// Filter audio files
+const { data } = await unbody.get
+  .audioFile
+  .where({ format: "mp3" })
+  .exec();
+```
+
+## Next Steps
+
+-   Learn about [searching audio files](/content-api/search)
+-   Explore [filtering options](/content-api/filters)
+-   See [sorting capabilities](/content-api/sorting)
+
+[Overview](/content-api/data-types/overview "Overview")[CsvRow](/content-api/data-types/csvrow "CsvRow")

@@ -1,0 +1,70 @@
+---
+sidebarTitle: Googledoc
+title: Googledoc
+__path__: >-
+  [{"title":"content-api","route":"/content-api"},{"title":"data-types","route":"/content-api/data-types"},{"title":"Googledoc","route":"/content-api/data-types/googledoc"}]
+---
+
+# GoogleDoc
+
+The `GoogleDoc` type represents a Google Doc document. It includes the document’s content, metadata, and any extracted information.
+
+## Schema
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier |
+| `createdAt` | `datetime` | Creation timestamp |
+| `updatedAt` | `datetime` | Last update timestamp |
+| `sourceId` | `string` | ID of the data source |
+| `remoteId` | `string` | ID in Google Drive |
+| `title` | `string` | Document title |
+| `text` | `string` | Document text content |
+| `html` | `string` | Document HTML content |
+| `url` | `string` | Google Drive URL |
+| `path` | `string[]` | Path in Google Drive |
+| `pathString` | `string` | Path as string |
+| `mimeType` | `string` | MIME type |
+| `originalName` | `string` | Original filename |
+| `size` | `number` | File size in bytes |
+| `properties` | `object` | Additional properties |
+| `tags` | `string[]` | Document tags |
+| `authors` | `string[]` | Document authors |
+| `subtitle` | `string` | Document subtitle |
+| `description` | `string` | Document description |
+| `toc` | `object[]` | Table of contents |
+| `footnotes` | `object[]` | Document footnotes |
+
+## Related Types
+
+[TextBlockIndividual text blocks within the document](/content-api/data-types/textblock)[ImageBlockImages within the document](/content-api/data-types/imageblock)
+
+## Example Usage
+
+```
+// Get all Google Docs
+const { data } = await unbody.get
+  .googleDoc
+  .select("title", "text", "url")
+  .exec();
+ 
+// Search Google Docs
+const { data } = await unbody.get
+  .googleDoc
+  .search.about("my search query")
+  .exec();
+ 
+// Filter Google Docs
+const { data } = await unbody.get
+  .googleDoc
+  .where({ title: "My Document" })
+  .exec();
+```
+
+## Next Steps
+
+-   Learn about [searching documents](/content-api/search)
+-   Explore [filtering options](/content-api/filters)
+-   See [sorting capabilities](/content-api/sorting)
+
+[GoogleCalendarEvent](/content-api/data-types/googlecalendarevent "GoogleCalendarEvent")[ImageBlock](/content-api/data-types/imageblock "ImageBlock")

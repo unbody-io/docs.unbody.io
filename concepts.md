@@ -1,0 +1,76 @@
+---
+sidebarTitle: Concepts
+title: Concepts
+__path__: '[{"title":"Concepts","route":"/concepts"}]'
+---
+
+Unbody is a new kind of backend built around **knowledge** instead of traditional data storage.
+
+Instead of rows, tables, and rigid schemas, Unbody revolves around rich, semantic knowledge that your backend can actively **understand**, **reason** about, and **act** upon at runtime.
+
+## Knowledge-base vs. Database
+
+Traditional backend stacks store data as isolated, static pieces of information—often structured into tables and rows with fixed schemas.
+
+This works great for applications that retrieve and store fixed, predictable information—but modern AI-native applications have fundamentally different needs.
+
+-   Users don’t just want to fetch information—they ask questions.
+-   Applications don’t just store facts—they must understand meaning, context, and intent.
+-   Software no longer just serves static responses—it dynamically reasons, summarizes, generates content, and acts autonomously.
+
+To power these capabilities, you need more than a database. You need a **knowledge-base**.
+
+A knowledge-base is a structured, semantic graph of information—meaningfully enriched with context, relationships, embeddings, and metadata. It can handle multimodal content seamlessly—text, images, videos, audio—and makes them **semantically searchable**, **contextually retrievable**, and **runtime actionable**.
+
+## How Unbody Fabricates Knowledge
+
+Turning raw data into meaningful, semantic knowledge is not trivial. Unbody makes this process seamless through a structured pipeline called **knowledge fabrication**:
+
+1.  **Data Ingestion**:  
+    Pull content from APIs, databases, websites, PDFs, videos, or images.
+    
+2.  **Parsing and Structuring**:  
+    Automatically transform diverse formats into structured, consistent representations.
+    
+3.  **Enhancement & Transformation**:  
+    Semantic agents automatically extract context, meaning, entities, relations, and metadata from your data—making it queryable and actionable.
+    
+4.  **Vectorization**:  
+    Structured knowledge is embedded into semantic vectors, enabling semantic search, reranking, and powerful reasoning capabilities.
+    
+
+The result is a **dynamic knowledge-base** optimized for semantic retrieval, reasoning, and intelligent interactions.
+
+## Why This Matters (Philosophy)
+
+We believe software is becoming **closer to humans** than ever before. We no longer interact by merely clicking buttons or filling forms—we interact through natural language and rich context.
+
+This fundamental shift means your backend must also evolve—it can no longer be passive storage. It must actively understand, reason, and respond intelligently.
+
+Unbody is designed precisely for this world—making it straightforward to build intelligent backends from scratch, without complexity and without compromise.
+
+## Core Unbody Principles
+
+-   **Knowledge-first, not data-first**  
+    Store meaning, relationships, and context—not just isolated records.
+    
+-   **Runtime Intelligence**  
+    Reason, generate content, and dynamically respond at runtime.
+    
+-   **Multimodal by Default**  
+    Handle text, images, videos, and audio seamlessly—just like humans.
+    
+-   **Modular and Flexible**  
+    Swap components easily; use built-in tools or plug in your own.
+    
+
+* * *
+
+### Next Steps
+
+With these foundational concepts clear, you’re ready to explore how Unbody’s architecture implements them technically, or jump right into building:
+
+-   [→ See Unbody’s Architecture](/architecture)
+-   [→ Set up your first Unbody backend](/first-projects/overview)
+
+[Next.js](/starters/nextjs "Next.js")[Architecture](/architecture "Architecture")

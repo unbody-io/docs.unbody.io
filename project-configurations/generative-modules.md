@@ -1,0 +1,139 @@
+---
+sidebarTitle: Generative Modules
+title: Generative Modules
+__path__: >-
+  [{"title":"project-configurations","route":"/project-configurations"},{"title":"Generative
+  Modules","route":"/project-configurations/generative-modules"}]
+---
+
+# Generative Modules
+
+Generative Modules enable you to integrate retrieval-augmented generation (RAG) and LLM-powered capabilities directly into your Unbody projects. These modules allow your applications to produce intelligent, context-aware outputs by combining structured data with advanced AI models.
+
+* * *
+
+## What are Generative Modules?
+
+Generative Modules are configurations that enable features like:
+
+-   **Question Answering**: Combine vectorized data with generative responses.
+-   **Content Creation**: Generate new content based on stored knowledge.
+-   **Dynamic Responses**: Tailor application outputs to specific user queries.
+
+They are flexible and model-agnostic, supporting multiple providers such as OpenAI, Cohere, and others.
+
+* * *
+
+## How They Work
+
+Generative Modules work as part of your project’s **pipeline**:
+
+1.  **Data Retrieval**: Fetches relevant knowledge from the vector database.
+2.  **Context Injection**: Combines retrieved data with a query.
+3.  **Generation**: Uses an LLM to produce structured or unstructured outputs.
+
+## Configuring Generative Modules
+
+You can configure Generative Modules via the Dashboard or the Admin API.
+
+* * *
+
+### 1\. Dashboard Setup
+
+To enable Generative Modules while creating a new `Project`:
+
+1.  Navigate to [Unbody Dashboard](https://app.unbody.io/).
+2.  Click on **New Project**.
+3.  Select the Generative module from `Generative` section.
+
+* * *
+
+### 2\. Admin API Configuration
+
+You can programmatically configure Generative Modules using the Admin API.
+
+**Example: Setting Up a Project with Generative Module**
+
+```
+import { UnbodyAdmin, Generative, ProjectSettings } from 'unbody/admin'
+ 
+// Initialize the Admin API
+const admin = new UnbodyAdmin({
+  auth: {
+    username: '[admin-key-id]',
+    password: '[admin-key-secret]',
+  },
+})
+ 
+// Apply the generative module to the project settings
+ 
+const projectSettings = new ProjectSettings()
+// Configure a generative module
+projectSettings.set(new Generative(Generative.OpenAI.GPT4))
+ 
+const project = await admin.projects.ref({
+  name: "My First Project",
+  settings: projectSettings,
+})
+ 
+await project.save()
+ 
+console.log(`Applied Generative Module to project: ${project.name}`)
+ 
+```
+
+* * *
+
+## Available Generative Models
+
+Unbody supports multiple providers and models. Below is a list of supported options:
+
+| Provider | Model Name | Description |
+| --- | --- | --- |
+| **OpenAI** | GPT-4 | Advanced general-purpose LLM. |
+| **OpenAI** | GPT-3.5 Turbo | Cost-effective high-performance model. |
+| **Cohere** | Command | Optimized for content generation tasks. |
+| **Mistral** | OpenMixtral 8x7b | Lightweight, scalable option for RAG. |
+
+* * *
+
+## Advanced Settings
+
+### Context Injection Strategies
+
+Define how retrieved data is injected into prompts for generation:
+
+-   **Full Context**: Inject all retrieved results.
+-   **Condensed Context**: Use summarization or filtering to reduce context size.
+
+### Prompt Tuning
+
+Customize prompts to fine-tune model outputs. Use placeholders like:
+
+-   `{context}`: Injects retrieved data.
+-   `{query}`: Represents the user’s input query.
+
+**Example:**
+
+```
+"Based on the following context: {context}, answer the question: {query}"
+```
+
+### Temperature
+
+Adjusts creativity levels. Lower values produce deterministic results, while higher values encourage creativity.
+
+* * *
+
+## Best Practices
+
+1.  **Model Selection**:
+    -   Use GPT-4 or GPT-3.5 Turbo for general-purpose tasks.
+    -   Opt for Cohere or Mistral models for domain-specific needs.
+2.  **Context Optimization**:
+    -   Limit the context size for faster generation.
+    -   Use summarization in preprocessing pipelines to refine inputs.
+3.  **Error Handling**:
+    -   Implement fallback models for improved reliability.
+
+[Enhancers](/project-configurations/enhancers "Enhancers")[Custom Schemas](/project-configurations/custom-schemas "Custom Schemas")

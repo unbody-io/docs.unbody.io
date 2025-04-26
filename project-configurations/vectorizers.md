@@ -1,0 +1,147 @@
+---
+sidebarTitle: Vectorizers
+title: Vectorizers
+__path__: >-
+  [{"title":"project-configurations","route":"/project-configurations"},{"title":"Vectorizers","route":"/project-configurations/vectorizers"}]
+---
+
+# Vectorizers
+
+Vectorizers are a core component of Unbody, converting unstructured data like text or images into numerical vectors that AI systems can understand. This transformation enables powerful operations like [semantic search](/content-api/search/semantic-search), recommendations, and more.
+
+Unbody supports multiple vectorization models, ensuring flexibility and performance for various use cases. You can configure vectorizers programmatically using the [Admin API](/admin-api) or through the [dashboard](https://app.unbody.io/projects/).
+
+* * *
+
+### Why Configure Vectorizers?
+
+Each application has unique requirements. Some need highly accurate vectorization for large datasets, while others prioritize speed or compatibility with specific languages or content types. By configuring vectorizers, you control how data is represented and processed.
+
+* * *
+
+### Types of Vectorizers
+
+Unbody supports two main types of vectorizers:
+
+1.  **Text Vectorizers**
+    -   Converts textual data into vectors.
+    -   Supported models include:
+        -   **Transformers**: Open-source model for general-purpose vectorization.
+        -   **OpenAI**: Advanced proprietary models like `ada-002` and `text-embedding-3-small`.
+        -   **Cohere**: High-performance multilingual models.
+        -   **Contextionary**: Lightweight vectorizer optimized for fast lookups.
+        -   For a full list of available text vectorizers, see the [Text Vectorizers Reference](/admin-api#textvectorizer-configuration).
+2.  **Image Vectorizers**
+    -   Converts image data into vectors.
+    -   Supported models include:
+        -   **Img2Vec-Neural**: Default vectorizer for image processing.
+        -   **Multi2Vec-Clip**: Advanced multimodal image-to-text vectorizer (coming soon).
+        -   For a full list of available Image vectorizers, see the [Image Vectorizers Reference](/admin-api#imagevectorizer-configuration).
+
+* * *
+
+### Configuring Vectorizers via Admin API
+
+To configure vectorizers for your project, use the [Admin API](/admin-api). Follow these steps:
+
+### **1\. Initialize the Admin Client**
+
+```
+import { UnbodyAdmin, TextVectorizer } from 'unbody/admin';
+ 
+const admin = new UnbodyAdmin({
+  auth: {
+    username: '[admin-key-id]',
+    password: '[admin-key-secret]',
+  },
+});
+ 
+```
+
+* * *
+
+### **2\. Set a Text Vectorizer**
+
+```
+import { ProjectSettings, TextVectorizer } from 'unbody/admin';
+ 
+const settings = new ProjectSettings();
+ 
+settings.set(new TextVectorizer(TextVectorizer.OpenAI.Ada002));
+ 
+// Apply vectorizer settings to your project
+const project = admin.projects.ref({ name: 'My Project', settings });
+await project.save();
+ 
+console.log(`Configured text vectorizer for project: ${project.name}`);
+ 
+```
+
+* * *
+
+### **3\. Set an Image Vectorizer**
+
+```
+import { ImageVectorizer } from 'unbody/admin';
+ 
+const settings = new ProjectSettings();
+ 
+settings.set(new ImageVectorizer(ImageVectorizer.Img2VecNeural.Default));
+ 
+// Apply image vectorizer settings to your project
+const project = admin.projects.ref({ name: 'My Image Project', settings });
+await project.save();
+ 
+console.log(`Configured image vectorizer for project: ${project.name}`);
+ 
+```
+
+* * *
+
+### Configuring Vectorizers via Dashboard
+
+You can also configure vectorizers directly from the Unbody dashboard when creating a Project:
+
+1.  Navigate to [Unbody Dashboard](https://app.unbody.io/).
+2.  Click on **New Project**.
+3.  Select the Advanced tab and choose vectorizer model for text or image data.
+4.  Save your changes.
+
+For detailed instructions, see the [First Project Guide](/first-project).
+
+* * *
+
+### Advanced Configuration
+
+### Using Multiple Vectorizers
+
+Unbody allows assigning different vectorizers to specific data types or workflows. For example:
+
+```
+settings.set(new TextVectorizer(TextVectorizer.Cohere.MultilingualV3));
+settings.set(new ImageVectorizer(ImageVectorizer.Img2VecNeural.Default));
+ 
+```
+
+* * *
+
+### Key Considerations
+
+-   **Performance**: Proprietary models like OpenAI may offer better accuracy but require cloud resources.
+-   **Cost**: Some models are free (open-source), while others are paid.
+-   **Scalability**: Choose vectorizers optimized for your dataset size and operational scale.
+
+* * *
+
+### Next Steps
+
+Once vectorizers are configured:
+
+-   Test vectorization with sample data using the GraphQL API.
+-   Optimize pipeline performance by combining vectorizers with rerankers.
+
+For further details, explore:
+
+-   [Admin API Documentation](/admin-api)
+
+[Overview](/project-configurations/overview "Overview")[Enhancers](/project-configurations/enhancers "Enhancers")

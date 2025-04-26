@@ -1,0 +1,259 @@
+---
+sidebarTitle: Enhancers
+title: Enhancers
+__path__: >-
+  [{"title":"project-configurations","route":"/project-configurations"},{"title":"Enhancers","route":"/project-configurations/enhancers"}]
+---
+
+# Enhancers
+
+Enhancers transform raw data into enriched, actionable knowledge. They are essential for turning unstructured or semi-structured data into a usable format for AI-native applications.
+
+Enhancers are **data-type specific**, meaning they cater to specific data formats like text, images, or videos. They are also **modular** and designed to integrate seamlessly with your data pipeline.
+
+Unbody supports two types of enhancers:
+
+1.  **Built-in Enhancers**: Out-of-the-box solutions for common enrichment tasks.
+2.  **Custom Enhancers**: Flexible pipelines tailored to your unique workflows.
+
+* * *
+
+## Built-in Enhancers
+
+Built-in enhancers are categorized by data type, offering seamless functionality right out of the box.
+
+### Available Built-in Enhancers
+
+| Data Type | Enhancer Name | Functionality |
+| --- | --- | --- |
+| **Text** | AutoSummary | Summarizes text into concise outputs. |
+| **Text** | AutoKeywords | Extracts key terms from textual data. |
+| **Image** | AutoVision | Captions images, performs OCR, and tags objects within images. |
+| **Video** | AutoChapters | Generates video chapters based on subtitles or transcriptions. |
+| **Audio** | AutoTranscribe | Transcribes speech from audio files into text. |
+
+### Using Built-in Enhancers
+
+To enable enhancers while creating a new `Project`:
+
+1.  Navigate to [Unbody Dashboard](https://app.unbody.io/).
+2.  Click on **New Project**.
+3.  Select the Advanced tab and enable them under the **Enhancements** section.
+
+Or, Alternatively, configure them using the [Admin API](/admin-api).
+
+```
+import { UnbodyAdmin, ProjectSettings, AutoSummary, AutoKeywords } from 'unbody/admin'
+ 
+// Initialize the Admin API
+const admin = new UnbodyAdmin({
+  auth: {
+    username: '[admin-key-id]',
+    password: '[admin-key-secret]',
+  },
+})
+ 
+const projectSettings = new ProjectSettings();
+ 
+// Enable AutoSummary and AutoKeywords
+projectSettings.set(new AutoSummary(AutoSummary.OpenAI.GPT4o))
+projectSettings.set(new AutoKeywords(AutoKeywords.OpenAI.GPT4o))
+ 
+const project = await admin.projects.ref({
+  name: "My First Project",
+  settings: projectSettings,
+})
+ 
+// Apply settings to the project
+await project.save()
+ 
+console.log(`Applied enhancers for project: ${project.name}`)
+```
+
+## Custom Enhancers
+
+Custom enhancers offer unparalleled flexibility, allowing you to design complex enrichment workflows tailored to your application’s needs.
+
+### Why Use Custom Enhancers?
+
+-   **Specificity**: When prebuilt options don’t meet your requirements.
+-   **Complexity**: For chaining multiple tasks into a single, cohesive workflow.
+-   **Adaptability**: To work with unique or non-standard data types and formats.
+
+* * *
+
+### Architecture of Custom Enhancers
+
+Custom enhancers follow a structured architecture:
+
+-   **Pipeline**: The overarching container that defines the workflow.
+-   **Steps**: Discrete tasks within the pipeline.
+-   **Actions**: Core operations performed in each step (e.g., text generation, tagging).
+
+* * *
+
+### Workflow for Custom Enhancers
+
+Creating a custom enhancer involves three main steps:
+
+1.  **Define a Pipeline**
+2.  **Add Steps to the Pipeline**
+3.  **Attach the Pipeline to Project Settings**
+
+* * *
+
+## 1\. Pipelines
+
+### What is a Pipeline?
+
+A pipeline is a container for the entire enhancement workflow. It:
+
+-   Targets a specific collection (e.g., `TextDocument`, `VideoFile`).
+-   Contains one or more steps executed in sequence.
+-   Supports conditional logic to enable or skip steps dynamically.
+
+### Defining a Pipeline
+
+```
+import { Enhancement } from 'unbody/admin'
+ 
+const pipeline = new Enhancement.Pipeline(
+  'custom_pipeline', // Unique name
+  'TextDocument',    // Target collection
+)
+```
+
+* * *
+
+## 2\. Steps
+
+### What is a Step?
+
+A step represents a single task in the pipeline. Each step:
+
+-   Has a **name** for identification.
+-   Performs an **action**.
+-   Specifies **output mappings** for storing results.
+-   Can include **conditional execution logic** and failure handling.
+
+* * *
+
+### Anatomy of a Step
+
+| Property | Type | Required | Description |
+| --- | --- | --- | --- |
+| **name** | `string` | Yes | Unique identifier for the step. |
+| **action** | `Action` | Yes | The action to perform. |
+| **output** | `Object` | No | Maps results to database fields. |
+| **if** | `Function(ctx):bool` | No | Conditional logic for execution. |
+| **onFailure** | \`“continue" | "stop”\` | No |
+
+* * *
+
+### Example: Defining a Step
+
+```
+const step = new Enhancement.Step(
+  'summarize_step',
+  new Enhancement.Action.TextGenerator({
+    model: 'openai-gpt-4',
+    prompt: (ctx) => `Summarize the following: ${ctx.record.content}`,
+  }),
+  {
+    output: {
+      summary: (ctx) => ctx.result.content,
+    },
+    if: (ctx) => ctx.record.content.length > 100, // Execute only if content > 100 chars
+    onFailure: 'continue', // Continue even if this step fails
+  },
+)
+ 
+pipeline.add(step)
+ 
+```
+
+* * *
+
+## 3\. Actions
+
+### What is an Action?
+
+Actions are the core operations within a step. Unbody supports various built-in actions, each tailored for specific tasks. All actions share:
+
+-   **Initialization Parameters**: Define what the action does.
+-   **Dynamic Behavior**: Use `ctx` to adjust actions based on runtime context. Learn more about [Pipeline Ctx](/admin-api#pipeline-context-ctx).
+
+* * *
+
+### How Actions Work
+
+Actions are initialized and attached to steps. Each action:
+
+1.  Takes input parameters (e.g., prompt, model).
+2.  Executes and produces results.
+3.  Outputs the results to the pipeline or database.
+
+* * *
+
+### Available Actions
+
+### **1\. TextGenerator**
+
+Generates text using a language model.
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| **model** | `string` | Model to use (e.g., `openai-gpt-4`). |
+| **prompt** | `Function(ctx):string` | Dynamic prompt for the model. |
+| **temperature** | `number` | Creativity level (higher = more creative). |
+
+**Example**:
+
+```
+new Enhancement.Action.TextGenerator({
+  model: 'openai-gpt-4',
+  prompt: (ctx) => `Summarize this: ${ctx.record.content}`,
+  temperature: 0.7,
+})
+ 
+```
+
+* * *
+
+### **2\. StructuredGenerator**
+
+Generates structured JSON output based on a schema.
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| **model** | `string` | Model to use (e.g., `openai-gpt-4`). |
+| **prompt** | `Function(ctx):string` | Dynamic prompt for the model. |
+| **schema** | `Function(ctx):Schema` | Schema for structured output (uses [Zod](https://zod.dev/)). |
+
+**Example**:
+
+```
+new Enhancement.Action.StructuredGenerator({
+  model: 'openai-gpt-4',
+  prompt: (ctx) => `Extract tags: ${ctx.record.content}`,
+  schema: (ctx, { z }) => z.object({
+    tags: z.array(z.string()).describe('Tags for the content'),
+  }),
+})
+ 
+```
+
+* * *
+
+### Best Practices for Custom Enhancers
+
+1.  **Reusability**:
+    -   Use `ctx.vars` to avoid redundant prompts or configurations.
+2.  **Error Handling**:
+    -   Use `onFailure: "continue"` for non-critical steps.
+3.  **Testing**:
+    -   Test pipelines on a small dataset before deployment.
+
+Learn more in our [Admin Api Enhancement Configuration Guide](/admin-api#enhancement-configuration).
+
+[Vectorizers](/project-configurations/vectorizers "Vectorizers")[Generative Modules](/project-configurations/generative-modules "Generative Modules")

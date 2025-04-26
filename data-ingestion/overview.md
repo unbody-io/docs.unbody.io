@@ -1,0 +1,48 @@
+---
+sidebarTitle: Overview
+title: Overview
+__path__: >-
+  [{"title":"data-ingestion","route":"/data-ingestion"},{"title":"Overview","route":"/data-ingestion/overview"}]
+---
+
+# Data Ingestion Overview
+
+Every AI-native application starts with data. But data is scattered—stored across platforms, in different formats, and often unstructured. Collecting and preparing this data is the first step in building anything AI-ready.
+
+**Data ingestion** is how you bring this data together. Unlike traditional ETL (Extract, Transform, Load) systems, Unbody’s ingestion is designed to handle modern AI needs. It’s **agnostic to data location, format, and structure**, meaning your data can come from anywhere, in any form.
+
+* * *
+
+### Why Data Ingestion Matters
+
+Your AI is only as good as the data it’s built on. Data ingestion unifies fragmented sources, makes raw data usable, and ensures your app has the input it needs to perform.
+
+* * *
+
+### Two Ways to Ingest Data
+
+### 1\. Prebuilt Integrations
+
+Unbody provides ready-to-use connectors for popular platforms. These save you time by making it simple to pull data without custom code.
+
+Current integrations include:
+
+-   [Google Drive](/providers/google-drive): Ingest files and documents.
+-   [Discord](/providers/google-calendar): Import messages and content.
+-   [GitHub](/providers/github): Extract repositories and related data.
+-   [Google Calendar](/providers/google-calendar): Extract calendar events data.
+
+_New integrations are added regularly._
+
+* * *
+
+### 2\. Custom Ingestion with Push API
+
+For everything else, there’s the [Push API](/data-ingestion/push-api). Use this when you need to:
+
+-   Define custom schemas for your data.
+-   Ingest data in any format, structured or unstructured.
+
+The Push API is flexible and works with non-standard or unique data sources.
+
+[Advanced Data Schema Including File](/importing-custom-data/advanced-data-schema "Advanced Data Schema Including File")[Prebuilt Integrations](/data-ingestion/prebuilt-integrations "Prebuilt Integrations")
