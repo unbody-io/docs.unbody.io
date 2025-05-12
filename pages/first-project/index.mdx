@@ -1,0 +1,76 @@
+# Make your first project with Unbody
+
+import { Callout } from 'nextra/components'
+import { PageItems } from '../../components/PageItems'
+import { PageThumbnail, InlineThumbnail } from '../../components/PageThumbnail'
+import { Rocket, ScanSearch, Bot, FileText, Database, Globe2 } from 'lucide-react'
+
+At a high level, Unbody’s data pipeline looks like this:
+
+1. **Configure the Knowledge Base**
+> Set up your project’s parameters: choose a vectorizer, pick enhancers, and define any custom schemas.  
+
+2. **Populate the Knowledge Base**
+> Connect cloud integrations (e.g. Google Drive) or push your own files to ingest.  
+
+
+3. **Query the Knowledge Base**
+> Use the Content API to power semantic search, RAG, chatbots, or generative agents.
+
+
+You can build projects in Unbody using two approaches:
+
+<Callout>
+If this is your first time using Unbody, we recommend starting with the console to understand the platform, then moving to the SDK as your needs grow more complex.
+</Callout>
+
+### Using Console (Recommended for beginners)
+
+Create projects with a visual interface, faster onboarding, and minimal code required.
+
+<PageItems>
+  <PageThumbnail 
+    title="RAG for Google Docs" 
+    link="/first-project/rag"
+    description="A system that searches docs semantically and answers questions with source references"
+    icon={<Rocket />}
+  />
+  <PageThumbnail 
+    title="Visual Search Engine" 
+    link="/first-project/visual-search"
+    description="Find similar images and understand image content"
+    icon={<ScanSearch />}
+  />
+  <PageThumbnail 
+    title="AI Assistant (Discord)" 
+    link="/first-project/ai-assistant"
+    description="A Discord AI assistant that learns from your community's conversations"
+    icon={<Bot />}
+  />
+</PageItems>
+
+### Using SDK (More flexibility)
+
+Full programmatic control with more customization options.
+
+<PageItems>
+  <PageThumbnail 
+    title="RAG on PDF" 
+    link="/first-project/example-1-rag-on-pdf"
+    description="Build a question-answering system using PDFs as your knowledge base"
+    icon={<FileText />}
+  />
+  <PageThumbnail 
+    title="RAG on Custom Data" 
+    link="/first-project/example-2-rag-custom-data"
+    description="Create a semantic search system with structured data collections"
+    icon={<Database />}
+  />
+  <PageThumbnail 
+    title="RAG on Website" 
+    link="/first-project/example-3-rag-on-website"
+    description="Build a RAG system that crawls websites with automatic content enhancement"
+    icon={<Globe2 />}
+  />
+</PageItems>
+

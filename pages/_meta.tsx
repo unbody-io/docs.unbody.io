@@ -4,7 +4,7 @@ const meta = {
     title: "Getting Started",
     type: "separator",
   },
-  "first-projects": "First Projects",
+  "first-project": "First Project",
   starters: "Starters",
   "-- core-ideas": {
     title: "Core Ideas",

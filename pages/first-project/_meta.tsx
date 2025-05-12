@@ -1,4 +1,7 @@
 const meta = {
+  "index": {
+    title: "Overview",
+  },
   "-- getting-started": {
     title: "Using console",
     type: "separator",
@@ -13,7 +16,7 @@ const meta = {
     title: "AI Assistant (Discord)",
   },
   "-- getting-started-separator": {
-    title: "Using SDK",
+    title: "Using SDK (JS/TS)",
     type: "separator",
   },
   "example-1-rag-on-pdf":{
