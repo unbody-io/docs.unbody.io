@@ -8,21 +8,21 @@ The API has the following methods available:
 1. `.generate.text()`: Generates text based on prompts or message arrays.
 2. `.generate.json()`: Generates structured JSON based on prompts, messages, or schemas.
 
-Each method supports optional settings to control output style, length, and other properties.
+Each method supports optional settings to control output style, length, and other properties. Both methods also support **streaming** for real-time content generation.
 
 <Cards>
     <Cards.Card title={"Text Generation"}
                 href={"/generative-api/text-gen"}
                 arrow={true}>
         <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
-            Generate natural language responses from prompts or conversations 
+            Generate natural language responses from prompts or conversations with streaming support
         </div>
     </Cards.Card>
     <Cards.Card title={"JSON Generation"}
                 href={"/generative-api/json-gen"}
                 arrow={true}>
         <div className={"mx-4 text-xs [&>*]:leading-5 leading-1 opacity-75"}>
-            Create structured data with schema validation and transformation
+            Create structured data with schema validation and streaming capabilities
         </div>
     </Cards.Card>
 </Cards>

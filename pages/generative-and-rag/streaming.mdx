@@ -1,0 +1,356 @@
+import Collapse from '@/components/Collapse'
+import { Tabs } from "nextra/components"
+
+# Streaming Generation Examples
+
+Generate content in real-time with streaming support for both text and JSON generation. Streaming allows you to receive partial responses as they're generated, providing a better user experience for longer content generation.
+
+## Basic Text Streaming
+When you need to generate text content with real-time streaming, use the `stream: true` option. This is perfect for creating interactive experiences where users can see content being generated live.
+
+```typescript copy
+const stream = await unbody.generate.text(
+  "Write a detailed explanation of quantum computing and its applications in modern technology.",
+  {
+    model: "gpt-4",
+    temperature: 0.7,
+    stream: true,
+  }
+);
+
+for await (const chunk of stream) {
+  if (chunk.finished) {
+    console.log('Stream finished');
+    console.log('Final response:', chunk.content);
+    break;
+  } else {
+    console.log(chunk.content);
+  }
+}
+```
+
+<Collapse title="Stream Output Example">
+```typescript copy
+// First chunks
+"Quantum"
+"Quantum computing"
+"Quantum computing represents"
+"Quantum computing represents a revolutionary"
+// ... continuing chunks
+"Quantum computing represents a revolutionary approach to information processing that leverages the principles of quantum mechanics..."
+
+// Final chunk
+{
+  finished: true,
+  content: "Quantum computing represents a revolutionary approach to information processing that leverages the principles of quantum mechanics to perform calculations exponentially faster than classical computers. Unlike traditional bits that exist in either 0 or 1 states, quantum bits (qubits) can exist in superposition, allowing them to be in multiple states simultaneously..."
+}
+```
+</Collapse>
+
+## JSON Streaming with Schema
+Generate structured JSON content with real-time streaming while maintaining schema validation. This is useful for creating dynamic forms, API responses, or structured data in real-time.
+
+```typescript copy
+import { z } from "zod";
+
+const stream = await unbody.generate.json(
+  "Generate a comprehensive product catalog entry for a high-tech gadget:",
+  {
+    schema: z.object({
+      productName: z.string(),
+      price: z.number(),
+      description: z.string(),
+      features: z.array(z.string()),
+      specifications: z.object({
+        dimensions: z.string(),
+        weight: z.string(),
+        battery: z.string(),
+        connectivity: z.array(z.string())
+      }),
+      availability: z.object({
+        inStock: z.boolean(),
+        shippingTime: z.string(),
+        regions: z.array(z.string())
+      })
+    }),
+    stream: true,
+  }
+);
+
+for await (const chunk of stream) {
+  if (chunk.finished) {
+    console.log('Stream finished');
+    console.log('Final JSON:', chunk.content);
+    break;
+  } else {
+    console.log('Partial JSON:', chunk.content);
+  }
+}
+```
+
+<Collapse title="Stream Output Example">
+```typescript copy
+// Progressive JSON building
+"{"
+"{\n  \"productName\":"
+"{\n  \"productName\": \"SmartWatch Pro X1\","
+"{\n  \"productName\": \"SmartWatch Pro X1\",\n  \"price\":"
+"{\n  \"productName\": \"SmartWatch Pro X1\",\n  \"price\": 299.99,"
+// ... continuing to build the JSON structure
+
+// Final complete JSON
+{
+  finished: true,
+  content: {
+    "productName": "SmartWatch Pro X1",
+    "price": 299.99,
+    "description": "Advanced smartwatch with health monitoring, GPS tracking, and 7-day battery life",
+    "features": [
+      "Heart rate monitoring",
+      "GPS tracking",
+      "Water resistant",
+      "Voice assistant",
+      "Sleep tracking"
+    ],
+    "specifications": {
+      "dimensions": "44mm x 38mm x 10.7mm",
+      "weight": "32g",
+      "battery": "7 days typical use",
+      "connectivity": ["Bluetooth 5.0", "Wi-Fi", "NFC"]
+    },
+    "availability": {
+      "inStock": true,
+      "shippingTime": "2-3 business days",
+      "regions": ["North America", "Europe", "Asia Pacific"]
+    }
+  }
+}
+```
+</Collapse>
+
+## Streaming with Message-Based Input
+Use streaming with conversational input for more complex generation scenarios. This is ideal for chatbot implementations or multi-turn conversations.
+
+```typescript copy
+const stream = await unbody.generate.text(
+  [
+    { role: "system", content: "You are a technical expert explaining complex topics simply." },
+    { role: "user", content: "Explain machine learning algorithms and their real-world applications." },
+    { role: "assistant", content: "I'd be happy to explain machine learning algorithms in simple terms." },
+    { role: "user", content: "Focus on supervised learning and give practical examples." }
+  ],
+  {
+    model: "gpt-4",
+    temperature: 0.6,
+    maxTokens: 800,
+    stream: true,
+  }
+);
+
+for await (const chunk of stream) {
+  if (chunk.finished) {
+    console.log('\n--- Stream Complete ---');
+    console.log('Total content:', chunk.content);
+    break;
+  } else {
+    process.stdout.write(chunk.content); // Real-time output
+  }
+}
+```
+
+<Collapse title="Stream Output Example">
+```typescript copy
+// Real-time streaming output
+"Supervised"
+"Supervised learning"
+"Supervised learning is like"
+"Supervised learning is like teaching"
+"Supervised learning is like teaching a child"
+// ... continuing stream
+
+// Final complete response
+{
+  finished: true,
+  content: "Supervised learning is like teaching a child with examples. You show the algorithm many examples of input-output pairs, and it learns to predict outputs for new inputs. Here are key algorithms and applications:\n\n1. **Linear Regression**: Predicts continuous values\n   - Real estate price prediction\n   - Stock market forecasting\n   - Sales revenue estimation\n\n2. **Decision Trees**: Makes decisions through yes/no questions\n   - Medical diagnosis systems\n   - Credit approval processes\n   - Customer segmentation\n\n3. **Random Forest**: Combines multiple decision trees\n   - Fraud detection in banking\n   - Recommendation systems\n   - Image classification\n\n4. **Support Vector Machines**: Finds optimal boundaries\n   - Email spam detection\n   - Text classification\n   - Handwriting recognition\n\nThese algorithms power everyday applications from Netflix recommendations to autonomous vehicles, making our digital world smarter and more responsive."
+}
+```
+</Collapse>
+
+## Combining Content Retrieval with Streaming
+While streaming is not available directly in content API methods like `.generate.fromMany()`, you can combine content retrieval with standalone streaming generation for RAG-like scenarios.
+
+```typescript copy
+// First, retrieve relevant documents
+const { data } = await unbody.get
+  .textDocument
+  .search.about("artificial intelligence applications")
+  .limit(5)
+  .select("title", "text")
+  .exec();
+
+// Extract content from retrieved documents
+const documentsContent = data.payload
+  .map(doc => `Title: ${doc.title}\nContent: ${doc.text}`)
+  .join('\n\n---\n\n');
+
+// Then use streaming generation with the retrieved content
+const stream = await unbody.generate.text(
+  `Based on the following documents, create a comprehensive analysis of AI applications across different industries:
+
+${documentsContent}
+
+Please provide a detailed analysis covering the main themes and applications mentioned in these documents.`,
+  {
+    model: "gpt-4",
+    temperature: 0.7,
+    maxTokens: 1000,
+    stream: true,
+  }
+);
+
+// Handle the streaming response
+for await (const chunk of stream) {
+  if (chunk.finished) {
+    console.log('\n--- Analysis Complete ---');
+    console.log('Sources used:', data.payload.map(doc => doc.title));
+    console.log('Final analysis:', chunk.content);
+    break;
+  } else {
+    process.stdout.write(chunk.content);
+  }
+}
+```
+
+<Collapse title="Stream Output Example">
+```typescript copy
+// Progressive analysis response
+"Based"
+"Based on"
+"Based on the"
+"Based on the provided"
+"Based on the provided documents,"
+"Based on the provided documents, artificial"
+"Based on the provided documents, artificial intelligence"
+// ... continuing stream with knowledge-based content
+
+// Final complete response
+{
+  finished: true,
+  content: "Based on the provided documents, artificial intelligence applications span across multiple industries with transformative impact:\n\n**Healthcare**: AI revolutionizes medical diagnosis through image analysis, drug discovery acceleration, and personalized treatment plans. Machine learning algorithms can detect diseases earlier and more accurately than traditional methods.\n\n**Transportation**: Autonomous vehicles represent the pinnacle of AI application, combining computer vision, sensor fusion, and decision-making algorithms to navigate complex environments safely.\n\n**Finance**: AI powers fraud detection systems, algorithmic trading, credit scoring, and risk assessment. Real-time analysis of transaction patterns helps prevent financial crimes.\n\n**Technology**: From recommendation systems to natural language processing, AI enhances user experiences across platforms, enabling personalized content delivery and intelligent automation.\n\n**Manufacturing**: Predictive maintenance, quality control, and supply chain optimization benefit from AI's ability to process vast amounts of operational data and identify patterns.\n\nThe convergence of these applications demonstrates AI's role as a foundational technology reshaping how industries operate, making processes more efficient, accurate, and responsive to human needs."
+}
+```
+</Collapse>
+
+## Error Handling in Streams
+Implement proper error handling for streaming scenarios to ensure robust applications.
+
+```typescript copy
+async function handleStreamWithErrors() {
+  try {
+    const stream = await unbody.generate.text(
+      "Generate a detailed technical report on blockchain technology.",
+      {
+        model: "gpt-4",
+        stream: true,
+      }
+    );
+
+    let fullContent = '';
+    
+    for await (const chunk of stream) {
+      if (chunk.finished) {
+        console.log('Stream completed successfully');
+        console.log('Full content length:', fullContent.length);
+        break;
+      } else if (chunk.error) {
+        console.error('Stream error:', chunk.error);
+        break;
+      } else {
+        fullContent += chunk.content;
+        // Update UI with new content
+        updateUI(chunk.content);
+      }
+    }
+  } catch (error) {
+    console.error('Failed to initialize stream:', error);
+    // Handle initialization errors
+    showErrorMessage('Failed to start content generation');
+  }
+}
+
+function updateUI(content) {
+  // Update your UI with streaming content
+  document.getElementById('output').textContent += content;
+}
+
+function showErrorMessage(message) {
+  // Show error to user
+  document.getElementById('error').textContent = message;
+}
+```
+
+## Best Practices for Streaming
+
+### Performance Optimization
+```typescript copy
+// Use appropriate chunk sizes for your use case
+const stream = await unbody.generate.text(prompt, {
+  stream: true,
+  maxTokens: 500, // Limit tokens for faster streaming
+  temperature: 0.7
+});
+
+// Buffer chunks for smoother UI updates
+let buffer = '';
+let lastUpdate = Date.now();
+
+for await (const chunk of stream) {
+  if (chunk.finished) {
+    // Flush remaining buffer
+    if (buffer) updateUI(buffer);
+    break;
+  } else {
+    buffer += chunk.content;
+    
+    // Update UI every 100ms or when buffer reaches certain size
+    if (Date.now() - lastUpdate > 100 || buffer.length > 50) {
+      updateUI(buffer);
+      buffer = '';
+      lastUpdate = Date.now();
+    }
+  }
+}
+```
+
+### User Experience Enhancement
+```typescript copy
+// Show typing indicators and progress
+async function streamWithUX() {
+  showTypingIndicator(true);
+  
+  const stream = await unbody.generate.text(prompt, { stream: true });
+  
+  for await (const chunk of stream) {
+    if (chunk.finished) {
+      showTypingIndicator(false);
+      markComplete();
+      break;
+    } else {
+      appendContent(chunk.content);
+      updateProgress(chunk.progress); // If available
+    }
+  }
+}
+
+function showTypingIndicator(show) {
+  document.getElementById('typing').style.display = show ? 'block' : 'none';
+}
+
+function appendContent(content) {
+  const output = document.getElementById('output');
+  output.textContent += content;
+  output.scrollTop = output.scrollHeight; // Auto-scroll
+}
+```
+
+Learn more about streaming in our [Text Generation API](/generative-api/text-gen#example-4---streaming-text-generation) and [JSON Generation API](/generative-api/json-gen#example-4---streaming-json-generation) guides. 

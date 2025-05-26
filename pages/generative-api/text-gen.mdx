@@ -1,6 +1,6 @@
 # Text Generation API
 
-The `.generate.text()` method creates text content based on a prompt or a sequence of messages. It supports configurable options for model selection, token limits, and more.
+The `.generate.text()` method creates text content based on a prompt or a sequence of messages. It supports configurable options for model selection, token limits, and streaming for real-time generation.
 
 ## Usage
 
@@ -37,6 +37,29 @@ unbody.generate.text(
 );
 ```
 
+### Example 4 - Streaming Text Generation
+Generate text with real-time streaming:
+```typescript copy
+const stream = await unbody.generate.text(
+  "Write a detailed explanation of quantum computing.",
+  {
+    model: "gpt-4",
+    temperature: 0.7,
+    stream: true,
+  }
+);
+
+for await (const chunk of stream) {
+  if (chunk.finished) {
+    console.log('Stream finished');
+    console.log('Final response:', chunk.content);
+    break;
+  } else {
+    console.log(chunk.content);
+  }
+}
+```
+
 ## Options
 - `model`: AI model to use (e.g., `gpt-4`). 
 - `topP`: Diversity control via nucleus sampling (0 to 1).
@@ -44,4 +67,5 @@ unbody.generate.text(
 - `temperature`: Creativity adjustment (0 to 1).
 - `presencePenalty`: Penalize new tokens based on input presence (-2.0 to 2.0).
 - `frequencyPenalty`: Penalize tokens based on frequency of occurrence (-2.0 to 2.0).
+- `stream`: Enable streaming for real-time content generation (boolean).
 
