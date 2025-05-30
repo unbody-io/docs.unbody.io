@@ -289,6 +289,46 @@ function showErrorMessage(message) {
 }
 ```
 
+## Cancelling Stream Requests
+Sometimes you may need to cancel a streaming request before it completes, such as when a user navigates away or manually stops generation. Here's how to implement cancellation with `AbortController`:
+
+```typescript copy
+import { isCancel } from 'axios';
+
+async function stream() {
+  // Create an AbortController to manage cancellation
+  const controller = new AbortController();
+  
+  try {
+    const stream = await unbody.generate.text(
+      "Generate a detailed technical report on blockchain technology.",
+      {
+        model: "gpt-4",
+        stream: true,
+        signal: controller.signal // Pass the AbortSignal
+      }
+    );
+
+    // Simulate user action to cancel the stream after 3 seconds
+    setTimeout(() => controller.abort(), 3000);
+    
+    for await (const chunk of stream) {
+      if (chunk.finished) {
+        console.log('Stream completed successfully');
+       } else {
+        console.log(chunk.content);
+      }
+    }
+  } catch (error) {
+    if (isCancel(error)) {
+      console.log("Stream cancelled by user.");
+    } else {
+      console.error('Stream error:', error);
+    }
+  }
+}
+```
+
 ## Best Practices for Streaming
 
 ### Performance Optimization
