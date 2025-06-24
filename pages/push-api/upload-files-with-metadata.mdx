@@ -1,0 +1,82 @@
+# Attaching Metadata to Files with Push API
+
+A quick guide on how to tag uploads with custom metadata (payload) so you can group, filter, or annotate files without creating multiple sources or APIs.
+
+## When to use
+
+• You want to organize files into logical buckets (e.g. reports by month, image galleries per product, HTML snapshots per page).
+• You need searchable attributes alongside the file (e.g. tags, version numbers, import dates).
+• You prefer a single upload endpoint but still need fine-grained querying.
+
+## 1. Extend your schema
+
+Add a text field (e.g. `xMetadata`) to each collection where you’ll store these tags.
+
+```typescript copy
+import { ProjectSettings, CustomSchema } from 'unbody/admin';
+
+const settings = new ProjectSettings();
+settings.set(
+  new CustomSchema().extend(
+    new CustomSchema.Collection('TextDocumentBlock').add(
+      new CustomSchema.Field.Text('xMetadata', 'Custom tags or payload JSON', false)
+    ),
+    new CustomSchema.Collection('ImageBlock').add(
+      new CustomSchema.Field.Text('xMetadata', 'Custom tags or payload JSON', false)
+    )
+  )
+);
+
+await settings.save();
+```
+
+> **Tip:** Use a single JSON payload (e.g. `{"category":"monthly-report","version":2}`) or a simple string tag.
+
+---
+
+## 2. Upload with metadata
+
+When calling `push.files.upload`, include your custom data in the `payload` field.
+
+```ts
+form.append('id', uuid());                // unique file ID
+form.append('payload', JSON.stringify({
+  xMetadata: 'monthly-report:2025-06'
+}));
+form.append('file', fileBlob, file.name);
+await push.files.upload({ form });
+```
+
+### Example scenarios
+
+* **Monthly PDF reports:** `xMetadata: 'report:2025-06'`
+* **Product image gallery:** `xMetadata: 'product-123-gallery'`
+* **HTML page snapshots:** `xMetadata: JSON.stringify({ page: '/about', tag: 'snapshot' })`
+
+---
+
+## 3. Query by metadata
+
+Filter files by your custom field:
+
+```ts
+const { data: { items } } = await unbody.get
+  .collection('ImageBlock')
+  .where(({ And }) => And({ xMetadata: 'product-123-gallery' }))
+  .select('url', 'payload')
+  .exec();
+```
+
+## 4. Migration and best practices
+
+• **Existing files:** Reindex and reupload so they include the new field.
+
+• **Structured vs. flat tags:** Flat strings are simple; JSON gives more structure.
+
+• **Performance:** Index only fields you query frequently.
+
+• **Error handling:** Validate your metadata before upload to avoid schema errors.
+
+---
+
+Now you can organize any file upload—PDFs, images, HTML—using a single Push API endpoint and powerful metadata queries!
